@@ -63,12 +63,8 @@ export default function HomePage() {
     router.push(`/courses/search/${encodeURIComponent(categoryName.toLowerCase().replace(/\s+/g, "-"))}`)
   }
 
-  const handleGetStarted = () => {
-    router.push("/courses")
-  }
-
   const handleBrowseCatalog = () => {
-    router.push("/courses")
+    router.push("/courses/search/")
   }
 
   return (
@@ -93,8 +89,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Button
                 size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-                onClick={handleGetStarted}
+                className="bg-white text-blue-600 cursor-default hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Get Started Today
                 <ArrowRight className="ml-2 h-5 w-5" />
