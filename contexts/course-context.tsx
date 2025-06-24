@@ -3,6 +3,7 @@
 import { Course } from "@/types"
 import { createContext, useContext, useState, useEffect, type ReactNode, SetStateAction, Dispatch } from "react"
 import { Code, Palette, Database, Smartphone, Brain, TrendingUp, ArrowRight, Award, BookOpen } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 interface CourseContextType {
     courses: Course[] | null
@@ -19,9 +20,12 @@ export function CourseProvider({ children }: { children: ReactNode }) {
     const [categories, setCategories] = useState<CourseContextType["categories"]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [filterCategory, setFilterCategory] = useState('')
+    const [previousPath, setPreviousPath] = useState("")
 
+    const pathname = usePathname()
 
     useEffect(() => {
+
         const fetchData = async () => {
             try {
                 const [coursesRes, categoriesRes] = await Promise.all([
@@ -31,7 +35,7 @@ export function CourseProvider({ children }: { children: ReactNode }) {
 
                 if (!coursesRes.ok || !categoriesRes.ok) { throw new Error("Failed to fetch") }
 
-                const [{data: coursesData}, {data: categoriesData}] = await Promise.all([
+                const [{ data: coursesData }, { data: categoriesData }] = await Promise.all([
                     coursesRes.json(),
                     categoriesRes.json(),
                 ])
@@ -59,7 +63,7 @@ export function CourseProvider({ children }: { children: ReactNode }) {
                 setCategories(mappedCategories)
             } catch (err: any) {
                 console.error(err.message)
-                
+
             } finally {
                 setLoading(false)
             }
@@ -67,6 +71,17 @@ export function CourseProvider({ children }: { children: ReactNode }) {
 
         fetchData()
     }, [])
+
+    useEffect(() => {
+        // Clear filter when moving away from search page to any other page except home
+        console.log(previousPath);
+        if (previousPath === "/courses/search"  && filterCategory) {
+            console.log("Clearing filter - moved away from search page")
+            setFilterCategory("")
+        }
+
+        setPreviousPath(pathname)
+    }, [pathname])
 
     return (<CourseContext.Provider value={{ courses, loading, categories, filterCategory, setFilterCategory }}>{children}</CourseContext.Provider>)
 }

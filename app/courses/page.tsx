@@ -2,16 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { CoursesList } from "@/components/courses-list"
-import { Course } from "@/types";
-import { useCourses } from "@/contexts/course-context";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<any>(null)
-  const { filterCategory, setFilterCategory} = useCourses();
 
   useEffect(() => {
-    if(filterCategory)
-     setFilterCategory(""); 
     const fetchData = async () => {
       try {
         const response = await fetch(`/api/courses`);
