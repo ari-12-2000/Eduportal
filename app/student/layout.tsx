@@ -6,7 +6,7 @@ import { Sidebar } from '@/components/student/sidebar'
 import { GlobalVariables } from '@/globalVariables'
 
 
-import {ReactNode, useEffect, useRef, useState} from 'react'
+import {ReactNode, useEffect, useState} from 'react'
 
 const layout = ({children}:{children:ReactNode}) => {
 

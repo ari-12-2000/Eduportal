@@ -14,6 +14,7 @@ import Loading from "./loading"
 import { CoursesList } from "@/components/courses-list"
 import { Course } from "@/types"
 import { useCourses } from "@/contexts/course-context"
+import { usePathname } from "next/navigation"
 
 interface FilterState {
   priceRange: [number, number]
@@ -78,6 +79,7 @@ export default function SearchPage() {
 
     setFilters(initialFilters)
     setFilteredCourses(courses)
+    
   }, [courses, filterCategory])
 
   useEffect(() => {
@@ -114,6 +116,7 @@ export default function SearchPage() {
 
     setFilteredCourses(result)
   }, [courses, filters, searchTerm])
+
 
   const handleSearch = (e: React.FormEvent) => e.preventDefault()
 

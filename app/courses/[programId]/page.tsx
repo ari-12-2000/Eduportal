@@ -2,22 +2,24 @@
 
 import { Clock, ArrowLeft, FileText, Award } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Card, CardContent } from "@/components/ui/card"
 import { use, useEffect, useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import Loading from "./loading"
+import { useCourses } from "@/contexts/course-context"
 
 export default function CourseDetail({ params }: { params: Promise<{ programId: string }> }) {
   const { toast } = useToast()
   const { programId } = use(params)
-  const router = useRouter()
   const [activeModule, setActiveModule] = useState<string | null>(null)
   const [courseData, setCourseData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const {filterCategory, setFilterCategory} = useCourses();
 
   useEffect(() => {
+    if(filterCategory)
+     setFilterCategory(""); 
     async function fetchCourse() {
       if (!programId) return
 

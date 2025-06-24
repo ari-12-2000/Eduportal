@@ -8,8 +8,8 @@ import { useCourses } from "@/contexts/course-context"
 
 export default function HomePage() {
   const router = useRouter()
-
-const {courses, categories, setFilterCategory, loading}= useCourses();
+  const { courses, categories, filterCategory, setFilterCategory, loading } = useCourses();
+  
 
   const handleCategoryClick = (categoryName: string) => {
     console.log(categoryName);
@@ -18,6 +18,8 @@ const {courses, categories, setFilterCategory, loading}= useCourses();
   }
 
   const handleBrowseCatalog = () => {
+   if(filterCategory)
+    setFilterCategory(""); 
     router.push("/courses/search/")
   }
 

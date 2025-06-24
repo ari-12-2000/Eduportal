@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation"
 import { use, useEffect, useState } from "react"
 import Loading from "./loading"
 import TopicResourceRenderer from "@/components/TopicResourceRenderer"
+import { useCourses } from "@/contexts/course-context"
 
 
 export default function TopicPage({ params }: { params: Promise<{ programId: string, moduleId: string, topicId: string }> }) {
@@ -19,7 +20,10 @@ export default function TopicPage({ params }: { params: Promise<{ programId: str
     const [moduleTopics, setModuleTopics] = useState<Map<number, number>>(new Map());
     const [sortedTopics, setSortedTopics] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState(true)
+    const {filterCategory, setFilterCategory} = useCourses();
     useEffect(() => {
+        if(filterCategory)
+          setFilterCategory(""); 
         const fetchData = async () => {
             setIsLoading(true)
             try {
