@@ -1,66 +1,20 @@
 "use client"
-
-import { useState, useEffect } from "react"
-import { Code, Palette, Database, Smartphone, Brain, TrendingUp, ArrowRight, Award, BookOpen } from "lucide-react"
-
+import { TrendingUp, ArrowRight, Award, BookOpen, Code } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
-import type { Course } from "@/types"
 import { CoursesList } from "@/components/courses-list"
+import { useCourses } from "@/contexts/course-context"
 
 export default function HomePage() {
   const router = useRouter()
 
-  // Add state for courses
-  const [courses, setCourses] = useState<Course[]>([])
-  const [categories, setCategories] = useState<{ category: string }[]>([])
-  const [loading, setLoading] = useState(true)
-
-  // Add useEffect to fetch data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const [{ data: coursesData }, { data: categoriesData }] = await Promise.all([
-          fetch("api/courses").then((res) => res.json()),
-          fetch("/courses/categories").then((res) => res.json()),
-        ])
-
-        setCourses(coursesData)
-
-        // Map categories with icons and colors
-        const categoryIcons = {
-          "Web Development": { icon: Code, color: "bg-blue-500" },
-          "UI/UX Design": { icon: Palette, color: "bg-purple-500" },
-          "Data Science": { icon: Database, color: "bg-green-500" },
-          "Mobile Development": { icon: Smartphone, color: "bg-orange-500" },
-          "Machine Learning": { icon: Brain, color: "bg-red-500" },
-          "Digital Marketing": { icon: TrendingUp, color: "bg-pink-500" },
-        } as const
-
-        const mappedCategories = categoriesData.map((prop: { category: string }) => {
-          const key = prop.category as keyof typeof categoryIcons
-          return {
-            name: prop.category,
-            icon: categoryIcons[key]?.icon || Code,
-            color: categoryIcons[key]?.color || "bg-gray-500",
-          }
-        })
-
-        setCategories(mappedCategories)
-      } catch (error) {
-        console.error("Error fetching data:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
+const {courses, categories, setFilterCategory, loading}= useCourses();
 
   const handleCategoryClick = (categoryName: string) => {
-    router.push(`/courses/search/${encodeURIComponent(categoryName.toLowerCase().replace(/\s+/g, "-"))}`)
+    console.log(categoryName);
+    setFilterCategory(categoryName);
+    router.push("/courses/search/");
   }
 
   const handleBrowseCatalog = () => {
@@ -70,7 +24,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden">
+      <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-black/10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
@@ -95,7 +49,6 @@ export default function HomePage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button
-                variant="outline"
                 size="lg"
                 className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300"
                 onClick={handleBrowseCatalog}
@@ -131,7 +84,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Categories */}
@@ -143,7 +96,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category: any) => (
+            {categories.map((category: { name: string, icon: typeof Code, color: string }) => (
               <Card
                 key={category.name}
                 className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md group"
@@ -176,7 +129,7 @@ export default function HomePage() {
           {loading ? (
             <div className="space-y-8">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
+                {[1, 2, 3].map((i) => (
                   <Card key={i} className="overflow-hidden shadow-md">
                     <div className="h-48 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
                     <CardContent className="p-6">

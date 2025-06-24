@@ -18,16 +18,16 @@ import { GlobalVariables } from "@/globalVariables"
 import { useRouter } from "next/navigation"
 
 
-export function CoursesList({ courses }: { courses: any[] }) {
+export function CoursesList({ courses }: { courses: Course[] | null}) {
   const { user } = useAuth()
   const router = useRouter()
   const { toast } = useToast()
   const enrolledCourses = new Set(user!.enrolledCourseIDs || []);
-  const visited = new Set();
+
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {courses.map((course) => (
+      {courses!.map((course) => (
 
         <Card
           key={course.id}
@@ -76,7 +76,7 @@ export function CoursesList({ courses }: { courses: any[] }) {
                 <Users className="h-4 w-4 mr-1" />
                 <span>
                   {course.programModules.reduce(
-                    (acc:Number, prop:any) => acc + prop.module.moduleTopics.length,
+                    (acc:number, prop:any) => acc + prop.module.moduleTopics.length,
                     0
                   )} topics
                 </span>

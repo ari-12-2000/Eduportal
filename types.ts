@@ -1,4 +1,4 @@
-export type Course = {
+export interface Course {
   id: number;
   authorId: number;
   title: string;
@@ -6,37 +6,56 @@ export type Course = {
   category: string;
   instructor: string;
   instructorAvatar: string | null;
-  image: string | null;
+  image: string;
   rating: number;
   level: string;
   price: string;
-  type: 'self_paced' | 'tutor_paced'| 'workshop'| 'webinar'; // You can expand this if more types exist
+  type: string | null;
   totalTimeLimit: number;
+  status: string | null;
+  uniqueHash: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  surveyStartDate: string | null;
+  surveyEndDate: string | null;
+  maxParticipants: number | null;
   passingScore: number | null;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  author: {
-    name: string;
-  };
-  topics:{
-    id:Number;
-  }[];
-  programModules: {
-    programId: number;
-    moduleId: number;
-    position: number;
-    module: {
-      id: number;
-      title: string;
-      description: string;
-      prerequisiteModuleId: number | null;
-      status: boolean;
-      createdAt: string;
-      updatedAt: string;
-    };
-  }[];
-  enrollments:{
-    learnerId: number;
-  }[];
-};
+  studySettings: any; // You can replace 'any' with a more specific type if available
+  clientId: number | null;
+  packageId: number | null;
+  isActive: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  programModules: ProgramModule[];
+  enrollments: Enrollment[];
+}
 
+export interface Enrollment {
+  learnerId: number;
+}
+
+export interface ProgramModule {
+  programId: number;
+  moduleId: number;
+  position: number;
+  module: Module;
+}
+
+export interface Module {
+  id: number;
+  title: string;
+  description: string;
+  prerequisiteModuleId: number | null;
+  status: string | null;
+  isDeleted: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  moduleTopics: ModuleTopic[];
+}
+
+export interface ModuleTopic {
+  topicId: number;
+}

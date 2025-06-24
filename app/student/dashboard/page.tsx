@@ -15,13 +15,13 @@ export default function DashboardPage() {
     <div className="max-w-7xl mx-auto">
 
       {user!.enrolledCourses.length > 0 ? (<>
-        <div className="mb-6">
+        <section className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Welcome back, {user!.first_name}!</h1>
           <p className="text-gray-600">Continue your learning journey. You've been making great progress!</p>
-        </div>
+        </section>
         <ProgressCards />
 
-        <div className="mt-8">
+        <section className="mt-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">Active Courses</h2>
             <Link href="/student/courses" className="text-sm text-blue-600 hover:underline flex items-center">
@@ -30,19 +30,19 @@ export default function DashboardPage() {
           </div>
 
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">All Courses</h1>
+            <h2 className="text-xl font-bold text-gray-800">All Courses</h2>
             <p className="text-gray-600">Browse all enrolled courses</p>
           </div>
 
           <CoursesList courses={(user!.enrolledCourses).slice(0,3)} />
 
 
-        </div>
+        </section>
         {/* <div className="mt-8 grid md:grid-cols-2 gap-6">
         <Achievements />
         <Leaderboard />
       </div> */}
-      </>) : (<>
+      </>) : (<section>
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Welcome {user!.first_name}!</h1>
           <p className="text-gray-600">Start your learning journey.</p>
@@ -61,7 +61,7 @@ export default function DashboardPage() {
             </Button>
           </Link>
         </div>
-        </>
+        </section>
       )}
 
 

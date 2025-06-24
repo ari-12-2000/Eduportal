@@ -1,6 +1,5 @@
 "use client"
 
-import type React from "react"
 import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { Search, Filter, X, Star } from "lucide-react"
@@ -13,6 +12,8 @@ import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
 import Loading from "./loading"
 import { CoursesList } from "@/components/courses-list"
+import { Course } from "@/types"
+import { useCourses } from "@/contexts/course-context"
 
 interface FilterState {
   priceRange: [number, number]
@@ -22,22 +23,23 @@ interface FilterState {
   duration: string[]
 }
 
+const defaultFilterState: FilterState = {
+  priceRange: [0, 500],
+  categories: [],
+  levels: [],
+  ratings: "",
+  duration: [],
+}
+
 export default function SearchPage() {
   const searchParams = useSearchParams()
+  const { courses, filterCategory, loading } = useCourses()
+
   const [searchTerm, setSearchTerm] = useState("")
-  const [allCourses, setAllCourses] = useState<any[] | null>(null)
-  const [filteredCourses, setFilteredCourses] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([])
+  const [filters, setFilters] = useState<FilterState>(defaultFilterState)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
-
-  const [filters, setFilters] = useState<FilterState>({
-    priceRange: [0, 500],
-    categories: [],
-    levels: [],
-    ratings: "",
-    duration: [],
-  })
 
   const categories = [
     "Web Development",
@@ -53,116 +55,95 @@ export default function SearchPage() {
   const levels = ["Beginner", "Intermediate", "Advanced"]
   const durations = ["0-2 hours", "2-5 hours", "5-10 hours", "10+ hours"]
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  useEffect(() => setMounted(true), [])
 
-  // Fetch all courses on mount
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await fetch("/api/courses")
-        if (!res.ok) throw new Error("Failed to fetch courses")
-        const data = await res.json()
-        setAllCourses(data.data || [])
-        setFilteredCourses(data.data || [])
-      } catch (err) {
-        console.error("Error fetching courses:", err)
-        setAllCourses([])
-        setFilteredCourses([])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchCourses()
-  }, [])
-
-  // Sync search term from URL
   useEffect(() => {
     const query = searchParams.get("q") || ""
     setSearchTerm(query)
   }, [searchParams])
 
-  // Apply all filters
   useEffect(() => {
-    if (!allCourses) return
+    if (!courses) return
 
-    let filtered = allCourses
+    const initialFilters = {
+      ...defaultFilterState, // copies all fields, including array references
+      categories: [...defaultFilterState.categories], // deep copy array
+      levels: [...defaultFilterState.levels],         // deep copy array
+      duration: [...defaultFilterState.duration],    // deep copy array
+    }
 
-    // Search term filter
-    if (searchTerm.trim() !== "") {
-      filtered = filtered.filter((course: any) =>
-        [course.title, course.instructor, course.description, course.category].some((field: string) =>
-          field?.toLowerCase().includes(searchTerm.toLowerCase()),
+    if (filterCategory) {
+      initialFilters.categories = [filterCategory]
+    }
+
+    setFilters(initialFilters)
+    setFilteredCourses(courses)
+  }, [courses, filterCategory])
+
+  useEffect(() => {
+    if (!courses) return
+
+    let result = [...courses]
+
+    if (searchTerm.trim()) {
+      const search = searchTerm.toLowerCase()
+      result = result.filter((course) =>
+        [course.title, course.instructor, course.description, course.category].some((field) =>
+          field?.toLowerCase().includes(search),
         ),
       )
     }
 
-    // Price filter
-    filtered = filtered.filter((course: any) => {
-      const price = Number.parseFloat(course.price) || 0
+    result = result.filter((course) => {
+      const price = parseFloat(course.price || "0")
       return price >= filters.priceRange[0] && price <= filters.priceRange[1]
     })
 
-    // Category filter
     if (filters.categories.length > 0) {
-      filtered = filtered.filter((course: any) => filters.categories.includes(course.category))
+      result = result.filter((course) => filters.categories.includes(course.category))
     }
 
-    // Level filter
     if (filters.levels.length > 0) {
-      filtered = filtered.filter((course: any) => filters.levels.includes(course.level))
+      result = result.filter((course) => filters.levels.includes(course.level))
     }
 
-    // Rating filter
     if (filters.ratings) {
-      const minRating = Number.parseInt(filters.ratings)
-      filtered = filtered.filter((course: any) => {
-        const rating = Number.parseFloat(course.rating) || 0
-        return rating >= minRating
-      })
+      const minRating = parseInt(filters.ratings)
+      result = result.filter((course) => parseFloat(String(course.rating ?? "0")) >= minRating)
     }
 
-    setFilteredCourses(filtered)
-  }, [searchTerm, allCourses, filters])
+    setFilteredCourses(result)
+  }, [courses, filters, searchTerm])
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-  }
+  const handleSearch = (e: React.FormEvent) => e.preventDefault()
 
-  const handleCategoryChange = (category: string, checked: boolean) => {
-    setFilters((prev) => ({
-      ...prev,
-      categories: checked ? [...prev.categories, category] : prev.categories.filter((c) => c !== category),
-    }))
-  }
-
-  const handleLevelChange = (level: string, checked: boolean) => {
-    setFilters((prev) => ({
-      ...prev,
-      levels: checked ? [...prev.levels, level] : prev.levels.filter((l) => l !== level),
-    }))
+  const handleCheckboxChange = (key: keyof FilterState, value: string, checked: boolean) => {
+    setFilters((prev) => {
+      const prevValue = prev[key]
+      if (Array.isArray(prevValue)) {
+        return {
+          ...prev,
+          [key]: checked ? [...prevValue, value] : prevValue.filter((v) => v !== value),
+        }
+      }
+      return prev
+    })
   }
 
   const handlePriceChange = (value: number[]) => {
-    setFilters((prev) => ({
-      ...prev,
-      priceRange: [value[0], value[1]],
-    }))
+    setFilters((prev) => ({ ...prev, priceRange: [value[0], value[1]] }))
   }
 
   const clearFilters = () => {
     setFilters({
-      priceRange: [0, 500],
-      categories: [],
-      levels: [],
-      ratings: "",
-      duration: [],
+      ...defaultFilterState,
+      categories: [...defaultFilterState.categories], 
+      levels: [...defaultFilterState.levels],         
+      duration: [...defaultFilterState.duration],    
     })
   }
 
-  if (isLoading) return <Loading />
+  if (loading) return <Loading />
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -177,20 +158,20 @@ export default function SearchPage() {
         Filters
       </Button>
 
-      {/* Filter Sidebar */}
-      <div
+      {/* Sidebar */}
+      <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-white border-r transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:block",
+          "fixed inset-y-0 left-0 z-40 w-80 bg-white border-r transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:block",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
           mounted ? "block" : "hidden",
         )}
       >
         <div className="p-6 h-full overflow-y-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-blue-600 hover:text-blue-700">
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-blue-600">
                 Clear All
               </Button>
               <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setIsSidebarOpen(false)}>
@@ -202,19 +183,17 @@ export default function SearchPage() {
           {/* Price Range */}
           <div className="mb-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Price</h3>
-            <div className="px-2">
-              <Slider
-                value={filters.priceRange}
-                onValueChange={handlePriceChange}
-                max={500}
-                min={0}
-                step={10}
-                className="mb-4"
-              />
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>${filters.priceRange[0]}</span>
-                <span>${filters.priceRange[1]}</span>
-              </div>
+            <Slider
+              value={filters.priceRange}
+              onValueChange={handlePriceChange}
+              min={0}
+              max={500}
+              step={10}
+              className="mb-4"
+            />
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>${filters.priceRange[0]}</span>
+              <span>${filters.priceRange[1]}</span>
             </div>
           </div>
 
@@ -222,22 +201,20 @@ export default function SearchPage() {
           <div className="mb-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Category</h3>
             <div className="space-y-3">
-              {categories.map((category) => (
-                <div key={category} className="flex items-center space-x-2">
+              {categories.map((cat) => (
+                <div key={cat} className="flex items-center space-x-2">
                   <Checkbox
-                    id={category}
-                    checked={filters.categories.includes(category)}
-                    onCheckedChange={(checked) => handleCategoryChange(category, checked as boolean)}
+                    id={cat}
+                    checked={filters.categories.includes(cat)}
+                    onCheckedChange={(checked) => handleCheckboxChange("categories", cat, checked as boolean)}
                   />
-                  <Label htmlFor={category} className="text-sm font-normal">
-                    {category}
-                  </Label>
+                  <Label htmlFor={cat}>{cat}</Label>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Level */}
+          {/* Levels */}
           <div className="mb-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Level</h3>
             <div className="space-y-3">
@@ -246,11 +223,9 @@ export default function SearchPage() {
                   <Checkbox
                     id={level}
                     checked={filters.levels.includes(level)}
-                    onCheckedChange={(checked) => handleLevelChange(level, checked as boolean)}
+                    onCheckedChange={(checked) => handleCheckboxChange("levels", level, checked as boolean)}
                   />
-                  <Label htmlFor={level} className="text-sm font-normal">
-                    {level}
-                  </Label>
+                  <Label htmlFor={level}>{level}</Label>
                 </div>
               ))}
             </div>
@@ -276,7 +251,7 @@ export default function SearchPage() {
             </RadioGroup>
           </div>
         </div>
-      </div>
+      </aside>
 
       {/* Overlay for mobile */}
       {isSidebarOpen && (
@@ -284,13 +259,13 @@ export default function SearchPage() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 lg:ml-0">
+      <main className="flex-1 lg:ml-0">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          {/* Header */}
+          {/* Search Header */}
           <div className="mb-8 lg:ml-0 ml-16">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Search Courses</h1>
             <form onSubmit={handleSearch} className="max-w-2xl relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 type="text"
                 placeholder="Search for courses, instructors, or topics..."
@@ -302,14 +277,12 @@ export default function SearchPage() {
           </div>
 
           {/* Course Count */}
-          <div className="mb-6 lg:ml-0 ml-16">
-            <p className="text-gray-600">
-              {filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""} found
-              {searchTerm && ` for "${searchTerm}"`}
-            </p>
+          <div className="mb-6 lg:ml-0 ml-16 text-gray-600">
+            {filteredCourses.length} course{filteredCourses.length !== 1 && "s"} found
+            {searchTerm && ` for "${searchTerm}"`}
           </div>
 
-          {/* Results */}
+          {/* Course Results */}
           <div className="lg:ml-0 ml-16">
             {filteredCourses.length > 0 ? (
               <CoursesList courses={filteredCourses} />
@@ -321,7 +294,7 @@ export default function SearchPage() {
             )}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
