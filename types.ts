@@ -6,18 +6,18 @@ export interface Course {
   category: string;
   instructor: string;
   instructorAvatar: string | null;
-  image: string;
-  rating: number;
-  level: string;
-  price: string;
+  image: string| null;
+  rating: number| null;
+  level: string| null;
+  price: string| null; // Changed from number to string to match Prisma schema
   type: string | null;
-  totalTimeLimit: number;
-  status: string | null;
+  totalTimeLimit: number| null;
+  status: number | null;
   uniqueHash: string | null;
-  startDate: string | null;
-  endDate: string | null;
-  surveyStartDate: string | null;
-  surveyEndDate: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  surveyStartDate: Date | null;
+  surveyEndDate: Date | null;
   maxParticipants: number | null;
   passingScore: number | null;
   studySettings: any; // You can replace 'any' with a more specific type if available
@@ -25,9 +25,9 @@ export interface Course {
   packageId: number | null;
   isActive: boolean;
   isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
   programModules: ProgramModule[];
   enrollments: Enrollment[];
 }
@@ -46,13 +46,13 @@ export interface ProgramModule {
 export interface Module {
   id: number;
   title: string;
-  description: string;
+  description: string| null;
   prerequisiteModuleId: number | null;
-  status: string | null;
+  status: number | null;
   isDeleted: boolean;
-  deletedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
+  deletedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
   moduleTopics: ModuleTopic[];
 }
 

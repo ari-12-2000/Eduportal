@@ -15,6 +15,7 @@ import { CoursesList } from "@/components/courses-list"
 import { Course } from "@/types"
 import { useCourses } from "@/contexts/course-context"
 import { usePathname } from "next/navigation"
+import { Program } from "@/lib/generated/prisma"
 
 interface FilterState {
   priceRange: [number, number]
@@ -106,7 +107,7 @@ export default function SearchPage() {
     }
 
     if (filters.levels.length > 0) {
-      result = result.filter((course) => filters.levels.includes(course.level))
+      result = result.filter((course) => course.level && filters.levels.includes(course.level))
     }
 
     if (filters.ratings) {

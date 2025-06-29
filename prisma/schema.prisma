@@ -47,7 +47,7 @@ model Admin {
   // Relations
   creator       Admin?         @relation("AdminCreator", fields: [createdBy], references: [id])
   createdAdmins Admin[]        @relation("AdminCreator")
-  //programs      Program[]      @relation("ProgramAuthor")
+  programs      Program[]      @relation("ProgramAuthor")
   questions     QuestionPool[] @relation("QuestionAuthor")
   quizPapers    QuizPaper[]    @relation("QuizPaperAuthor")
 
@@ -107,16 +107,15 @@ enum ProgramType {
 model Program {
   id               Int               @id @default(autoincrement())
   authorId         Int               @map("author_id")
-  //author         Admin      @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   title            String            @db.VarChar(255)
   description      String            @db.Text
-  category         String?           @db.VarChar(100)
-  instructor       String?           @db.VarChar(255)
+  category         String           @db.VarChar(100)
+  instructor       String           @db.VarChar(255)
   instructorAvatar String?           @map("instructor_avatar") @db.Text
   image            String?           @db.Text
   rating           Float?            @default(0) @map("rating")
   level            String?           @db.VarChar(50)
-  price            Decimal?          @db.Decimal(10, 2)
+  price            Decimal          @db.Decimal(10, 2)
   type             ProgramType?
   totalTimeLimit   Int?              @map("total_time_limit")
   status           Int?              @db.SmallInt // Record state code
@@ -125,18 +124,18 @@ model Program {
   endDate          DateTime?         @map("end_date") @db.Date // Closing date
   surveyStartDate  DateTime?         @map("survey_start_date") @db.Date // Survey window start
   surveyEndDate    DateTime?         @map("survey_end_date") @db.Date // Survey window end
-  maxParticipants  String?           @map("max_participants") @db.VarChar(100) // Max registrants
+  maxParticipants  Int?              @map("max_participants")
   passingScore     Int?              @map("passing_score") // Pass threshold
   studySettings    Json?             @map("study_settings") @db.JsonB // Advanced settings
   clientId         Int?              @map("client_id") // Dashboard client reference
-  packageId        BigInt?           @map("package_id") // Dashboard package ID
+  packageId        Int?           @map("package_id") // Dashboard package ID
   isActive         Boolean           @default(true) @map("is_active") // Active flag
   isDeleted        Boolean           @default(false) @map("is_deleted") // Soft-delete
   createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz // Creation time
   updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz // Update time
   deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz // Deletion timestamp
   // Relations
-  //author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   enrollments      Enrollment[]      @relation("ProgramEnrollments")
   quizAssignments  QuizAssignment[]
   measureProgress  MeasureProgress[] // Opposite relation for MeasureProgress

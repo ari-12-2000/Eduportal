@@ -2,7 +2,7 @@
 
 import { Course } from "@/types"
 import { createContext, useContext, useState, useEffect, type ReactNode, SetStateAction, Dispatch } from "react"
-import { Code, Palette, Database, Smartphone, Brain, TrendingUp, ArrowRight, Award, BookOpen } from "lucide-react"
+import { Code, Palette, Database, Smartphone, Brain, TrendingUp, ArrowRight, Award, BookOpen, BarChartBig, Megaphone, LineChart } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 interface CourseContextType {
@@ -45,11 +45,12 @@ export function CourseProvider({ children }: { children: ReactNode }) {
                 const categoryIcons = {
                     "Web Development": { icon: Code, color: "bg-blue-500" },
                     "UI/UX Design": { icon: Palette, color: "bg-purple-500" },
-                    "Data Science": { icon: Database, color: "bg-green-500" },
-                    "Mobile Development": { icon: Smartphone, color: "bg-orange-500" },
+                    "Database": { icon: Database, color: "bg-green-500" },
+                    "Data Science": { icon: BarChartBig, color: "bg-green-500" },
                     "Machine Learning": { icon: Brain, color: "bg-red-500" },
-                    "Digital Marketing": { icon: TrendingUp, color: "bg-pink-500" },
-                } as const
+                    "Digital Marketing": { icon: Megaphone, color: "bg-orange-500" },
+                    "Mobile Development": { icon: Smartphone, color: "bg-orange-500" },
+                } as const;
 
                 const mappedCategories = categoriesData.map((categoryData: { category: string }) => {
                     const key = categoryData.category as keyof typeof categoryIcons
@@ -59,7 +60,7 @@ export function CourseProvider({ children }: { children: ReactNode }) {
                         color: categoryIcons[key]?.color || "bg-gray-500",
                     }
                 })
-
+                console.log(mappedCategories);
                 setCategories(mappedCategories)
             } catch (err: any) {
                 console.error(err.message)
@@ -75,7 +76,7 @@ export function CourseProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         // Clear filter when moving away from search page to any other page except home
         console.log(previousPath);
-        if (previousPath === "/courses/search"  && filterCategory) {
+        if (previousPath === "/courses/search" && filterCategory) {
             console.log("Clearing filter - moved away from search page")
             setFilterCategory("")
         }

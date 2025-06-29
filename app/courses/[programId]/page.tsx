@@ -1,19 +1,25 @@
 "use client"
 
-import { Clock, ArrowLeft, FileText, Award } from "lucide-react"
+import { Clock, ArrowLeft, FileText, Award, CheckCircle } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Card, CardContent } from "@/components/ui/card"
 import { use, useEffect, useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import Loading from "./loading"
+import { useAuth } from "@/contexts/auth-context"
+import { useRouter } from "next/navigation"
 
-export default function CourseDetail({ params }: { params: Promise<{ programId: string }> }) {
+
+export default function CourseDetail({ params, searchParams }: { params: Promise<{ programId: string }>, searchParams: Promise<{ [enrolled: string]: string | undefined }> }) {
   const { toast } = useToast()
   const { programId } = use(params)
+  const { enrolled } = use(searchParams)
   const [activeModule, setActiveModule] = useState<string | null>(null)
   const [courseData, setCourseData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const { refreshUser } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchCourse() {
@@ -21,7 +27,6 @@ export default function CourseDetail({ params }: { params: Promise<{ programId: 
 
       setIsLoading(true)
       try {
-        console.log("Fetching course for programId:", programId)
         const res = await fetch(`/api/courses/${programId}`)
 
         if (!res.ok) {
@@ -46,6 +51,30 @@ export default function CourseDetail({ params }: { params: Promise<{ programId: 
     fetchCourse()
   }, [programId, toast])
 
+  useEffect(() => {
+    if (enrolled === "true") {
+      // Show success toast
+      toast({
+        title: "Enrollment Successful",
+        description: (
+          <div className="flex items-center gap-2 text-green-600">
+            <CheckCircle className="h-5 w-5" />
+            <span>You have successfully enrolled in the course.</span>
+          </div>
+        ),
+      })
+
+      // Refresh user data to update enrolled courses
+      if (refreshUser) {
+        refreshUser()
+      }
+
+      // Clean up the URL by removing the query parameter
+      const url = new URL(window.location.href)
+      url.searchParams.delete("enrolled")
+      router.replace(url.pathname, { scroll: false })
+    }
+  }, [enrolled, refreshUser, toast, router])
   // Show loading state
   if (isLoading) {
     return <Loading />

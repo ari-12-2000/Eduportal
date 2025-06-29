@@ -26,6 +26,7 @@ interface AuthContextType {
   ) => Promise<{ success: boolean; message?: string }>
   logout: () => void
   isLoading: boolean
+  refreshUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -104,13 +105,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const refreshUser = async () => {
+    const token = localStorage.getItem("eduportal-token")
+    console.log("Refreshing user data with token:", token)
+    if (!token) return
+
+    try {
+      const response = await fetch("/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data);
+        setUser(data.user)
+      }
+    } catch (error) {
+      console.error("Failed to refresh user data:", error)
+    }
+  }
+
   const logout = () => {
     setUser(null)
     localStorage.removeItem("eduportal-user")
     localStorage.removeItem("eduportal-token")
   }
 
-  return <AuthContext.Provider value={{ user, login, signup, logout, isLoading }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, login, signup, logout, isLoading , refreshUser}}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

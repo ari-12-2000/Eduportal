@@ -168,7 +168,7 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <Label htmlFor="signup-first_name">First Name</Label>
                   <Input
-                    id="signup-name"
+                    id="signup-first_name"
                     type="text"
                     placeholder="John"
                     value={signupData.first_name}
@@ -180,7 +180,7 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <Label htmlFor="signup-last_name">Last Name</Label>
                   <Input
-                    id="signup-name"
+                    id="signup-last_name"
                     type="text"
                     placeholder="Doe"
                     value={signupData.last_name}
@@ -201,7 +201,7 @@ export default function LoginPage() {
                   />
                 </div>
 
-                {signupData.password === `${GlobalVariables.non_admin.role1}` &&
+                {signupData.role === `${GlobalVariables.non_admin.role1}` &&
                   (<div className="space-y-2 relative">
                     <Label htmlFor="signup-password">Password</Label>
                     <p className="text-xs text-muted-foreground mb-1">

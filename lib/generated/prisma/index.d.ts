@@ -2607,12 +2607,14 @@ export namespace Prisma {
 
   export type AdminCountOutputType = {
     createdAdmins: number
+    programs: number
     questions: number
     quizPapers: number
   }
 
   export type AdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdAdmins?: boolean | AdminCountOutputTypeCountCreatedAdminsArgs
+    programs?: boolean | AdminCountOutputTypeCountProgramsArgs
     questions?: boolean | AdminCountOutputTypeCountQuestionsArgs
     quizPapers?: boolean | AdminCountOutputTypeCountQuizPapersArgs
   }
@@ -2633,6 +2635,13 @@ export namespace Prisma {
    */
   export type AdminCountOutputTypeCountCreatedAdminsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AdminWhereInput
+  }
+
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeCountProgramsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramWhereInput
   }
 
   /**
@@ -3404,6 +3413,7 @@ export namespace Prisma {
     updatedAt?: boolean
     creator?: boolean | Admin$creatorArgs<ExtArgs>
     createdAdmins?: boolean | Admin$createdAdminsArgs<ExtArgs>
+    programs?: boolean | Admin$programsArgs<ExtArgs>
     questions?: boolean | Admin$questionsArgs<ExtArgs>
     quizPapers?: boolean | Admin$quizPapersArgs<ExtArgs>
     _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
@@ -3475,6 +3485,7 @@ export namespace Prisma {
   export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | Admin$creatorArgs<ExtArgs>
     createdAdmins?: boolean | Admin$createdAdminsArgs<ExtArgs>
+    programs?: boolean | Admin$programsArgs<ExtArgs>
     questions?: boolean | Admin$questionsArgs<ExtArgs>
     quizPapers?: boolean | Admin$quizPapersArgs<ExtArgs>
     _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
@@ -3491,6 +3502,7 @@ export namespace Prisma {
     objects: {
       creator: Prisma.$AdminPayload<ExtArgs> | null
       createdAdmins: Prisma.$AdminPayload<ExtArgs>[]
+      programs: Prisma.$ProgramPayload<ExtArgs>[]
       questions: Prisma.$QuestionPoolPayload<ExtArgs>[]
       quizPapers: Prisma.$QuizPaperPayload<ExtArgs>[]
     }
@@ -3908,6 +3920,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     creator<T extends Admin$creatorArgs<ExtArgs> = {}>(args?: Subset<T, Admin$creatorArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdAdmins<T extends Admin$createdAdminsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$createdAdminsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    programs<T extends Admin$programsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$programsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questions<T extends Admin$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quizPapers<T extends Admin$quizPapersArgs<ExtArgs> = {}>(args?: Subset<T, Admin$quizPapersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizPaperPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -4392,6 +4405,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
+  }
+
+  /**
+   * Admin.programs
+   */
+  export type Admin$programsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Program
+     */
+    select?: ProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Program
+     */
+    omit?: ProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramInclude<ExtArgs> | null
+    where?: ProgramWhereInput
+    orderBy?: ProgramOrderByWithRelationInput | ProgramOrderByWithRelationInput[]
+    cursor?: ProgramWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramScalarFieldEnum | ProgramScalarFieldEnum[]
   }
 
   /**
@@ -6085,6 +6122,7 @@ export namespace Prisma {
     price: Decimal | null
     totalTimeLimit: number | null
     status: number | null
+    maxParticipants: number | null
     passingScore: number | null
     clientId: number | null
     packageId: number | null
@@ -6097,9 +6135,10 @@ export namespace Prisma {
     price: Decimal | null
     totalTimeLimit: number | null
     status: number | null
+    maxParticipants: number | null
     passingScore: number | null
     clientId: number | null
-    packageId: bigint | null
+    packageId: number | null
   }
 
   export type ProgramMinAggregateOutputType = {
@@ -6122,10 +6161,10 @@ export namespace Prisma {
     endDate: Date | null
     surveyStartDate: Date | null
     surveyEndDate: Date | null
-    maxParticipants: string | null
+    maxParticipants: number | null
     passingScore: number | null
     clientId: number | null
-    packageId: bigint | null
+    packageId: number | null
     isActive: boolean | null
     isDeleted: boolean | null
     createdAt: Date | null
@@ -6153,10 +6192,10 @@ export namespace Prisma {
     endDate: Date | null
     surveyStartDate: Date | null
     surveyEndDate: Date | null
-    maxParticipants: string | null
+    maxParticipants: number | null
     passingScore: number | null
     clientId: number | null
-    packageId: bigint | null
+    packageId: number | null
     isActive: boolean | null
     isDeleted: boolean | null
     createdAt: Date | null
@@ -6205,6 +6244,7 @@ export namespace Prisma {
     price?: true
     totalTimeLimit?: true
     status?: true
+    maxParticipants?: true
     passingScore?: true
     clientId?: true
     packageId?: true
@@ -6217,6 +6257,7 @@ export namespace Prisma {
     price?: true
     totalTimeLimit?: true
     status?: true
+    maxParticipants?: true
     passingScore?: true
     clientId?: true
     packageId?: true
@@ -6408,13 +6449,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category: string | null
-    instructor: string | null
+    category: string
+    instructor: string
     instructorAvatar: string | null
     image: string | null
     rating: number | null
     level: string | null
-    price: Decimal | null
+    price: Decimal
     type: $Enums.ProgramType | null
     totalTimeLimit: number | null
     status: number | null
@@ -6423,11 +6464,11 @@ export namespace Prisma {
     endDate: Date | null
     surveyStartDate: Date | null
     surveyEndDate: Date | null
-    maxParticipants: string | null
+    maxParticipants: number | null
     passingScore: number | null
     studySettings: JsonValue | null
     clientId: number | null
-    packageId: bigint | null
+    packageId: number | null
     isActive: boolean
     isDeleted: boolean
     createdAt: Date
@@ -6484,6 +6525,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
+    author?: boolean | AdminDefaultArgs<ExtArgs>
     enrollments?: boolean | Program$enrollmentsArgs<ExtArgs>
     quizAssignments?: boolean | Program$quizAssignmentsArgs<ExtArgs>
     measureProgress?: boolean | Program$measureProgressArgs<ExtArgs>
@@ -6522,6 +6564,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
+    author?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["program"]>
 
   export type ProgramSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6554,6 +6597,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
+    author?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["program"]>
 
   export type ProgramSelectScalar = {
@@ -6590,6 +6634,7 @@ export namespace Prisma {
 
   export type ProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "authorId" | "title" | "description" | "category" | "instructor" | "instructorAvatar" | "image" | "rating" | "level" | "price" | "type" | "totalTimeLimit" | "status" | "uniqueHash" | "startDate" | "endDate" | "surveyStartDate" | "surveyEndDate" | "maxParticipants" | "passingScore" | "studySettings" | "clientId" | "packageId" | "isActive" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["program"]>
   export type ProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | AdminDefaultArgs<ExtArgs>
     enrollments?: boolean | Program$enrollmentsArgs<ExtArgs>
     quizAssignments?: boolean | Program$quizAssignmentsArgs<ExtArgs>
     measureProgress?: boolean | Program$measureProgressArgs<ExtArgs>
@@ -6597,12 +6642,17 @@ export namespace Prisma {
     programModules?: boolean | Program$programModulesArgs<ExtArgs>
     _count?: boolean | ProgramCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ProgramIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+  export type ProgramIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | AdminDefaultArgs<ExtArgs>
+  }
 
   export type $ProgramPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Program"
     objects: {
+      author: Prisma.$AdminPayload<ExtArgs>
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       quizAssignments: Prisma.$QuizAssignmentPayload<ExtArgs>[]
       measureProgress: Prisma.$MeasureProgressPayload<ExtArgs>[]
@@ -6614,13 +6664,13 @@ export namespace Prisma {
       authorId: number
       title: string
       description: string
-      category: string | null
-      instructor: string | null
+      category: string
+      instructor: string
       instructorAvatar: string | null
       image: string | null
       rating: number | null
       level: string | null
-      price: Prisma.Decimal | null
+      price: Prisma.Decimal
       type: $Enums.ProgramType | null
       totalTimeLimit: number | null
       status: number | null
@@ -6629,11 +6679,11 @@ export namespace Prisma {
       endDate: Date | null
       surveyStartDate: Date | null
       surveyEndDate: Date | null
-      maxParticipants: string | null
+      maxParticipants: number | null
       passingScore: number | null
       studySettings: Prisma.JsonValue | null
       clientId: number | null
-      packageId: bigint | null
+      packageId: number | null
       isActive: boolean
       isDeleted: boolean
       createdAt: Date
@@ -7033,6 +7083,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    author<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     enrollments<T extends Program$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Program$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quizAssignments<T extends Program$quizAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Program$quizAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     measureProgress<T extends Program$measureProgressArgs<ExtArgs> = {}>(args?: Subset<T, Program$measureProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeasureProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7086,11 +7137,11 @@ export namespace Prisma {
     readonly endDate: FieldRef<"Program", 'DateTime'>
     readonly surveyStartDate: FieldRef<"Program", 'DateTime'>
     readonly surveyEndDate: FieldRef<"Program", 'DateTime'>
-    readonly maxParticipants: FieldRef<"Program", 'String'>
+    readonly maxParticipants: FieldRef<"Program", 'Int'>
     readonly passingScore: FieldRef<"Program", 'Int'>
     readonly studySettings: FieldRef<"Program", 'Json'>
     readonly clientId: FieldRef<"Program", 'Int'>
-    readonly packageId: FieldRef<"Program", 'BigInt'>
+    readonly packageId: FieldRef<"Program", 'Int'>
     readonly isActive: FieldRef<"Program", 'Boolean'>
     readonly isDeleted: FieldRef<"Program", 'Boolean'>
     readonly createdAt: FieldRef<"Program", 'DateTime'>
@@ -7345,6 +7396,10 @@ export namespace Prisma {
      */
     data: ProgramCreateManyInput | ProgramCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7415,6 +7470,10 @@ export namespace Prisma {
      * Limit how many Programs to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -26819,20 +26878,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'BigInt'
-   */
-  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
-    
-
-
-  /**
-   * Reference to a field of type 'BigInt[]'
-   */
-  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
-    
-
-
-  /**
    * Reference to a field of type 'ResourceType'
    */
   export type EnumResourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceType'>
@@ -26928,6 +26973,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
     creator?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
     createdAdmins?: AdminListRelationFilter
+    programs?: ProgramListRelationFilter
     questions?: QuestionPoolListRelationFilter
     quizPapers?: QuizPaperListRelationFilter
   }
@@ -26952,6 +26998,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     creator?: AdminOrderByWithRelationInput
     createdAdmins?: AdminOrderByRelationAggregateInput
+    programs?: ProgramOrderByRelationAggregateInput
     questions?: QuestionPoolOrderByRelationAggregateInput
     quizPapers?: QuizPaperOrderByRelationAggregateInput
   }
@@ -26979,6 +27026,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
     creator?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
     createdAdmins?: AdminListRelationFilter
+    programs?: ProgramListRelationFilter
     questions?: QuestionPoolListRelationFilter
     quizPapers?: QuizPaperListRelationFilter
   }, "id" | "email">
@@ -27234,13 +27282,13 @@ export namespace Prisma {
     authorId?: IntFilter<"Program"> | number
     title?: StringFilter<"Program"> | string
     description?: StringFilter<"Program"> | string
-    category?: StringNullableFilter<"Program"> | string | null
-    instructor?: StringNullableFilter<"Program"> | string | null
+    category?: StringFilter<"Program"> | string
+    instructor?: StringFilter<"Program"> | string
     instructorAvatar?: StringNullableFilter<"Program"> | string | null
     image?: StringNullableFilter<"Program"> | string | null
     rating?: FloatNullableFilter<"Program"> | number | null
     level?: StringNullableFilter<"Program"> | string | null
-    price?: DecimalNullableFilter<"Program"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFilter<"Program"> | Decimal | DecimalJsLike | number | string
     type?: EnumProgramTypeNullableFilter<"Program"> | $Enums.ProgramType | null
     totalTimeLimit?: IntNullableFilter<"Program"> | number | null
     status?: IntNullableFilter<"Program"> | number | null
@@ -27249,16 +27297,17 @@ export namespace Prisma {
     endDate?: DateTimeNullableFilter<"Program"> | Date | string | null
     surveyStartDate?: DateTimeNullableFilter<"Program"> | Date | string | null
     surveyEndDate?: DateTimeNullableFilter<"Program"> | Date | string | null
-    maxParticipants?: StringNullableFilter<"Program"> | string | null
+    maxParticipants?: IntNullableFilter<"Program"> | number | null
     passingScore?: IntNullableFilter<"Program"> | number | null
     studySettings?: JsonNullableFilter<"Program">
     clientId?: IntNullableFilter<"Program"> | number | null
-    packageId?: BigIntNullableFilter<"Program"> | bigint | number | null
+    packageId?: IntNullableFilter<"Program"> | number | null
     isActive?: BoolFilter<"Program"> | boolean
     isDeleted?: BoolFilter<"Program"> | boolean
     createdAt?: DateTimeFilter<"Program"> | Date | string
     updatedAt?: DateTimeFilter<"Program"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Program"> | Date | string | null
+    author?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     enrollments?: EnrollmentListRelationFilter
     quizAssignments?: QuizAssignmentListRelationFilter
     measureProgress?: MeasureProgressListRelationFilter
@@ -27271,13 +27320,13 @@ export namespace Prisma {
     authorId?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    category?: SortOrderInput | SortOrder
-    instructor?: SortOrderInput | SortOrder
+    category?: SortOrder
+    instructor?: SortOrder
     instructorAvatar?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     rating?: SortOrderInput | SortOrder
     level?: SortOrderInput | SortOrder
-    price?: SortOrderInput | SortOrder
+    price?: SortOrder
     type?: SortOrderInput | SortOrder
     totalTimeLimit?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
@@ -27296,6 +27345,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    author?: AdminOrderByWithRelationInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
     quizAssignments?: QuizAssignmentOrderByRelationAggregateInput
     measureProgress?: MeasureProgressOrderByRelationAggregateInput
@@ -27311,13 +27361,13 @@ export namespace Prisma {
     authorId?: IntFilter<"Program"> | number
     title?: StringFilter<"Program"> | string
     description?: StringFilter<"Program"> | string
-    category?: StringNullableFilter<"Program"> | string | null
-    instructor?: StringNullableFilter<"Program"> | string | null
+    category?: StringFilter<"Program"> | string
+    instructor?: StringFilter<"Program"> | string
     instructorAvatar?: StringNullableFilter<"Program"> | string | null
     image?: StringNullableFilter<"Program"> | string | null
     rating?: FloatNullableFilter<"Program"> | number | null
     level?: StringNullableFilter<"Program"> | string | null
-    price?: DecimalNullableFilter<"Program"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFilter<"Program"> | Decimal | DecimalJsLike | number | string
     type?: EnumProgramTypeNullableFilter<"Program"> | $Enums.ProgramType | null
     totalTimeLimit?: IntNullableFilter<"Program"> | number | null
     status?: IntNullableFilter<"Program"> | number | null
@@ -27326,16 +27376,17 @@ export namespace Prisma {
     endDate?: DateTimeNullableFilter<"Program"> | Date | string | null
     surveyStartDate?: DateTimeNullableFilter<"Program"> | Date | string | null
     surveyEndDate?: DateTimeNullableFilter<"Program"> | Date | string | null
-    maxParticipants?: StringNullableFilter<"Program"> | string | null
+    maxParticipants?: IntNullableFilter<"Program"> | number | null
     passingScore?: IntNullableFilter<"Program"> | number | null
     studySettings?: JsonNullableFilter<"Program">
     clientId?: IntNullableFilter<"Program"> | number | null
-    packageId?: BigIntNullableFilter<"Program"> | bigint | number | null
+    packageId?: IntNullableFilter<"Program"> | number | null
     isActive?: BoolFilter<"Program"> | boolean
     isDeleted?: BoolFilter<"Program"> | boolean
     createdAt?: DateTimeFilter<"Program"> | Date | string
     updatedAt?: DateTimeFilter<"Program"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Program"> | Date | string | null
+    author?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     enrollments?: EnrollmentListRelationFilter
     quizAssignments?: QuizAssignmentListRelationFilter
     measureProgress?: MeasureProgressListRelationFilter
@@ -27348,13 +27399,13 @@ export namespace Prisma {
     authorId?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    category?: SortOrderInput | SortOrder
-    instructor?: SortOrderInput | SortOrder
+    category?: SortOrder
+    instructor?: SortOrder
     instructorAvatar?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     rating?: SortOrderInput | SortOrder
     level?: SortOrderInput | SortOrder
-    price?: SortOrderInput | SortOrder
+    price?: SortOrder
     type?: SortOrderInput | SortOrder
     totalTimeLimit?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
@@ -27388,13 +27439,13 @@ export namespace Prisma {
     authorId?: IntWithAggregatesFilter<"Program"> | number
     title?: StringWithAggregatesFilter<"Program"> | string
     description?: StringWithAggregatesFilter<"Program"> | string
-    category?: StringNullableWithAggregatesFilter<"Program"> | string | null
-    instructor?: StringNullableWithAggregatesFilter<"Program"> | string | null
+    category?: StringWithAggregatesFilter<"Program"> | string
+    instructor?: StringWithAggregatesFilter<"Program"> | string
     instructorAvatar?: StringNullableWithAggregatesFilter<"Program"> | string | null
     image?: StringNullableWithAggregatesFilter<"Program"> | string | null
     rating?: FloatNullableWithAggregatesFilter<"Program"> | number | null
     level?: StringNullableWithAggregatesFilter<"Program"> | string | null
-    price?: DecimalNullableWithAggregatesFilter<"Program"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalWithAggregatesFilter<"Program"> | Decimal | DecimalJsLike | number | string
     type?: EnumProgramTypeNullableWithAggregatesFilter<"Program"> | $Enums.ProgramType | null
     totalTimeLimit?: IntNullableWithAggregatesFilter<"Program"> | number | null
     status?: IntNullableWithAggregatesFilter<"Program"> | number | null
@@ -27403,11 +27454,11 @@ export namespace Prisma {
     endDate?: DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
     surveyStartDate?: DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
     surveyEndDate?: DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
-    maxParticipants?: StringNullableWithAggregatesFilter<"Program"> | string | null
+    maxParticipants?: IntNullableWithAggregatesFilter<"Program"> | number | null
     passingScore?: IntNullableWithAggregatesFilter<"Program"> | number | null
     studySettings?: JsonNullableWithAggregatesFilter<"Program">
     clientId?: IntNullableWithAggregatesFilter<"Program"> | number | null
-    packageId?: BigIntNullableWithAggregatesFilter<"Program"> | bigint | number | null
+    packageId?: IntNullableWithAggregatesFilter<"Program"> | number | null
     isActive?: BoolWithAggregatesFilter<"Program"> | boolean
     isDeleted?: BoolWithAggregatesFilter<"Program"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Program"> | Date | string
@@ -28597,6 +28648,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     creator?: AdminCreateNestedOneWithoutCreatedAdminsInput
     createdAdmins?: AdminCreateNestedManyWithoutCreatorInput
+    programs?: ProgramCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperCreateNestedManyWithoutAuthorInput
   }
@@ -28620,6 +28672,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdAdmins?: AdminUncheckedCreateNestedManyWithoutCreatorInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolUncheckedCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperUncheckedCreateNestedManyWithoutAuthorInput
   }
@@ -28642,6 +28695,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: AdminUpdateOneWithoutCreatedAdminsNestedInput
     createdAdmins?: AdminUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUpdateManyWithoutAuthorNestedInput
   }
@@ -28665,6 +28719,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAdmins?: AdminUncheckedUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUncheckedUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUncheckedUpdateManyWithoutAuthorNestedInput
   }
@@ -28972,16 +29027,15 @@ export namespace Prisma {
   }
 
   export type ProgramCreateInput = {
-    authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -28990,16 +29044,17 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    author: AdminCreateNestedOneWithoutProgramsInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
     quizAssignments?: QuizAssignmentCreateNestedManyWithoutProgramInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutProgramInput
@@ -29012,13 +29067,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -29027,11 +29082,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -29045,16 +29100,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -29063,16 +29117,17 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: AdminUpdateOneRequiredWithoutProgramsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
     quizAssignments?: QuizAssignmentUpdateManyWithoutProgramNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutProgramNestedInput
@@ -29085,13 +29140,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -29100,11 +29155,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29122,13 +29177,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -29137,11 +29192,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -29150,16 +29205,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateManyMutationInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -29168,11 +29222,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29185,13 +29239,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -29200,11 +29254,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30430,6 +30484,12 @@ export namespace Prisma {
     none?: AdminWhereInput
   }
 
+  export type ProgramListRelationFilter = {
+    every?: ProgramWhereInput
+    some?: ProgramWhereInput
+    none?: ProgramWhereInput
+  }
+
   export type QuestionPoolListRelationFilter = {
     every?: QuestionPoolWhereInput
     some?: QuestionPoolWhereInput
@@ -30448,6 +30508,10 @@ export namespace Prisma {
   }
 
   export type AdminOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgramOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -30846,15 +30910,15 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
   export type EnumProgramTypeNullableFilter<$PrismaModel = never> = {
@@ -30887,15 +30951,9 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type BigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  export type AdminScalarRelationFilter = {
+    is?: AdminWhereInput
+    isNot?: AdminWhereInput
   }
 
   export type QuizAssignmentListRelationFilter = {
@@ -30957,6 +31015,7 @@ export namespace Prisma {
     price?: SortOrder
     totalTimeLimit?: SortOrder
     status?: SortOrder
+    maxParticipants?: SortOrder
     passingScore?: SortOrder
     clientId?: SortOrder
     packageId?: SortOrder
@@ -31031,6 +31090,7 @@ export namespace Prisma {
     price?: SortOrder
     totalTimeLimit?: SortOrder
     status?: SortOrder
+    maxParticipants?: SortOrder
     passingScore?: SortOrder
     clientId?: SortOrder
     packageId?: SortOrder
@@ -31052,20 +31112,20 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type EnumProgramTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -31102,22 +31162,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
-
-  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
   }
 
   export type ModuleNullableScalarRelationFilter = {
@@ -31519,11 +31563,6 @@ export namespace Prisma {
     not?: NestedEnumQuestionTypeFilter<$PrismaModel> | $Enums.QuestionType
   }
 
-  export type AdminScalarRelationFilter = {
-    is?: AdminWhereInput
-    isNot?: AdminWhereInput
-  }
-
   export type QuizPaperQuestionListRelationFilter = {
     every?: QuizPaperQuestionWhereInput
     some?: QuizPaperQuestionWhereInput
@@ -31860,6 +31899,17 @@ export namespace Prisma {
     _max?: NestedEnumResultModeFilter<$PrismaModel>
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type BoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -31923,6 +31973,22 @@ export namespace Prisma {
     learnerId?: SortOrder
     totalTimeSpent?: SortOrder
     score?: SortOrder
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -32071,17 +32137,6 @@ export namespace Prisma {
     resourceId?: SortOrder
   }
 
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
   export type LeaderboardProgramIdLearnerIdCompoundUniqueInput = {
     programId: number
     learnerId: number
@@ -32120,22 +32175,6 @@ export namespace Prisma {
     totalScore?: SortOrder
   }
 
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
-  }
-
   export type AdminCreateNestedOneWithoutCreatedAdminsInput = {
     create?: XOR<AdminCreateWithoutCreatedAdminsInput, AdminUncheckedCreateWithoutCreatedAdminsInput>
     connectOrCreate?: AdminCreateOrConnectWithoutCreatedAdminsInput
@@ -32147,6 +32186,13 @@ export namespace Prisma {
     connectOrCreate?: AdminCreateOrConnectWithoutCreatorInput | AdminCreateOrConnectWithoutCreatorInput[]
     createMany?: AdminCreateManyCreatorInputEnvelope
     connect?: AdminWhereUniqueInput | AdminWhereUniqueInput[]
+  }
+
+  export type ProgramCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<ProgramCreateWithoutAuthorInput, ProgramUncheckedCreateWithoutAuthorInput> | ProgramCreateWithoutAuthorInput[] | ProgramUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramCreateOrConnectWithoutAuthorInput | ProgramCreateOrConnectWithoutAuthorInput[]
+    createMany?: ProgramCreateManyAuthorInputEnvelope
+    connect?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
   }
 
   export type QuestionPoolCreateNestedManyWithoutAuthorInput = {
@@ -32168,6 +32214,13 @@ export namespace Prisma {
     connectOrCreate?: AdminCreateOrConnectWithoutCreatorInput | AdminCreateOrConnectWithoutCreatorInput[]
     createMany?: AdminCreateManyCreatorInputEnvelope
     connect?: AdminWhereUniqueInput | AdminWhereUniqueInput[]
+  }
+
+  export type ProgramUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<ProgramCreateWithoutAuthorInput, ProgramUncheckedCreateWithoutAuthorInput> | ProgramCreateWithoutAuthorInput[] | ProgramUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramCreateOrConnectWithoutAuthorInput | ProgramCreateOrConnectWithoutAuthorInput[]
+    createMany?: ProgramCreateManyAuthorInputEnvelope
+    connect?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
   }
 
   export type QuestionPoolUncheckedCreateNestedManyWithoutAuthorInput = {
@@ -32232,6 +32285,20 @@ export namespace Prisma {
     deleteMany?: AdminScalarWhereInput | AdminScalarWhereInput[]
   }
 
+  export type ProgramUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<ProgramCreateWithoutAuthorInput, ProgramUncheckedCreateWithoutAuthorInput> | ProgramCreateWithoutAuthorInput[] | ProgramUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramCreateOrConnectWithoutAuthorInput | ProgramCreateOrConnectWithoutAuthorInput[]
+    upsert?: ProgramUpsertWithWhereUniqueWithoutAuthorInput | ProgramUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: ProgramCreateManyAuthorInputEnvelope
+    set?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    disconnect?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    delete?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    connect?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    update?: ProgramUpdateWithWhereUniqueWithoutAuthorInput | ProgramUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: ProgramUpdateManyWithWhereWithoutAuthorInput | ProgramUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: ProgramScalarWhereInput | ProgramScalarWhereInput[]
+  }
+
   export type QuestionPoolUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<QuestionPoolCreateWithoutAuthorInput, QuestionPoolUncheckedCreateWithoutAuthorInput> | QuestionPoolCreateWithoutAuthorInput[] | QuestionPoolUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: QuestionPoolCreateOrConnectWithoutAuthorInput | QuestionPoolCreateOrConnectWithoutAuthorInput[]
@@ -32288,6 +32355,20 @@ export namespace Prisma {
     update?: AdminUpdateWithWhereUniqueWithoutCreatorInput | AdminUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: AdminUpdateManyWithWhereWithoutCreatorInput | AdminUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: AdminScalarWhereInput | AdminScalarWhereInput[]
+  }
+
+  export type ProgramUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<ProgramCreateWithoutAuthorInput, ProgramUncheckedCreateWithoutAuthorInput> | ProgramCreateWithoutAuthorInput[] | ProgramUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramCreateOrConnectWithoutAuthorInput | ProgramCreateOrConnectWithoutAuthorInput[]
+    upsert?: ProgramUpsertWithWhereUniqueWithoutAuthorInput | ProgramUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: ProgramCreateManyAuthorInputEnvelope
+    set?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    disconnect?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    delete?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    connect?: ProgramWhereUniqueInput | ProgramWhereUniqueInput[]
+    update?: ProgramUpdateWithWhereUniqueWithoutAuthorInput | ProgramUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: ProgramUpdateManyWithWhereWithoutAuthorInput | ProgramUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: ProgramScalarWhereInput | ProgramScalarWhereInput[]
   }
 
   export type QuestionPoolUncheckedUpdateManyWithoutAuthorNestedInput = {
@@ -32590,6 +32671,12 @@ export namespace Prisma {
     deleteMany?: LeaderboardScalarWhereInput | LeaderboardScalarWhereInput[]
   }
 
+  export type AdminCreateNestedOneWithoutProgramsInput = {
+    create?: XOR<AdminCreateWithoutProgramsInput, AdminUncheckedCreateWithoutProgramsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutProgramsInput
+    connect?: AdminWhereUniqueInput
+  }
+
   export type EnrollmentCreateNestedManyWithoutProgramInput = {
     create?: XOR<EnrollmentCreateWithoutProgramInput, EnrollmentUncheckedCreateWithoutProgramInput> | EnrollmentCreateWithoutProgramInput[] | EnrollmentUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutProgramInput | EnrollmentCreateOrConnectWithoutProgramInput[]
@@ -32668,8 +32755,8 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
     increment?: Decimal | DecimalJsLike | number | string
     decrement?: Decimal | DecimalJsLike | number | string
     multiply?: Decimal | DecimalJsLike | number | string
@@ -32680,12 +32767,12 @@ export namespace Prisma {
     set?: $Enums.ProgramType | null
   }
 
-  export type NullableBigIntFieldUpdateOperationsInput = {
-    set?: bigint | number | null
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
+  export type AdminUpdateOneRequiredWithoutProgramsNestedInput = {
+    create?: XOR<AdminCreateWithoutProgramsInput, AdminUncheckedCreateWithoutProgramsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutProgramsInput
+    upsert?: AdminUpsertWithoutProgramsInput
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutProgramsInput, AdminUpdateWithoutProgramsInput>, AdminUncheckedUpdateWithoutProgramsInput>
   }
 
   export type EnrollmentUpdateManyWithoutProgramNestedInput = {
@@ -33776,6 +33863,14 @@ export namespace Prisma {
     connect?: QuestionAttemptWhereUniqueInput | QuestionAttemptWhereUniqueInput[]
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
   }
@@ -33966,14 +34061,6 @@ export namespace Prisma {
     create?: XOR<LearnerCreateWithoutLeaderboardsInput, LearnerUncheckedCreateWithoutLeaderboardsInput>
     connectOrCreate?: LearnerCreateOrConnectWithoutLeaderboardsInput
     connect?: LearnerWhereUniqueInput
-  }
-
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type ProgramUpdateOneRequiredWithoutLeaderboardsNestedInput = {
@@ -34227,15 +34314,15 @@ export namespace Prisma {
     _max?: NestedBytesNullableFilter<$PrismaModel>
   }
 
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
   export type NestedEnumProgramTypeNullableFilter<$PrismaModel = never> = {
@@ -34243,17 +34330,6 @@ export namespace Prisma {
     in?: $Enums.ProgramType[] | ListEnumProgramTypeFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.ProgramType[] | ListEnumProgramTypeFieldRefInput<$PrismaModel> | null
     not?: NestedEnumProgramTypeNullableFilter<$PrismaModel> | $Enums.ProgramType | null
-  }
-
-  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -34272,20 +34348,20 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
     lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type NestedEnumProgramTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -34319,22 +34395,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumResourceTypeFilter<$PrismaModel = never> = {
@@ -34447,9 +34507,36 @@ export namespace Prisma {
     _max?: NestedEnumResultModeFilter<$PrismaModel>
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -34458,33 +34545,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
-  }
-
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type AdminCreateWithoutCreatedAdminsInput = {
@@ -34504,6 +34564,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     creator?: AdminCreateNestedOneWithoutCreatedAdminsInput
+    programs?: ProgramCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperCreateNestedManyWithoutAuthorInput
   }
@@ -34526,6 +34587,7 @@ export namespace Prisma {
     createdBy?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    programs?: ProgramUncheckedCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolUncheckedCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperUncheckedCreateNestedManyWithoutAuthorInput
   }
@@ -34552,6 +34614,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdAdmins?: AdminCreateNestedManyWithoutCreatorInput
+    programs?: ProgramCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperCreateNestedManyWithoutAuthorInput
   }
@@ -34574,6 +34637,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdAdmins?: AdminUncheckedCreateNestedManyWithoutCreatorInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolUncheckedCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperUncheckedCreateNestedManyWithoutAuthorInput
   }
@@ -34585,6 +34649,87 @@ export namespace Prisma {
 
   export type AdminCreateManyCreatorInputEnvelope = {
     data: AdminCreateManyCreatorInput | AdminCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramCreateWithoutAuthorInput = {
+    title: string
+    description: string
+    category: string
+    instructor: string
+    instructorAvatar?: string | null
+    image?: string | null
+    rating?: number | null
+    level?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    type?: $Enums.ProgramType | null
+    totalTimeLimit?: number | null
+    status?: number | null
+    uniqueHash?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    surveyStartDate?: Date | string | null
+    surveyEndDate?: Date | string | null
+    maxParticipants?: number | null
+    passingScore?: number | null
+    studySettings?: NullableJsonNullValueInput | InputJsonValue
+    clientId?: number | null
+    packageId?: number | null
+    isActive?: boolean
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
+    quizAssignments?: QuizAssignmentCreateNestedManyWithoutProgramInput
+    measureProgress?: MeasureProgressCreateNestedManyWithoutProgramInput
+    leaderboards?: LeaderboardCreateNestedManyWithoutProgramInput
+    programModules?: ProgramModuleCreateNestedManyWithoutProgramInput
+  }
+
+  export type ProgramUncheckedCreateWithoutAuthorInput = {
+    id?: number
+    title: string
+    description: string
+    category: string
+    instructor: string
+    instructorAvatar?: string | null
+    image?: string | null
+    rating?: number | null
+    level?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    type?: $Enums.ProgramType | null
+    totalTimeLimit?: number | null
+    status?: number | null
+    uniqueHash?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    surveyStartDate?: Date | string | null
+    surveyEndDate?: Date | string | null
+    maxParticipants?: number | null
+    passingScore?: number | null
+    studySettings?: NullableJsonNullValueInput | InputJsonValue
+    clientId?: number | null
+    packageId?: number | null
+    isActive?: boolean
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
+    quizAssignments?: QuizAssignmentUncheckedCreateNestedManyWithoutProgramInput
+    measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutProgramInput
+    leaderboards?: LeaderboardUncheckedCreateNestedManyWithoutProgramInput
+    programModules?: ProgramModuleUncheckedCreateNestedManyWithoutProgramInput
+  }
+
+  export type ProgramCreateOrConnectWithoutAuthorInput = {
+    where: ProgramWhereUniqueInput
+    create: XOR<ProgramCreateWithoutAuthorInput, ProgramUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type ProgramCreateManyAuthorInputEnvelope = {
+    data: ProgramCreateManyAuthorInput | ProgramCreateManyAuthorInput[]
     skipDuplicates?: boolean
   }
 
@@ -34690,6 +34835,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: AdminUpdateOneWithoutCreatedAdminsNestedInput
+    programs?: ProgramUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUpdateManyWithoutAuthorNestedInput
   }
@@ -34712,6 +34858,7 @@ export namespace Prisma {
     createdBy?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    programs?: ProgramUncheckedUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUncheckedUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUncheckedUpdateManyWithoutAuthorNestedInput
   }
@@ -34753,6 +34900,57 @@ export namespace Prisma {
     createdBy?: IntNullableFilter<"Admin"> | number | null
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
+  }
+
+  export type ProgramUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: ProgramWhereUniqueInput
+    update: XOR<ProgramUpdateWithoutAuthorInput, ProgramUncheckedUpdateWithoutAuthorInput>
+    create: XOR<ProgramCreateWithoutAuthorInput, ProgramUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type ProgramUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: ProgramWhereUniqueInput
+    data: XOR<ProgramUpdateWithoutAuthorInput, ProgramUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type ProgramUpdateManyWithWhereWithoutAuthorInput = {
+    where: ProgramScalarWhereInput
+    data: XOR<ProgramUpdateManyMutationInput, ProgramUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type ProgramScalarWhereInput = {
+    AND?: ProgramScalarWhereInput | ProgramScalarWhereInput[]
+    OR?: ProgramScalarWhereInput[]
+    NOT?: ProgramScalarWhereInput | ProgramScalarWhereInput[]
+    id?: IntFilter<"Program"> | number
+    authorId?: IntFilter<"Program"> | number
+    title?: StringFilter<"Program"> | string
+    description?: StringFilter<"Program"> | string
+    category?: StringFilter<"Program"> | string
+    instructor?: StringFilter<"Program"> | string
+    instructorAvatar?: StringNullableFilter<"Program"> | string | null
+    image?: StringNullableFilter<"Program"> | string | null
+    rating?: FloatNullableFilter<"Program"> | number | null
+    level?: StringNullableFilter<"Program"> | string | null
+    price?: DecimalFilter<"Program"> | Decimal | DecimalJsLike | number | string
+    type?: EnumProgramTypeNullableFilter<"Program"> | $Enums.ProgramType | null
+    totalTimeLimit?: IntNullableFilter<"Program"> | number | null
+    status?: IntNullableFilter<"Program"> | number | null
+    uniqueHash?: StringNullableFilter<"Program"> | string | null
+    startDate?: DateTimeNullableFilter<"Program"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Program"> | Date | string | null
+    surveyStartDate?: DateTimeNullableFilter<"Program"> | Date | string | null
+    surveyEndDate?: DateTimeNullableFilter<"Program"> | Date | string | null
+    maxParticipants?: IntNullableFilter<"Program"> | number | null
+    passingScore?: IntNullableFilter<"Program"> | number | null
+    studySettings?: JsonNullableFilter<"Program">
+    clientId?: IntNullableFilter<"Program"> | number | null
+    packageId?: IntNullableFilter<"Program"> | number | null
+    isActive?: BoolFilter<"Program"> | boolean
+    isDeleted?: BoolFilter<"Program"> | boolean
+    createdAt?: DateTimeFilter<"Program"> | Date | string
+    updatedAt?: DateTimeFilter<"Program"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Program"> | Date | string | null
   }
 
   export type QuestionPoolUpsertWithWhereUniqueWithoutAuthorInput = {
@@ -35382,6 +35580,56 @@ export namespace Prisma {
     lastAttemptAt?: DateTimeNullableFilter<"Leaderboard"> | Date | string | null
   }
 
+  export type AdminCreateWithoutProgramsInput = {
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    adminType: $Enums.AdminType
+    organization?: string | null
+    bio?: string | null
+    profile_image?: string | null
+    contactPhone?: string | null
+    website?: string | null
+    isVerified?: boolean
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creator?: AdminCreateNestedOneWithoutCreatedAdminsInput
+    createdAdmins?: AdminCreateNestedManyWithoutCreatorInput
+    questions?: QuestionPoolCreateNestedManyWithoutAuthorInput
+    quizPapers?: QuizPaperCreateNestedManyWithoutAuthorInput
+  }
+
+  export type AdminUncheckedCreateWithoutProgramsInput = {
+    id?: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    adminType: $Enums.AdminType
+    organization?: string | null
+    bio?: string | null
+    profile_image?: string | null
+    contactPhone?: string | null
+    website?: string | null
+    isVerified?: boolean
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdBy?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdAdmins?: AdminUncheckedCreateNestedManyWithoutCreatorInput
+    questions?: QuestionPoolUncheckedCreateNestedManyWithoutAuthorInput
+    quizPapers?: QuizPaperUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type AdminCreateOrConnectWithoutProgramsInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutProgramsInput, AdminUncheckedCreateWithoutProgramsInput>
+  }
+
   export type EnrollmentCreateWithoutProgramInput = {
     enrolledAt?: Date | string
     learner: LearnerCreateNestedOneWithoutEnrollmentsInput
@@ -35518,6 +35766,62 @@ export namespace Prisma {
   export type ProgramModuleCreateManyProgramInputEnvelope = {
     data: ProgramModuleCreateManyProgramInput | ProgramModuleCreateManyProgramInput[]
     skipDuplicates?: boolean
+  }
+
+  export type AdminUpsertWithoutProgramsInput = {
+    update: XOR<AdminUpdateWithoutProgramsInput, AdminUncheckedUpdateWithoutProgramsInput>
+    create: XOR<AdminCreateWithoutProgramsInput, AdminUncheckedCreateWithoutProgramsInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutProgramsInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutProgramsInput, AdminUncheckedUpdateWithoutProgramsInput>
+  }
+
+  export type AdminUpdateWithoutProgramsInput = {
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    adminType?: EnumAdminTypeFieldUpdateOperationsInput | $Enums.AdminType
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: AdminUpdateOneWithoutCreatedAdminsNestedInput
+    createdAdmins?: AdminUpdateManyWithoutCreatorNestedInput
+    questions?: QuestionPoolUpdateManyWithoutAuthorNestedInput
+    quizPapers?: QuizPaperUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type AdminUncheckedUpdateWithoutProgramsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    adminType?: EnumAdminTypeFieldUpdateOperationsInput | $Enums.AdminType
+    organization?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAdmins?: AdminUncheckedUpdateManyWithoutCreatorNestedInput
+    questions?: QuestionPoolUncheckedUpdateManyWithoutAuthorNestedInput
+    quizPapers?: QuizPaperUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutProgramInput = {
@@ -35980,16 +36284,15 @@ export namespace Prisma {
   }
 
   export type ProgramCreateWithoutEnrollmentsInput = {
-    authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -35998,16 +36301,17 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    author: AdminCreateNestedOneWithoutProgramsInput
     quizAssignments?: QuizAssignmentCreateNestedManyWithoutProgramInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutProgramInput
     leaderboards?: LeaderboardCreateNestedManyWithoutProgramInput
@@ -36019,13 +36323,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -36034,11 +36338,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -36151,16 +36455,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateWithoutEnrollmentsInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36169,16 +36472,17 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: AdminUpdateOneRequiredWithoutProgramsNestedInput
     quizAssignments?: QuizAssignmentUpdateManyWithoutProgramNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutProgramNestedInput
     leaderboards?: LeaderboardUpdateManyWithoutProgramNestedInput
@@ -36190,13 +36494,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36205,11 +36509,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36222,16 +36526,15 @@ export namespace Prisma {
   }
 
   export type ProgramCreateWithoutProgramModulesInput = {
-    authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -36240,16 +36543,17 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    author: AdminCreateNestedOneWithoutProgramsInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
     quizAssignments?: QuizAssignmentCreateNestedManyWithoutProgramInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutProgramInput
@@ -36261,13 +36565,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -36276,11 +36580,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -36343,16 +36647,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateWithoutProgramModulesInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36361,16 +36664,17 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: AdminUpdateOneRequiredWithoutProgramsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
     quizAssignments?: QuizAssignmentUpdateManyWithoutProgramNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutProgramNestedInput
@@ -36382,13 +36686,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36397,11 +36701,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37152,6 +37456,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     creator?: AdminCreateNestedOneWithoutCreatedAdminsInput
     createdAdmins?: AdminCreateNestedManyWithoutCreatorInput
+    programs?: ProgramCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperCreateNestedManyWithoutAuthorInput
   }
 
@@ -37174,6 +37479,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdAdmins?: AdminUncheckedCreateNestedManyWithoutCreatorInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutAuthorInput
     quizPapers?: QuizPaperUncheckedCreateNestedManyWithoutAuthorInput
   }
 
@@ -37259,6 +37565,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: AdminUpdateOneWithoutCreatedAdminsNestedInput
     createdAdmins?: AdminUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUpdateManyWithoutAuthorNestedInput
   }
 
@@ -37281,6 +37588,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAdmins?: AdminUncheckedUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
@@ -37356,6 +37664,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     creator?: AdminCreateNestedOneWithoutCreatedAdminsInput
     createdAdmins?: AdminCreateNestedManyWithoutCreatorInput
+    programs?: ProgramCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolCreateNestedManyWithoutAuthorInput
   }
 
@@ -37378,6 +37687,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdAdmins?: AdminUncheckedCreateNestedManyWithoutCreatorInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutAuthorInput
     questions?: QuestionPoolUncheckedCreateNestedManyWithoutAuthorInput
   }
 
@@ -37484,6 +37794,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: AdminUpdateOneWithoutCreatedAdminsNestedInput
     createdAdmins?: AdminUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUpdateManyWithoutAuthorNestedInput
   }
 
@@ -37506,6 +37817,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAdmins?: AdminUncheckedUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
@@ -37702,16 +38014,15 @@ export namespace Prisma {
   }
 
   export type ProgramCreateWithoutQuizAssignmentsInput = {
-    authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -37720,16 +38031,17 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    author: AdminCreateNestedOneWithoutProgramsInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutProgramInput
     leaderboards?: LeaderboardCreateNestedManyWithoutProgramInput
@@ -37741,13 +38053,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -37756,11 +38068,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -37850,16 +38162,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateWithoutQuizAssignmentsInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -37868,16 +38179,17 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: AdminUpdateOneRequiredWithoutProgramsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutProgramNestedInput
     leaderboards?: LeaderboardUpdateManyWithoutProgramNestedInput
@@ -37889,13 +38201,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -37904,11 +38216,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38729,16 +39041,15 @@ export namespace Prisma {
   }
 
   export type ProgramCreateWithoutMeasureProgressInput = {
-    authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -38747,16 +39058,17 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    author: AdminCreateNestedOneWithoutProgramsInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
     quizAssignments?: QuizAssignmentCreateNestedManyWithoutProgramInput
     leaderboards?: LeaderboardCreateNestedManyWithoutProgramInput
@@ -38768,13 +39080,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -38783,11 +39095,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -39006,16 +39318,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateWithoutMeasureProgressInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39024,16 +39335,17 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: AdminUpdateOneRequiredWithoutProgramsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
     quizAssignments?: QuizAssignmentUpdateManyWithoutProgramNestedInput
     leaderboards?: LeaderboardUpdateManyWithoutProgramNestedInput
@@ -39045,13 +39357,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39060,11 +39372,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39155,16 +39467,15 @@ export namespace Prisma {
   }
 
   export type ProgramCreateWithoutLeaderboardsInput = {
-    authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -39173,16 +39484,17 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    author: AdminCreateNestedOneWithoutProgramsInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
     quizAssignments?: QuizAssignmentCreateNestedManyWithoutProgramInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutProgramInput
@@ -39194,13 +39506,13 @@ export namespace Prisma {
     authorId: number
     title: string
     description: string
-    category?: string | null
-    instructor?: string | null
+    category: string
+    instructor: string
     instructorAvatar?: string | null
     image?: string | null
     rating?: number | null
     level?: string | null
-    price?: Decimal | DecimalJsLike | number | string | null
+    price: Decimal | DecimalJsLike | number | string
     type?: $Enums.ProgramType | null
     totalTimeLimit?: number | null
     status?: number | null
@@ -39209,11 +39521,11 @@ export namespace Prisma {
     endDate?: Date | string | null
     surveyStartDate?: Date | string | null
     surveyEndDate?: Date | string | null
-    maxParticipants?: string | null
+    maxParticipants?: number | null
     passingScore?: number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: number | null
-    packageId?: bigint | number | null
+    packageId?: number | null
     isActive?: boolean
     isDeleted?: boolean
     createdAt?: Date | string
@@ -39320,16 +39632,15 @@ export namespace Prisma {
   }
 
   export type ProgramUpdateWithoutLeaderboardsInput = {
-    authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39338,16 +39649,17 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: AdminUpdateOneRequiredWithoutProgramsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
     quizAssignments?: QuizAssignmentUpdateManyWithoutProgramNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutProgramNestedInput
@@ -39359,13 +39671,13 @@ export namespace Prisma {
     authorId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
     instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
     totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39374,11 +39686,11 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maxParticipants?: NullableStringFieldUpdateOperationsInput | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     passingScore?: NullableIntFieldUpdateOperationsInput | number | null
     studySettings?: NullableJsonNullValueInput | InputJsonValue
     clientId?: NullableIntFieldUpdateOperationsInput | number | null
-    packageId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39493,6 +39805,37 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ProgramCreateManyAuthorInput = {
+    id?: number
+    title: string
+    description: string
+    category: string
+    instructor: string
+    instructorAvatar?: string | null
+    image?: string | null
+    rating?: number | null
+    level?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    type?: $Enums.ProgramType | null
+    totalTimeLimit?: number | null
+    status?: number | null
+    uniqueHash?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    surveyStartDate?: Date | string | null
+    surveyEndDate?: Date | string | null
+    maxParticipants?: number | null
+    passingScore?: number | null
+    studySettings?: NullableJsonNullValueInput | InputJsonValue
+    clientId?: number | null
+    packageId?: number | null
+    isActive?: boolean
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
   export type QuestionPoolCreateManyAuthorInput = {
     id?: number
     questionText: string
@@ -39534,6 +39877,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAdmins?: AdminUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUpdateManyWithoutAuthorNestedInput
   }
@@ -39556,6 +39900,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAdmins?: AdminUncheckedUpdateManyWithoutCreatorNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutAuthorNestedInput
     questions?: QuestionPoolUncheckedUpdateManyWithoutAuthorNestedInput
     quizPapers?: QuizPaperUncheckedUpdateManyWithoutAuthorNestedInput
   }
@@ -39577,6 +39922,108 @@ export namespace Prisma {
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramUpdateWithoutAuthorInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
+    totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableIntFieldUpdateOperationsInput | number | null
+    uniqueHash?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    passingScore?: NullableIntFieldUpdateOperationsInput | number | null
+    studySettings?: NullableJsonNullValueInput | InputJsonValue
+    clientId?: NullableIntFieldUpdateOperationsInput | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
+    quizAssignments?: QuizAssignmentUpdateManyWithoutProgramNestedInput
+    measureProgress?: MeasureProgressUpdateManyWithoutProgramNestedInput
+    leaderboards?: LeaderboardUpdateManyWithoutProgramNestedInput
+    programModules?: ProgramModuleUpdateManyWithoutProgramNestedInput
+  }
+
+  export type ProgramUncheckedUpdateWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
+    totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableIntFieldUpdateOperationsInput | number | null
+    uniqueHash?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    passingScore?: NullableIntFieldUpdateOperationsInput | number | null
+    studySettings?: NullableJsonNullValueInput | InputJsonValue
+    clientId?: NullableIntFieldUpdateOperationsInput | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
+    quizAssignments?: QuizAssignmentUncheckedUpdateManyWithoutProgramNestedInput
+    measureProgress?: MeasureProgressUncheckedUpdateManyWithoutProgramNestedInput
+    leaderboards?: LeaderboardUncheckedUpdateManyWithoutProgramNestedInput
+    programModules?: ProgramModuleUncheckedUpdateManyWithoutProgramNestedInput
+  }
+
+  export type ProgramUncheckedUpdateManyWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    instructor?: StringFieldUpdateOperationsInput | string
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    type?: NullableEnumProgramTypeFieldUpdateOperationsInput | $Enums.ProgramType | null
+    totalTimeLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableIntFieldUpdateOperationsInput | number | null
+    uniqueHash?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    surveyStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    surveyEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    passingScore?: NullableIntFieldUpdateOperationsInput | number | null
+    studySettings?: NullableJsonNullValueInput | InputJsonValue
+    clientId?: NullableIntFieldUpdateOperationsInput | number | null
+    packageId?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type QuestionPoolUpdateWithoutAuthorInput = {

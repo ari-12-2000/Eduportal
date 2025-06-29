@@ -2,8 +2,9 @@ import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import { prisma } from '@/lib/prisma';
-import { Admin} from "@/lib/generated/prisma";
+import { Admin , Program} from "@/lib/generated/prisma";
 import { GlobalVariables } from "@/globalVariables";
+import { Course } from "@/types";
 
 const JWT_SECRET = process.env.JWT_SECRET!
 
@@ -45,7 +46,7 @@ export class AuthController {
       })
 
       let userType = GlobalVariables.non_admin.role1;
-      let enrolledCourses: any[] = []
+      let enrolledCourses: Course[] | [] = []
       let enrolledCourseIDs: number[] = []
       let admin
 
@@ -56,7 +57,10 @@ export class AuthController {
         }
         userType = GlobalVariables.admin
       } else {
-        enrolledCourses = learner.enrollments.map(e => e.program)
+        enrolledCourses = learner.enrollments.map(e => ({
+          ...e.program,
+          price: e.program.price !== null ? e.program.price.toString() : null
+        }))
         enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
       }
 
@@ -147,7 +151,7 @@ export class AuthController {
 
       const token = jwt.sign(
         {
-          userId: newUser.id,
+          id: newUser.id,
           email: newUser.email,
           role
         },
@@ -173,6 +177,74 @@ export class AuthController {
 
     } catch (error) {
       console.error("Signup error:", error)
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    }
+  }
+
+  static async refreshUser(req: NextRequest) {
+    try {
+      const token = req.headers.get("Authorization")?.split(" ")[1]
+      if (!token) {
+        return NextResponse.json({ error: "No token provided" }, { status: 401 })
+      }
+      const decoded = jwt.verify(token, JWT_SECRET) as { id: number, email: string, role: string, adminType?: string }
+      const learner = await prisma.learner.findUnique({
+        where: { id: decoded.id },
+        include: {
+          enrollments: {
+            include: {
+              program: {
+                include: {
+                  programModules: {
+                    include: {
+                      module: {
+                        include: {
+                          moduleTopics: {
+                            select: { topicId: true },
+                          },
+                        },
+                      },
+                    },
+                  },
+                  enrollments: {
+                    select: { learnerId: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      let userType = GlobalVariables.non_admin.role1
+      let enrolledCourses: Course[] = []
+      let enrolledCourseIDs: number[] = []
+
+      if (!learner) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 })
+      }
+      
+      enrolledCourses = learner.enrollments.map(e => ({
+          ...e.program,
+          price: e.program.price !== null ? e.program.price.toString() : null
+        }))
+      enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
+
+      const userData = {
+      id: learner.id,
+      email: learner.email,
+      first_name: learner.first_name,
+      last_name: learner.last_name,
+      profile_image: learner.profile_image || "",
+      role: userType,
+      enrolledCourses,
+      enrolledCourseIDs,
+    }
+     
+    return NextResponse.json({ user: userData }, { status: 200 })
+
+    } catch (error) {
+      console.error("Refresh user error:", error)
       return NextResponse.json({ error: "Internal server error" }, { status: 500 })
     }
   }

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import sanitizeHtml from 'sanitize-html';
 
 export class CourseController {
   // 1. Get all courses
@@ -89,7 +88,7 @@ export class CourseController {
     try {
       const data = await req.json();
 
-      if (!data.name || !data.description) {
+      if (!data.title || !data.description) {
         return NextResponse.json({ error: 'Name and description are required' }, { status: 400 });
       }
 

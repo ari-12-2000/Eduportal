@@ -98,7 +98,9 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category: { name: string, icon: typeof Code, color: string }) => (
+            {categories.map((category: { name: string, icon: typeof Code, color: string }) => {
+              const Icon = category.icon;
+              return (
               <Card
                 key={category.name}
                 className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md group"
@@ -108,14 +110,14 @@ export default function HomePage() {
                   <div
                     className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
                   >
-                    <category.icon className="h-8 w-8 text-white" />
+                    <Icon className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
                     {category.name}
                   </h3>
                 </CardContent>
               </Card>
-            ))}
+            )})}
           </div>
         </section>
 

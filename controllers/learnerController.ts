@@ -43,18 +43,17 @@ export class LearnerController {
   }
 
   // 2. Enroll a learner in a course
-  static async enrolInCourses(req: NextRequest, { params }: { params: { learnerId: string } }) {
+  static async enrolInCourses(req: NextRequest) {
     try {
-      const learnerId = Number(params.learnerId);
-      const { programId } = await req.json();
+      const { programId, learnerId } = await req.json();
       const parsedProgramId = Number(programId);
-
-      if (isNaN(learnerId) || isNaN(parsedProgramId)) {
+      const parsedLearnerId = Number(learnerId);
+      if (isNaN(parsedLearnerId) || isNaN(parsedProgramId)) {
         return NextResponse.json({ error: 'Invalid learner or program ID' }, { status: 400 });
       }
 
       const existingEnrollment = await prisma.enrollment.findFirst({
-        where: { learnerId, programId: parsedProgramId }
+        where: { learnerId:parsedLearnerId, programId: parsedProgramId }
       });
 
       if (existingEnrollment) {
@@ -62,7 +61,7 @@ export class LearnerController {
       }
 
       const enrollment = await prisma.enrollment.create({
-        data: { learnerId, programId: parsedProgramId }
+        data: { learnerId:parsedLearnerId, programId: parsedProgramId }
       });
 
       return NextResponse.json({ success: true, data: enrollment }, { status: 201 });
