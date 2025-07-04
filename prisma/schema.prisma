@@ -200,7 +200,7 @@ model ProgramModule {
 model Topic {
   id                  Int               @id @default(autoincrement())
   title               String            @db.VarChar(255)
-  content             String?           @db.Text
+  description         String?           @db.Text
   prerequisiteTopicId Int?              @map("prerequisite_topic_id")
   status              Int?              @db.SmallInt
   isDeleted           Boolean           @default(false) @map("is_deleted")

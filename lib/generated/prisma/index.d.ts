@@ -580,8 +580,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.10.1
-   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
+   * Prisma Client JS version: 6.11.1
+   * Query Engine version: f40f79ec31188888a2e33acda0ecc8fd10a853a9
    */
   export type PrismaVersion = {
     client: string
@@ -11170,7 +11170,7 @@ export namespace Prisma {
   export type TopicMinAggregateOutputType = {
     id: number | null
     title: string | null
-    content: string | null
+    description: string | null
     prerequisiteTopicId: number | null
     status: number | null
     isDeleted: boolean | null
@@ -11182,7 +11182,7 @@ export namespace Prisma {
   export type TopicMaxAggregateOutputType = {
     id: number | null
     title: string | null
-    content: string | null
+    description: string | null
     prerequisiteTopicId: number | null
     status: number | null
     isDeleted: boolean | null
@@ -11194,7 +11194,7 @@ export namespace Prisma {
   export type TopicCountAggregateOutputType = {
     id: number
     title: number
-    content: number
+    description: number
     prerequisiteTopicId: number
     status: number
     isDeleted: number
@@ -11220,7 +11220,7 @@ export namespace Prisma {
   export type TopicMinAggregateInputType = {
     id?: true
     title?: true
-    content?: true
+    description?: true
     prerequisiteTopicId?: true
     status?: true
     isDeleted?: true
@@ -11232,7 +11232,7 @@ export namespace Prisma {
   export type TopicMaxAggregateInputType = {
     id?: true
     title?: true
-    content?: true
+    description?: true
     prerequisiteTopicId?: true
     status?: true
     isDeleted?: true
@@ -11244,7 +11244,7 @@ export namespace Prisma {
   export type TopicCountAggregateInputType = {
     id?: true
     title?: true
-    content?: true
+    description?: true
     prerequisiteTopicId?: true
     status?: true
     isDeleted?: true
@@ -11343,7 +11343,7 @@ export namespace Prisma {
   export type TopicGroupByOutputType = {
     id: number
     title: string
-    content: string | null
+    description: string | null
     prerequisiteTopicId: number | null
     status: number | null
     isDeleted: boolean
@@ -11374,7 +11374,7 @@ export namespace Prisma {
   export type TopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
-    content?: boolean
+    description?: boolean
     prerequisiteTopicId?: boolean
     status?: boolean
     isDeleted?: boolean
@@ -11392,7 +11392,7 @@ export namespace Prisma {
   export type TopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
-    content?: boolean
+    description?: boolean
     prerequisiteTopicId?: boolean
     status?: boolean
     isDeleted?: boolean
@@ -11405,7 +11405,7 @@ export namespace Prisma {
   export type TopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
-    content?: boolean
+    description?: boolean
     prerequisiteTopicId?: boolean
     status?: boolean
     isDeleted?: boolean
@@ -11418,7 +11418,7 @@ export namespace Prisma {
   export type TopicSelectScalar = {
     id?: boolean
     title?: boolean
-    content?: boolean
+    description?: boolean
     prerequisiteTopicId?: boolean
     status?: boolean
     isDeleted?: boolean
@@ -11427,7 +11427,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "prerequisiteTopicId" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["topic"]>
+  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "prerequisiteTopicId" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["topic"]>
   export type TopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     prerequisiteTopic?: boolean | Topic$prerequisiteTopicArgs<ExtArgs>
     dependentTopics?: boolean | Topic$dependentTopicsArgs<ExtArgs>
@@ -11455,7 +11455,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       title: string
-      content: string | null
+      description: string | null
       prerequisiteTopicId: number | null
       status: number | null
       isDeleted: boolean
@@ -11892,7 +11892,7 @@ export namespace Prisma {
   interface TopicFieldRefs {
     readonly id: FieldRef<"Topic", 'Int'>
     readonly title: FieldRef<"Topic", 'String'>
-    readonly content: FieldRef<"Topic", 'String'>
+    readonly description: FieldRef<"Topic", 'String'>
     readonly prerequisiteTopicId: FieldRef<"Topic", 'Int'>
     readonly status: FieldRef<"Topic", 'Int'>
     readonly isDeleted: FieldRef<"Topic", 'Boolean'>
@@ -26529,7 +26529,7 @@ export namespace Prisma {
   export const TopicScalarFieldEnum: {
     id: 'id',
     title: 'title',
-    content: 'content',
+    description: 'description',
     prerequisiteTopicId: 'prerequisiteTopicId',
     status: 'status',
     isDeleted: 'isDeleted',
@@ -27669,7 +27669,7 @@ export namespace Prisma {
     NOT?: TopicWhereInput | TopicWhereInput[]
     id?: IntFilter<"Topic"> | number
     title?: StringFilter<"Topic"> | string
-    content?: StringNullableFilter<"Topic"> | string | null
+    description?: StringNullableFilter<"Topic"> | string | null
     prerequisiteTopicId?: IntNullableFilter<"Topic"> | number | null
     status?: IntNullableFilter<"Topic"> | number | null
     isDeleted?: BoolFilter<"Topic"> | boolean
@@ -27686,7 +27686,7 @@ export namespace Prisma {
   export type TopicOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
-    content?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     prerequisiteTopicId?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     isDeleted?: SortOrder
@@ -27706,7 +27706,7 @@ export namespace Prisma {
     OR?: TopicWhereInput[]
     NOT?: TopicWhereInput | TopicWhereInput[]
     title?: StringFilter<"Topic"> | string
-    content?: StringNullableFilter<"Topic"> | string | null
+    description?: StringNullableFilter<"Topic"> | string | null
     prerequisiteTopicId?: IntNullableFilter<"Topic"> | number | null
     status?: IntNullableFilter<"Topic"> | number | null
     isDeleted?: BoolFilter<"Topic"> | boolean
@@ -27723,7 +27723,7 @@ export namespace Prisma {
   export type TopicOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
-    content?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     prerequisiteTopicId?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     isDeleted?: SortOrder
@@ -27743,7 +27743,7 @@ export namespace Prisma {
     NOT?: TopicScalarWhereWithAggregatesInput | TopicScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Topic"> | number
     title?: StringWithAggregatesFilter<"Topic"> | string
-    content?: StringNullableWithAggregatesFilter<"Topic"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Topic"> | string | null
     prerequisiteTopicId?: IntNullableWithAggregatesFilter<"Topic"> | number | null
     status?: IntNullableWithAggregatesFilter<"Topic"> | number | null
     isDeleted?: BoolWithAggregatesFilter<"Topic"> | boolean
@@ -29448,7 +29448,7 @@ export namespace Prisma {
 
   export type TopicCreateInput = {
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -29464,7 +29464,7 @@ export namespace Prisma {
   export type TopicUncheckedCreateInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     prerequisiteTopicId?: number | null
     status?: number | null
     isDeleted?: boolean
@@ -29479,7 +29479,7 @@ export namespace Prisma {
 
   export type TopicUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29495,7 +29495,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteTopicId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -29511,7 +29511,7 @@ export namespace Prisma {
   export type TopicCreateManyInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     prerequisiteTopicId?: number | null
     status?: number | null
     isDeleted?: boolean
@@ -29522,7 +29522,7 @@ export namespace Prisma {
 
   export type TopicUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29533,7 +29533,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteTopicId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -31358,7 +31358,7 @@ export namespace Prisma {
   export type TopicCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
-    content?: SortOrder
+    description?: SortOrder
     prerequisiteTopicId?: SortOrder
     status?: SortOrder
     isDeleted?: SortOrder
@@ -31376,7 +31376,7 @@ export namespace Prisma {
   export type TopicMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
-    content?: SortOrder
+    description?: SortOrder
     prerequisiteTopicId?: SortOrder
     status?: SortOrder
     isDeleted?: SortOrder
@@ -31388,7 +31388,7 @@ export namespace Prisma {
   export type TopicMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
-    content?: SortOrder
+    description?: SortOrder
     prerequisiteTopicId?: SortOrder
     status?: SortOrder
     isDeleted?: SortOrder
@@ -36759,7 +36759,7 @@ export namespace Prisma {
 
   export type TopicCreateWithoutDependentTopicsInput = {
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -36774,7 +36774,7 @@ export namespace Prisma {
   export type TopicUncheckedCreateWithoutDependentTopicsInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     prerequisiteTopicId?: number | null
     status?: number | null
     isDeleted?: boolean
@@ -36793,7 +36793,7 @@ export namespace Prisma {
 
   export type TopicCreateWithoutPrerequisiteTopicInput = {
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -36808,7 +36808,7 @@ export namespace Prisma {
   export type TopicUncheckedCreateWithoutPrerequisiteTopicInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -36913,7 +36913,7 @@ export namespace Prisma {
 
   export type TopicUpdateWithoutDependentTopicsInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -36928,7 +36928,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateWithoutDependentTopicsInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteTopicId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -36962,7 +36962,7 @@ export namespace Prisma {
     NOT?: TopicScalarWhereInput | TopicScalarWhereInput[]
     id?: IntFilter<"Topic"> | number
     title?: StringFilter<"Topic"> | string
-    content?: StringNullableFilter<"Topic"> | string | null
+    description?: StringNullableFilter<"Topic"> | string | null
     prerequisiteTopicId?: IntNullableFilter<"Topic"> | number | null
     status?: IntNullableFilter<"Topic"> | number | null
     isDeleted?: BoolFilter<"Topic"> | boolean
@@ -37064,7 +37064,7 @@ export namespace Prisma {
 
   export type TopicCreateWithoutModuleTopicsInput = {
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -37079,7 +37079,7 @@ export namespace Prisma {
   export type TopicUncheckedCreateWithoutModuleTopicsInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     prerequisiteTopicId?: number | null
     status?: number | null
     isDeleted?: boolean
@@ -37149,7 +37149,7 @@ export namespace Prisma {
 
   export type TopicUpdateWithoutModuleTopicsInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -37164,7 +37164,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateWithoutModuleTopicsInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteTopicId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -37296,7 +37296,7 @@ export namespace Prisma {
 
   export type TopicCreateWithoutTopicResourcesInput = {
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -37311,7 +37311,7 @@ export namespace Prisma {
   export type TopicUncheckedCreateWithoutTopicResourcesInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     prerequisiteTopicId?: number | null
     status?: number | null
     isDeleted?: boolean
@@ -37373,7 +37373,7 @@ export namespace Prisma {
 
   export type TopicUpdateWithoutTopicResourcesInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -37388,7 +37388,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateWithoutTopicResourcesInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteTopicId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -39008,7 +39008,7 @@ export namespace Prisma {
 
   export type TopicCreateWithoutMeasureProgressInput = {
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -39023,7 +39023,7 @@ export namespace Prisma {
   export type TopicUncheckedCreateWithoutMeasureProgressInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     prerequisiteTopicId?: number | null
     status?: number | null
     isDeleted?: boolean
@@ -39279,7 +39279,7 @@ export namespace Prisma {
 
   export type TopicUpdateWithoutMeasureProgressInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -39294,7 +39294,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateWithoutMeasureProgressInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteTopicId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
@@ -40705,7 +40705,7 @@ export namespace Prisma {
   export type TopicCreateManyPrerequisiteTopicInput = {
     id?: number
     title: string
-    content?: string | null
+    description?: string | null
     status?: number | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
@@ -40735,7 +40735,7 @@ export namespace Prisma {
 
   export type TopicUpdateWithoutPrerequisiteTopicInput = {
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -40750,7 +40750,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateWithoutPrerequisiteTopicInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -40765,7 +40765,7 @@ export namespace Prisma {
   export type TopicUncheckedUpdateManyWithoutPrerequisiteTopicInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
