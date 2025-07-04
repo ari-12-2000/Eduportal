@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   output        = "../lib/generated/prisma"
@@ -16,34 +10,24 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// 1. ADMINS
-
-enum AdminType {
-  SystemAdmin
-  PartnerAdmin
-}
-
 model Admin {
-  id            Int       @id @default(autoincrement())
-  first_name    String    @db.VarChar(255)
-  last_name     String    @db.VarChar(255)
-  email         String    @unique @db.VarChar(255)
-  password      String    @db.VarChar(255)
-  adminType     AdminType @map("admin_type")
-  // permissions  String[]  // Array of permission strings
-  organization  String?   @db.VarChar(255)
-  bio           String?   @db.Text
-  profile_image String?   @db.Text
-  contactPhone  String?   @map("contact_phone") @db.VarChar(20)
-  website       String?   @db.Text
-  isVerified    Boolean   @default(false) @map("is_verified")
-  isActive      Boolean   @default(true) @map("is_active")
-  lastLogin     DateTime? @map("last_login") @db.Timestamptz
-  createdBy     Int?      @map("created_by")
-  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
-
-  // Relations
+  id            Int            @id @default(autoincrement())
+  first_name    String         @db.VarChar(255)
+  last_name     String         @db.VarChar(255)
+  email         String         @unique @db.VarChar(255)
+  password      String         @db.VarChar(255)
+  adminType     AdminType      @map("admin_type")
+  organization  String?        @db.VarChar(255)
+  bio           String?
+  profile_image String?
+  contactPhone  String?        @map("contact_phone") @db.VarChar(20)
+  website       String?
+  isVerified    Boolean        @default(false) @map("is_verified")
+  isActive      Boolean        @default(true) @map("is_active")
+  lastLogin     DateTime?      @map("last_login") @db.Timestamptz(6)
+  createdBy     Int?           @map("created_by")
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
   creator       Admin?         @relation("AdminCreator", fields: [createdBy], references: [id])
   createdAdmins Admin[]        @relation("AdminCreator")
   programs      Program[]      @relation("ProgramAuthor")
@@ -62,8 +46,8 @@ model Learner {
   email              String            @unique @db.VarChar(255)
   phone              Bytes?
   communicationEmail Bytes?            @map("communication_email")
-  password           String?           @db.Text
-  profile_image      String?           @db.Text
+  password           String?
+  profile_image      String?
   organisation       String?           @db.VarChar(255)
   designation        String?           @db.VarChar(255)
   department         String?           @db.VarChar(255)
@@ -72,97 +56,83 @@ model Learner {
   totalPoints        Int               @default(0) @map("total_points")
   isActive           Boolean           @default(true) @map("is_active")
   isDeleted          Boolean           @default(false) @map("is_deleted")
-  deletedAt          DateTime?         @map("deleted_at") @db.Timestamptz
+  deletedAt          DateTime?         @map("deleted_at") @db.Timestamptz(6)
   isVerified         Boolean           @default(false) @map("is_verified")
-  lastLogin          DateTime?         @map("last_login") @db.Timestamptz
+  lastLogin          DateTime?         @map("last_login") @db.Timestamptz(6)
   createdBy          Int?              @map("created_by")
-  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz
-  uniqueHash         String?           @map("unique_hash") @db.Text
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  uniqueHash         String?           @map("unique_hash")
   status             Int?
-  extraConfig        String?           @map("extra_config") @db.Text
-  metaData           String?           @map("meta_data") @db.Text
+  extraConfig        String?           @map("extra_config")
+  metaData           String?           @map("meta_data")
   role               String            @db.VarChar(20)
+  enrollments        Enrollment[]      @relation("LearnerEnrollments")
+  leaderboards       Leaderboard[]
   creator            Learner?          @relation("LearnerCreator", fields: [createdBy], references: [id])
   createdLearners    Learner[]         @relation("LearnerCreator")
-  enrollments        Enrollment[]      @relation("LearnerEnrollments")
+  measureProgress    MeasureProgress[]
   quizAttempts       QuizAttempt[]     @relation("LearnerAttempts")
   resourceViews      ResourceView[]
-  measureProgress    MeasureProgress[]
-  leaderboards       Leaderboard[]
 
   @@map("learners")
-}
-
-// 2. LEARNING
-
-enum ProgramType {
-  self_paced
-  tutor_paced
-  workshop
-  webinar
 }
 
 model Program {
   id               Int               @id @default(autoincrement())
   authorId         Int               @map("author_id")
   title            String            @db.VarChar(255)
-  description      String            @db.Text
+  description      String
   category         String            @db.VarChar(100)
   instructor       String            @db.VarChar(255)
-  instructorAvatar String?           @map("instructor_avatar") @db.Text
-  image            String?           @db.Text
+  instructorAvatar String?           @map("instructor_avatar")
+  image            String?
   rating           Float?            @default(0) @map("rating")
   level            String?           @db.VarChar(50)
   price            Decimal           @db.Decimal(10, 2)
   type             ProgramType?
   totalTimeLimit   Int?              @map("total_time_limit")
-  status           Int?              @db.SmallInt // Record state code
-  uniqueHash       String?           @map("unique_hash") @db.VarChar(255) // SSO token
-  startDate        DateTime?         @map("start_date") @db.Date // Launch date
-  endDate          DateTime?         @map("end_date") @db.Date // Closing date
-  surveyStartDate  DateTime?         @map("survey_start_date") @db.Date // Survey window start
-  surveyEndDate    DateTime?         @map("survey_end_date") @db.Date // Survey window end
+  status           Int?              @db.SmallInt
+  uniqueHash       String?           @map("unique_hash") @db.VarChar(255)
+  startDate        DateTime?         @map("start_date") @db.Date
+  endDate          DateTime?         @map("end_date") @db.Date
+  surveyStartDate  DateTime?         @map("survey_start_date") @db.Date
+  surveyEndDate    DateTime?         @map("survey_end_date") @db.Date
+  passingScore     Int?              @map("passing_score")
+  studySettings    Json?             @map("study_settings")
+  clientId         Int?              @map("client_id")
+  packageId        Int?              @map("package_id")
+  isActive         Boolean           @default(true) @map("is_active")
+  isDeleted        Boolean           @default(false) @map("is_deleted")
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz(6)
   maxParticipants  Int?              @map("max_participants")
-  passingScore     Int?              @map("passing_score") // Pass threshold
-  studySettings    Json?             @map("study_settings") @db.JsonB // Advanced settings
-  clientId         Int?              @map("client_id") // Dashboard client reference
-  packageId        Int?              @map("package_id") // Dashboard package ID
-  isActive         Boolean           @default(true) @map("is_active") // Active flag
-  isDeleted        Boolean           @default(false) @map("is_deleted") // Soft-delete
-  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz // Creation time
-  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz // Update time
-  deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz // Deletion timestamp
-  // Relations
-  author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   enrollments      Enrollment[]      @relation("ProgramEnrollments")
+  leaderboards     Leaderboard[]
+  measureProgress  MeasureProgress[]
+  programModules   ProgramModule[]
+  author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   quizAssignments  QuizAssignment[]
-  measureProgress  MeasureProgress[] // Opposite relation for MeasureProgress
-  leaderboards     Leaderboard[] // Opposite relation for Leaderboard
-  programModules   ProgramModule[] // Opposite relation for ProgramModule
 
   @@map("programs")
 }
 
 model Module {
-  id                   Int       @id @default(autoincrement())
-  title                String    @db.VarChar(255)
-  description          String?   @db.Text
-  prerequisiteModuleId Int?      @map("prerequisite_module_id")
-  status               Int?      @db.SmallInt
-  isDeleted            Boolean   @default(false) @map("is_deleted")
-  deletedAt            DateTime? @map("deleted_at") @db.Timestamptz
-  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt            DateTime  @updatedAt @map("updated_at") @db.Timestamptz
-
-  // If a prerequisite module is deleted, set the reference to null (do not delete this module)
-  // This is equivalent to Django's on_delete=models.SET_NULL
-  // Relations
-  prerequisiteModule Module?           @relation("ModulePrerequisite", fields: [prerequisiteModuleId], references: [id], onDelete: SetNull)
-  dependentModules   Module[]          @relation("ModulePrerequisite")
-  measureProgress    MeasureProgress[]
-  programModules     ProgramModule[] // Opposite relation for ProgramModule
-  moduleTopics       ModuleTopic[] // Opposite relation for ModuleTopic
+  id                   Int               @id @default(autoincrement())
+  title                String            @db.VarChar(255)
+  description          String?
+  prerequisiteModuleId Int?              @map("prerequisite_module_id")
+  status               Int?              @db.SmallInt
+  isDeleted            Boolean           @default(false) @map("is_deleted")
+  deletedAt            DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  createdAt            DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  measureProgress      MeasureProgress[]
+  moduleTopics         ModuleTopic[]
+  prerequisiteModule   Module?           @relation("ModulePrerequisite", fields: [prerequisiteModuleId], references: [id])
+  dependentModules     Module[]          @relation("ModulePrerequisite")
+  programModules       ProgramModule[]
 
   @@map("modules")
 }
@@ -171,14 +141,9 @@ model Enrollment {
   id         Int      @id @default(autoincrement())
   learnerId  Int      @map("learner_id")
   programId  Int      @map("program_id")
-  enrolledAt DateTime @default(now()) @map("enrolled_at") @db.Timestamptz //# Enrollment time
-
-  // Relations
-  learner Learner @relation("LearnerEnrollments", fields: [learnerId], references: [id], onDelete: Cascade)
-  program Program @relation("ProgramEnrollments", fields: [programId], references: [id], onDelete: Cascade)
-
-  // // Related quiz attempts
-  // quizAttempts QuizAttempt[]
+  enrolledAt DateTime @default(now()) @map("enrolled_at") @db.Timestamptz(6)
+  learner    Learner  @relation("LearnerEnrollments", fields: [learnerId], references: [id], onDelete: Cascade)
+  program    Program  @relation("ProgramEnrollments", fields: [programId], references: [id], onDelete: Cascade)
 
   @@unique([learnerId, programId])
   @@map("enrollments")
@@ -188,8 +153,8 @@ model ProgramModule {
   programId Int
   moduleId  Int
   position  Int
-  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
   module    Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
 
   @@id([programId, moduleId])
   @@unique([programId, position])
@@ -199,18 +164,18 @@ model ProgramModule {
 model Topic {
   id                  Int               @id @default(autoincrement())
   title               String            @db.VarChar(255)
-  description         String?           @db.Text
   prerequisiteTopicId Int?              @map("prerequisite_topic_id")
   status              Int?              @db.SmallInt
   isDeleted           Boolean           @default(false) @map("is_deleted")
-  deletedAt           DateTime?         @map("deleted_at") @db.Timestamptz
-  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt           DateTime          @updatedAt @map("updated_at") @db.Timestamptz
-  prerequisiteTopic   Topic?            @relation("TopicPrerequisite", fields: [prerequisiteTopicId], references: [id], onDelete: SetNull)
-  dependentTopics     Topic[]           @relation("TopicPrerequisite")
+  deletedAt           DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  description         String
   measureProgress     MeasureProgress[]
-  moduleTopics        ModuleTopic[] // Opposite relation for ModuleTopic
-  topicResources      TopicResource[] // Opposite relation for TopicResource
+  moduleTopics        ModuleTopic[]
+  topicResources      TopicResource[]
+  prerequisiteTopic   Topic?            @relation("TopicPrerequisite", fields: [prerequisiteTopicId], references: [id])
+  dependentTopics     Topic[]           @relation("TopicPrerequisite")
 
   @@map("topics")
 }
@@ -227,26 +192,19 @@ model ModuleTopic {
   @@map("module_topics")
 }
 
-enum ResourceType {
-  video
-  document
-  image
-  other
-}
-
 model Resource {
   id              Int               @id @default(autoincrement())
   resourceType    ResourceType      @map("resource_type")
-  url             String            @db.Text
+  url             String
   title           String?           @db.VarChar(255)
-  description     String?           @db.Text
+  description     String?
   status          Int?              @db.SmallInt
   isDeleted       Boolean           @default(false) @map("is_deleted")
-  deletedAt       DateTime?         @map("deleted_at") @db.Timestamptz
-  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz
-  resourceViews   ResourceView[]
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   measureProgress MeasureProgress[]
-  topicResources  TopicResource[] // Opposite relation for TopicResource
+  resourceViews   ResourceView[]
+  topicResources  TopicResource[]
 
   @@map("resources")
 }
@@ -255,12 +213,177 @@ model TopicResource {
   topicId    Int
   resourceId Int
   position   Int
-  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
   resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
   @@id([topicId, resourceId])
   @@unique([topicId, position])
   @@map("topic_resources")
+}
+
+model QuestionPool {
+  id                 Int                 @id @default(autoincrement())
+  authorId           Int                 @map("author_id")
+  questionText       String              @map("question_text")
+  questionType       QuestionType        @map("question_type")
+  metadata           Json?
+  explanation        String?
+  timeLimitSec       Int?                @map("time_limit_sec")
+  points             Int                 @default(1)
+  option1            String?             @map("option_1")
+  option2            String?             @map("option_2")
+  option3            String?             @map("option_3")
+  option4            String?             @map("option_4")
+  option5            String?             @map("option_5")
+  option6            String?             @map("option_6")
+  answer             String?
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  questionAttempts   QuestionAttempt[]   @relation("QuestionAttempts")
+  author             Admin               @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  quizPaperQuestions QuizPaperQuestion[]
+
+  @@map("questions_pool")
+}
+
+model QuizPaper {
+  id          Int                 @id @default(autoincrement())
+  authorId    Int                 @map("author_id")
+  title       String              @db.VarChar(255)
+  createdAt   DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  assignments QuizAssignment[]
+  questions   QuizPaperQuestion[]
+  author      Admin               @relation("QuizPaperAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("quiz_papers")
+}
+
+model QuizPaperQuestion {
+  quizPaperId Int          @map("quiz_paper_id")
+  questionId  Int          @map("question_id")
+  position    Int?
+  timeMode    Boolean      @default(false) @map("time_mode")
+  timeLimit   Int?         @map("time_limit")
+  question    QuestionPool @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  quizPaper   QuizPaper    @relation(fields: [quizPaperId], references: [id], onDelete: Cascade)
+
+  @@id([quizPaperId, questionId])
+  @@unique([quizPaperId, questionId])
+  @@map("quiz_paper_questions")
+}
+
+model QuizAssignment {
+  id              Int             @id @default(autoincrement())
+  quizPaperId     Int             @map("quiz_paper_id")
+  programId       Int?            @map("program_id")
+  startAt         DateTime?       @map("start_at") @db.Timestamptz(6)
+  endAt           DateTime?       @map("end_at") @db.Timestamptz(6)
+  uniqueLinkToken String          @unique @default(uuid()) @map("unique_link_token") @db.Uuid
+  timeMode        TimeMode        @default(none) @map("time_mode")
+  wrongAnsMode    WrongAnswerMode @default(none) @map("wrong_ans_mode")
+  resultMode      ResultMode      @default(none) @map("result_mode")
+  totalTimeLimit  Int?            @map("total_time_limit")
+  passingScore    Int?            @map("passing_score")
+  enabled         Boolean         @default(true)
+  isDeleted       Boolean         @default(false) @map("is_deleted")
+  deletedAt       DateTime?       @map("deleted_at") @db.Timestamptz(6)
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  program         Program?        @relation(fields: [programId], references: [id], onDelete: Cascade)
+  quizPaper       QuizPaper       @relation(fields: [quizPaperId], references: [id], onDelete: Cascade)
+  quizAttempts    QuizAttempt[]   @relation("AssignmentAttempts")
+
+  @@map("quiz_assignments")
+}
+
+model QuizAttempt {
+  id               Int               @id @default(autoincrement())
+  assignmentId     Int               @map("assignment_id")
+  learnerId        Int               @map("learner_id")
+  startedAt        DateTime          @default(now()) @map("started_at") @db.Timestamptz(6)
+  submittedAt      DateTime?         @map("submitted_at") @db.Timestamptz(6)
+  totalTimeSpent   Int?              @map("total_time_spent")
+  score            Decimal?          @db.Decimal(5, 2)
+  passed           Boolean?
+  status           String            @db.VarChar(20)
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  questionAttempts QuestionAttempt[]
+  assignment       QuizAssignment    @relation("AssignmentAttempts", fields: [assignmentId], references: [id], onDelete: Cascade)
+  learner          Learner           @relation("LearnerAttempts", fields: [learnerId], references: [id], onDelete: Cascade)
+
+  @@map("quiz_attempts")
+}
+
+model QuestionAttempt {
+  attemptId    Int          @map("attempt_id")
+  questionId   Int          @map("question_id")
+  answerText   String?      @map("answer_text")
+  isCorrect    Boolean      @map("is_correct")
+  timeTakenSec Int?         @map("time_taken_sec")
+  attempt      QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question     QuestionPool @relation("QuestionAttempts", fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, questionId])
+  @@map("question_attempts")
+}
+
+model ResourceView {
+  learnerId  Int      @map("learner_id")
+  resourceId Int      @map("resource_id")
+  viewedAt   DateTime @default(now()) @map("viewed_at") @db.Timestamptz(6)
+  learner    Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@id([learnerId, resourceId])
+  @@map("resource_views")
+}
+
+model MeasureProgress {
+  learnerId    Int       @map("learner_id")
+  topicId      Int       @map("topic_id")
+  completedAt  DateTime  @map("completed_at") @db.Timestamptz(6)
+  progressType String    @map("progress_type") @db.VarChar(20)
+  status       String    @db.VarChar(20)
+  programId    Int?      @map("program_id")
+  moduleId     Int?      @map("module_id")
+  resourceId   Int?      @map("resource_id")
+  learner      Learner   @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  module       Module?   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  program      Program?  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  resource     Resource? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  topic        Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([learnerId, topicId])
+  @@map("measure_progress")
+}
+
+model Leaderboard {
+  programId     Int       @map("program_id")
+  learnerId     Int       @map("learner_id")
+  totalScore    Decimal   @map("total_score") @db.Decimal(6, 2)
+  lastAttemptAt DateTime? @map("last_attempt_at") @db.Timestamptz(6)
+  learner       Learner   @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  program       Program   @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@id([programId, learnerId])
+  @@map("leaderboard")
+}
+
+enum AdminType {
+  SystemAdmin
+  PartnerAdmin
+}
+
+enum ProgramType {
+  self_paced
+  tutor_paced
+  workshop
+  webinar
+}
+
+enum ResourceType {
+  video
+  document
+  image
+  other
 }
 
 enum QuestionType {
@@ -273,8 +396,8 @@ enum QuestionType {
 
 enum TimeMode {
   none
-  qns // time per question
-  exam // time for entire paper
+  qns
+  exam
 }
 
 enum WrongAnswerMode {
@@ -285,170 +408,6 @@ enum WrongAnswerMode {
 
 enum ResultMode {
   none
-  exam_ends // show immediately after submission
-  later // lock until manual release
-}
-
-model QuestionPool {
-  id           Int          @id @default(autoincrement())
-  authorId     Int          @map("author_id")
-  questionText String       @map("question_text") @db.Text
-  questionType QuestionType @map("question_type")
-  metadata     Json?        @db.JsonB
-  explanation  String?      @db.Text
-  timeLimitSec Int?         @map("time_limit_sec")
-  points       Int          @default(1)
-  option1      String?      @map("option_1") @db.Text
-  option2      String?      @map("option_2") @db.Text
-  option3      String?      @map("option_3") @db.Text
-  option4      String?      @map("option_4") @db.Text
-  option5      String?      @map("option_5") @db.Text
-  option6      String?      @map("option_6") @db.Text
-  answer       String?      @db.Text
-  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz
-
-  // Relations
-  author             Admin               @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  quizPaperQuestions QuizPaperQuestion[]
-  questionAttempts   QuestionAttempt[]   @relation("QuestionAttempts")
-
-  @@map("questions_pool")
-}
-
-model QuizPaper {
-  id        Int      @id @default(autoincrement())
-  authorId  Int      @map("author_id")
-  title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-
-  // Relations
-  author      Admin               @relation("QuizPaperAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  questions   QuizPaperQuestion[]
-  assignments QuizAssignment[]
-
-  @@map("quiz_papers")
-}
-
-model QuizPaperQuestion {
-  quizPaperId Int     @map("quiz_paper_id")
-  questionId  Int     @map("question_id")
-  position    Int?
-  timeMode    Boolean @default(false) @map("time_mode")
-  timeLimit   Int?    @map("time_limit")
-
-  // Relations
-  quizPaper QuizPaper    @relation(fields: [quizPaperId], references: [id], onDelete: Cascade)
-  question  QuestionPool @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
-  @@id([quizPaperId, questionId])
-  @@unique([quizPaperId, questionId])
-  @@map("quiz_paper_questions")
-}
-
-model QuizAssignment {
-  id              Int             @id @default(autoincrement())
-  quizPaperId     Int             @map("quiz_paper_id")
-  programId       Int?            @map("program_id")
-  startAt         DateTime?       @map("start_at") @db.Timestamptz
-  endAt           DateTime?       @map("end_at") @db.Timestamptz
-  uniqueLinkToken String          @unique @default(uuid()) @map("unique_link_token") @db.Uuid
-  timeMode        TimeMode        @default(none) @map("time_mode")
-  wrongAnsMode    WrongAnswerMode @default(none) @map("wrong_ans_mode")
-  resultMode      ResultMode      @default(none) @map("result_mode")
-  totalTimeLimit  Int?            @map("total_time_limit")
-  passingScore    Int?            @map("passing_score")
-  enabled         Boolean         @default(true)
-  isDeleted       Boolean         @default(false) @map("is_deleted")
-  deletedAt       DateTime?       @map("deleted_at") @db.Timestamptz
-  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz
-
-  // Relations
-  quizPaper    QuizPaper     @relation(fields: [quizPaperId], references: [id], onDelete: Cascade)
-  program      Program?      @relation(fields: [programId], references: [id], onDelete: Cascade)
-  quizAttempts QuizAttempt[] @relation("AssignmentAttempts")
-
-  @@map("quiz_assignments")
-}
-
-model QuizAttempt {
-  id             Int       @id @default(autoincrement())
-  assignmentId   Int       @map("assignment_id")
-  learnerId      Int       @map("learner_id")
-  startedAt      DateTime  @default(now()) @map("started_at") @db.Timestamptz
-  submittedAt    DateTime? @map("submitted_at") @db.Timestamptz
-  totalTimeSpent Int?      @map("total_time_spent")
-  score          Decimal?  @db.Decimal(5, 2)
-  passed         Boolean?
-  status         String    @db.VarChar(20)
-  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz
-
-  // Relations
-  assignment       QuizAssignment    @relation("AssignmentAttempts", fields: [assignmentId], references: [id], onDelete: Cascade)
-  learner          Learner           @relation("LearnerAttempts", fields: [learnerId], references: [id], onDelete: Cascade)
-  questionAttempts QuestionAttempt[]
-
-  @@map("quiz_attempts")
-}
-
-model QuestionAttempt {
-  attemptId    Int     @map("attempt_id")
-  questionId   Int     @map("question_id")
-  answerText   String? @map("answer_text") @db.Text
-  isCorrect    Boolean @map("is_correct")
-  timeTakenSec Int?    @map("time_taken_sec")
-
-  // Relations
-  attempt  QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
-  question QuestionPool @relation("QuestionAttempts", fields: [questionId], references: [id], onDelete: Cascade)
-
-  @@id([attemptId, questionId])
-  @@map("question_attempts")
-}
-
-model ResourceView {
-  learnerId  Int      @map("learner_id")
-  resourceId Int      @map("resource_id")
-  viewedAt   DateTime @default(now()) @map("viewed_at") @db.Timestamptz
-
-  // Relations
-  learner  Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)
-  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-
-  @@id([learnerId, resourceId])
-  @@map("resource_views")
-}
-
-model MeasureProgress {
-  learnerId    Int      @map("learner_id")
-  topicId      Int      @map("topic_id")
-  completedAt  DateTime @map("completed_at") @db.Timestamptz
-  progressType String   @map("progress_type") @db.VarChar(20)
-  status       String   @db.VarChar(20)
-  programId    Int?     @map("program_id")
-  moduleId     Int?     @map("module_id")
-  resourceId   Int?     @map("resource_id")
-
-  // Relations
-  learner  Learner   @relation(fields: [learnerId], references: [id], onDelete: Cascade)
-  topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  program  Program?  @relation(fields: [programId], references: [id], onDelete: Cascade)
-  module   Module?   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  resource Resource? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-
-  @@id([learnerId, topicId])
-  @@map("measure_progress")
-}
-
-model Leaderboard {
-  programId     Int       @map("program_id")
-  learnerId     Int       @map("learner_id")
-  totalScore    Decimal   @map("total_score") @db.Decimal(6, 2)
-  lastAttemptAt DateTime? @map("last_attempt_at") @db.Timestamptz
-
-  // Relations
-  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
-  learner Learner @relation(fields: [learnerId], references: [id], onDelete: Cascade)
-
-  @@id([programId, learnerId])
-  @@map("leaderboard")
+  exam_ends
+  later
 }
