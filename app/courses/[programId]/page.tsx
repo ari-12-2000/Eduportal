@@ -1,6 +1,6 @@
 "use client"
 
-import { Clock, ArrowLeft, FileText, Award, CheckCircle, Users, BookOpen, Star, Trophy } from "lucide-react"
+import { Clock, ArrowLeft, FileText, Award, CheckCircle, Users, BookOpen, Star, Trophy, Video } from "lucide-react"
 import Link from "next/link"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Card, CardContent } from "@/components/ui/card"
@@ -274,21 +274,19 @@ export default function CourseDetail({
                         <AccordionItem
                           key={module.id}
                           value={module.id.toString()}
-                          className={`border-0 rounded-xl overflow-hidden shadow-sm ${
-                            moduleCompleted
+                          className={`border-0 rounded-xl overflow-hidden shadow-sm ${moduleCompleted
                               ? "bg-gradient-to-r from-green-50 to-emerald-50 ring-2 ring-green-200"
                               : "bg-gradient-to-r from-gray-50 to-slate-50"
-                          }`}
+                            }`}
                         >
                           <AccordionTrigger className="hover:bg-white/50 px-6 py-4 rounded-xl transition-all duration-200 [&[data-state=open]]:bg-white/70">
                             <div className="flex items-center justify-between w-full pr-4">
                               <div className="flex items-center">
                                 <div
-                                  className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 text-white font-bold ${
-                                    moduleCompleted
+                                  className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 text-white font-bold ${moduleCompleted
                                       ? "bg-gradient-to-r from-green-500 to-emerald-600"
                                       : "bg-gradient-to-r from-blue-500 to-purple-600"
-                                  }`}
+                                    }`}
                                 >
                                   {moduleCompleted ? <CheckCircle className="h-5 w-5" /> : moduleIndex + 1}
                                 </div>
@@ -376,16 +374,17 @@ export default function CourseDetail({
                                         {/* Enhanced Timeline Circle and Line */}
                                         <div className="flex items-center flex-col mr-6">
                                           <div
-                                            className={`p-3 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300 ${
-                                              topicCompleted
+                                            className={`p-3 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300 ${topicCompleted
                                                 ? "bg-gradient-to-r from-green-500 to-emerald-600"
                                                 : colorScheme.bg
-                                            } ${colorScheme.shadow}`}
+                                              } ${colorScheme.shadow}`}
                                           >
                                             {topicCompleted ? (
                                               <CheckCircle className="h-6 w-6" />
                                             ) : prop.topic.topicResources[0]?.resource.resourceType === "document" ? (
                                               <FileText className="h-6 w-6" />
+                                            ) : prop.topic.topicResources[0]?.resource.resourceType === "video" ? (
+                                              <Video className="h-6 w-6" /> // You can replace this with the appropriate video icon
                                             ) : (
                                               <Clock className="h-6 w-6" />
                                             )}
@@ -396,11 +395,10 @@ export default function CourseDetail({
                                         </div>
                                         {/* Enhanced Content Card */}
                                         <div
-                                          className={`flex-1 border-2 rounded-xl p-6 group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 ${
-                                            topicCompleted
+                                          className={`flex-1 border-2 rounded-xl p-6 group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 ${topicCompleted
                                               ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 ring-2 ring-green-400 ring-offset-2"
                                               : `${colorScheme.cardBg} ${colorScheme.border}`
-                                          } ${colorScheme.shadow}`}
+                                            } ${colorScheme.shadow}`}
                                         >
                                           <div className="flex items-start justify-between mb-3">
                                             <h4 className="font-bold text-gray-900 text-lg leading-tight pr-4 flex items-center">
