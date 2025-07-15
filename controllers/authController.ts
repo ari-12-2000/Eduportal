@@ -2,9 +2,9 @@ import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import { prisma } from '@/lib/prisma';
-import { Admin , Program} from "@/lib/generated/prisma";
+import { Admin, Program } from "@/lib/generated/prisma";
 import { GlobalVariables } from "@/globalVariables";
-import { Course } from "@/types";
+import { Course } from "@/types/course";
 
 const JWT_SECRET = process.env.JWT_SECRET!
 
@@ -37,17 +37,45 @@ export class AuthController {
                   },
                   enrollments: {
                     select: { learnerId: true }
-                  }
+                  },
                 },
               }
+            }
+          },
+          measureProgress: {
+            include: {
+              program: {
+                select: {
+                  id: true
+                }
+              },
+              module: {
+                select: {
+                  id: true
+                }
+              },
+              resource: {
+                select: {
+                  id: true
+                }
+              },
+              topic: {
+                select: {
+                  id: true
+                }
+              },
             }
           }
         }
       })
 
       let userType = GlobalVariables.non_admin.role1;
-      let enrolledCourses: Course[] | [] = []
+      let enrolledCourses: Course[] = []
       let enrolledCourseIDs: number[] = []
+      let completedPrograms: number[] = []
+      let completedModules: number[] = []
+      let completedResources: number[] = []
+      let completedTopics: number[] = []
       let admin
 
       if (!learner) {
@@ -62,6 +90,20 @@ export class AuthController {
           price: e.program.price !== null ? e.program.price.toString() : null
         }))
         enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
+        learner.measureProgress.forEach((progress: any) => {
+          if (progress.program?.id) {
+            completedPrograms.push(progress.program.id)
+          }
+          if (progress.module?.id) {
+            completedModules.push(progress.module.id)
+          }
+          if (progress.resource?.id) {
+            completedResources.push(progress.resource.id)
+          }
+          if (progress.topic?.id) {
+            completedTopics.push(progress.topic.id)
+          }
+        })
       }
 
       const user = admin || learner
@@ -97,7 +139,11 @@ export class AuthController {
         role: userType,
         adminType: userType === GlobalVariables.admin ? (user as Admin).adminType : undefined,
         enrolledCourses,
-        enrolledCourseIDs
+        enrolledCourseIDs,
+        completedPrograms,
+        completedModules,
+        completedResources,
+        completedTopics
       }
 
       return NextResponse.json({ success: true, user: userData, token }, { status: 200 })
@@ -123,6 +169,7 @@ export class AuthController {
       }
 
       const isGuest = role === GlobalVariables.non_admin.role2
+
       if (!isGuest && !password?.trim()) {
         return NextResponse.json({ error: "Password is required" }, { status: 400 })
       }
@@ -159,13 +206,19 @@ export class AuthController {
         { expiresIn: "7d" }
       )
 
+
       const userData = {
         id: newUser.id,
         first_name: newUser.first_name,
         last_name: newUser.last_name,
         email: newUser.email,
         role,
+        profile_image: newUser.profile_image || "",
         enrolledCourses: [],
+        completedPrograms: [],
+        completedModules: [],
+        completedResources: [],
+        completedTopics: []
       }
 
       return NextResponse.json({
@@ -213,35 +266,81 @@ export class AuthController {
               },
             },
           },
+          measureProgress: {
+            include: {
+              program: {
+                select: {
+                  id: true
+                }
+              },
+              module: {
+                select: {
+                  id: true
+                }
+              },
+              resource: {
+                select: {
+                  id: true
+                }
+              },
+              topic: {
+                select: {
+                  id: true
+                }
+              },
+            }
+          }
         },
       })
 
       let userType = GlobalVariables.non_admin.role1
       let enrolledCourses: Course[] = []
       let enrolledCourseIDs: number[] = []
+      let completedPrograms: number[] = []
+      let completedModules: number[] = []
+      let completedResources: number[] = []
+      let completedTopics: number[] = []
 
       if (!learner) {
         return NextResponse.json({ error: "User not found" }, { status: 404 })
       }
-      
+
       enrolledCourses = learner.enrollments.map(e => ({
-          ...e.program,
-          price: e.program.price !== null ? e.program.price.toString() : null
-        }))
+        ...e.program,
+        price: e.program.price !== null ? e.program.price.toString() : null
+      }))
       enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
+      learner.measureProgress.forEach((progress: any) => {
+          if (progress.program?.id) {
+            completedPrograms.push(progress.program.id)
+          }
+          if (progress.module?.id) {
+            completedModules.push(progress.module.id)
+          }
+          if (progress.resource?.id) {
+            completedResources.push(progress.resource.id)
+          }
+          if (progress.topic?.id) {
+            completedTopics.push(progress.topic.id)
+          }
+        })
 
       const userData = {
-      id: learner.id,
-      email: learner.email,
-      first_name: learner.first_name,
-      last_name: learner.last_name,
-      profile_image: learner.profile_image || "",
-      role: userType,
-      enrolledCourses,
-      enrolledCourseIDs,
-    }
-     
-    return NextResponse.json({ user: userData }, { status: 200 })
+        id: learner.id,
+        email: learner.email,
+        first_name: learner.first_name,
+        last_name: learner.last_name,
+        profile_image: learner.profile_image || "",
+        role: userType,
+        enrolledCourses,
+        enrolledCourseIDs,
+        completedPrograms,
+        completedModules,
+        completedResources,
+        completedTopics
+      }
+
+      return NextResponse.json({ user: userData }, { status: 200 })
 
     } catch (error) {
       console.error("Refresh user error:", error)

@@ -12,10 +12,8 @@ import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
 import Loading from "./loading"
 import { CoursesList } from "@/components/courses-list"
-import { Course } from "@/types"
+import { Course } from "@/types/course"
 import { useCourses } from "@/contexts/course-context"
-import { usePathname } from "next/navigation"
-import { Program } from "@/lib/generated/prisma"
 
 interface FilterState {
   priceRange: [number, number]
@@ -55,7 +53,6 @@ export default function SearchPage() {
   ]
 
   const levels = ["Beginner", "Intermediate", "Advanced"]
-  const durations = ["0-2 hours", "2-5 hours", "5-10 hours", "10+ hours"]
 
   useEffect(() => setMounted(true), [])
 
@@ -80,7 +77,7 @@ export default function SearchPage() {
 
     setFilters(initialFilters)
     setFilteredCourses(courses)
-    
+
   }, [courses, filterCategory])
 
   useEffect(() => {
@@ -141,9 +138,9 @@ export default function SearchPage() {
   const clearFilters = () => {
     setFilters({
       ...defaultFilterState,
-      categories: [...defaultFilterState.categories], 
-      levels: [...defaultFilterState.levels],         
-      duration: [...defaultFilterState.duration],    
+      categories: [...defaultFilterState.categories],
+      levels: [...defaultFilterState.levels],
+      duration: [...defaultFilterState.duration],
     })
   }
 
@@ -165,7 +162,7 @@ export default function SearchPage() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-white border-r transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:block",
+          "fixed inset-y-0 left-0 z-40 w-80 bg-white border-r transition-transform duration-300 ease-in-out lg:translate-x-0",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
           mounted ? "block" : "hidden",
         )}
@@ -196,8 +193,8 @@ export default function SearchPage() {
               className="mb-4"
             />
             <div className="flex justify-between text-sm text-gray-600">
-              <span>${filters.priceRange[0]}</span>
-              <span>${filters.priceRange[1]}</span>
+              <span>₹{filters.priceRange[0]}</span>
+              <span>₹{filters.priceRange[1]}</span>
             </div>
           </div>
 
@@ -263,7 +260,7 @@ export default function SearchPage() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-0">
+      <main className="flex-1 lg:ml-[320px] lg:w-[calc(100vw - 320px)]">
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Search Header */}
           <div className="mb-8 lg:ml-0 ml-16">

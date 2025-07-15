@@ -24067,6 +24067,7 @@ export namespace Prisma {
   }
 
   export type MeasureProgressAvgAggregateOutputType = {
+    id: number | null
     learnerId: number | null
     topicId: number | null
     programId: number | null
@@ -24075,6 +24076,7 @@ export namespace Prisma {
   }
 
   export type MeasureProgressSumAggregateOutputType = {
+    id: number | null
     learnerId: number | null
     topicId: number | null
     programId: number | null
@@ -24083,33 +24085,36 @@ export namespace Prisma {
   }
 
   export type MeasureProgressMinAggregateOutputType = {
+    id: number | null
     learnerId: number | null
     topicId: number | null
     completedAt: Date | null
-    progressType: string | null
     status: string | null
+    progressType: string | null
     programId: number | null
     moduleId: number | null
     resourceId: number | null
   }
 
   export type MeasureProgressMaxAggregateOutputType = {
+    id: number | null
     learnerId: number | null
     topicId: number | null
     completedAt: Date | null
-    progressType: string | null
     status: string | null
+    progressType: string | null
     programId: number | null
     moduleId: number | null
     resourceId: number | null
   }
 
   export type MeasureProgressCountAggregateOutputType = {
+    id: number
     learnerId: number
     topicId: number
     completedAt: number
-    progressType: number
     status: number
+    progressType: number
     programId: number
     moduleId: number
     resourceId: number
@@ -24118,6 +24123,7 @@ export namespace Prisma {
 
 
   export type MeasureProgressAvgAggregateInputType = {
+    id?: true
     learnerId?: true
     topicId?: true
     programId?: true
@@ -24126,6 +24132,7 @@ export namespace Prisma {
   }
 
   export type MeasureProgressSumAggregateInputType = {
+    id?: true
     learnerId?: true
     topicId?: true
     programId?: true
@@ -24134,33 +24141,36 @@ export namespace Prisma {
   }
 
   export type MeasureProgressMinAggregateInputType = {
+    id?: true
     learnerId?: true
     topicId?: true
     completedAt?: true
-    progressType?: true
     status?: true
+    progressType?: true
     programId?: true
     moduleId?: true
     resourceId?: true
   }
 
   export type MeasureProgressMaxAggregateInputType = {
+    id?: true
     learnerId?: true
     topicId?: true
     completedAt?: true
-    progressType?: true
     status?: true
+    progressType?: true
     programId?: true
     moduleId?: true
     resourceId?: true
   }
 
   export type MeasureProgressCountAggregateInputType = {
+    id?: true
     learnerId?: true
     topicId?: true
     completedAt?: true
-    progressType?: true
     status?: true
+    progressType?: true
     programId?: true
     moduleId?: true
     resourceId?: true
@@ -24254,11 +24264,12 @@ export namespace Prisma {
   }
 
   export type MeasureProgressGroupByOutputType = {
+    id: number
     learnerId: number
-    topicId: number
+    topicId: number | null
     completedAt: Date
-    progressType: string
     status: string
+    progressType: string
     programId: number | null
     moduleId: number | null
     resourceId: number | null
@@ -24284,11 +24295,12 @@ export namespace Prisma {
 
 
   export type MeasureProgressSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     learnerId?: boolean
     topicId?: boolean
     completedAt?: boolean
-    progressType?: boolean
     status?: boolean
+    progressType?: boolean
     programId?: boolean
     moduleId?: boolean
     resourceId?: boolean
@@ -24296,15 +24308,16 @@ export namespace Prisma {
     module?: boolean | MeasureProgress$moduleArgs<ExtArgs>
     program?: boolean | MeasureProgress$programArgs<ExtArgs>
     resource?: boolean | MeasureProgress$resourceArgs<ExtArgs>
-    topic?: boolean | TopicDefaultArgs<ExtArgs>
+    topic?: boolean | MeasureProgress$topicArgs<ExtArgs>
   }, ExtArgs["result"]["measureProgress"]>
 
   export type MeasureProgressSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     learnerId?: boolean
     topicId?: boolean
     completedAt?: boolean
-    progressType?: boolean
     status?: boolean
+    progressType?: boolean
     programId?: boolean
     moduleId?: boolean
     resourceId?: boolean
@@ -24312,15 +24325,16 @@ export namespace Prisma {
     module?: boolean | MeasureProgress$moduleArgs<ExtArgs>
     program?: boolean | MeasureProgress$programArgs<ExtArgs>
     resource?: boolean | MeasureProgress$resourceArgs<ExtArgs>
-    topic?: boolean | TopicDefaultArgs<ExtArgs>
+    topic?: boolean | MeasureProgress$topicArgs<ExtArgs>
   }, ExtArgs["result"]["measureProgress"]>
 
   export type MeasureProgressSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     learnerId?: boolean
     topicId?: boolean
     completedAt?: boolean
-    progressType?: boolean
     status?: boolean
+    progressType?: boolean
     programId?: boolean
     moduleId?: boolean
     resourceId?: boolean
@@ -24328,41 +24342,42 @@ export namespace Prisma {
     module?: boolean | MeasureProgress$moduleArgs<ExtArgs>
     program?: boolean | MeasureProgress$programArgs<ExtArgs>
     resource?: boolean | MeasureProgress$resourceArgs<ExtArgs>
-    topic?: boolean | TopicDefaultArgs<ExtArgs>
+    topic?: boolean | MeasureProgress$topicArgs<ExtArgs>
   }, ExtArgs["result"]["measureProgress"]>
 
   export type MeasureProgressSelectScalar = {
+    id?: boolean
     learnerId?: boolean
     topicId?: boolean
     completedAt?: boolean
-    progressType?: boolean
     status?: boolean
+    progressType?: boolean
     programId?: boolean
     moduleId?: boolean
     resourceId?: boolean
   }
 
-  export type MeasureProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"learnerId" | "topicId" | "completedAt" | "progressType" | "status" | "programId" | "moduleId" | "resourceId", ExtArgs["result"]["measureProgress"]>
+  export type MeasureProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "learnerId" | "topicId" | "completedAt" | "status" | "progressType" | "programId" | "moduleId" | "resourceId", ExtArgs["result"]["measureProgress"]>
   export type MeasureProgressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     learner?: boolean | LearnerDefaultArgs<ExtArgs>
     module?: boolean | MeasureProgress$moduleArgs<ExtArgs>
     program?: boolean | MeasureProgress$programArgs<ExtArgs>
     resource?: boolean | MeasureProgress$resourceArgs<ExtArgs>
-    topic?: boolean | TopicDefaultArgs<ExtArgs>
+    topic?: boolean | MeasureProgress$topicArgs<ExtArgs>
   }
   export type MeasureProgressIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     learner?: boolean | LearnerDefaultArgs<ExtArgs>
     module?: boolean | MeasureProgress$moduleArgs<ExtArgs>
     program?: boolean | MeasureProgress$programArgs<ExtArgs>
     resource?: boolean | MeasureProgress$resourceArgs<ExtArgs>
-    topic?: boolean | TopicDefaultArgs<ExtArgs>
+    topic?: boolean | MeasureProgress$topicArgs<ExtArgs>
   }
   export type MeasureProgressIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     learner?: boolean | LearnerDefaultArgs<ExtArgs>
     module?: boolean | MeasureProgress$moduleArgs<ExtArgs>
     program?: boolean | MeasureProgress$programArgs<ExtArgs>
     resource?: boolean | MeasureProgress$resourceArgs<ExtArgs>
-    topic?: boolean | TopicDefaultArgs<ExtArgs>
+    topic?: boolean | MeasureProgress$topicArgs<ExtArgs>
   }
 
   export type $MeasureProgressPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -24372,14 +24387,15 @@ export namespace Prisma {
       module: Prisma.$ModulePayload<ExtArgs> | null
       program: Prisma.$ProgramPayload<ExtArgs> | null
       resource: Prisma.$ResourcePayload<ExtArgs> | null
-      topic: Prisma.$TopicPayload<ExtArgs>
+      topic: Prisma.$TopicPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
+      id: number
       learnerId: number
-      topicId: number
+      topicId: number | null
       completedAt: Date
-      progressType: string
       status: string
+      progressType: string
       programId: number | null
       moduleId: number | null
       resourceId: number | null
@@ -24466,8 +24482,8 @@ export namespace Prisma {
      * // Get first 10 MeasureProgresses
      * const measureProgresses = await prisma.measureProgress.findMany({ take: 10 })
      * 
-     * // Only select the `learnerId`
-     * const measureProgressWithLearnerIdOnly = await prisma.measureProgress.findMany({ select: { learnerId: true } })
+     * // Only select the `id`
+     * const measureProgressWithIdOnly = await prisma.measureProgress.findMany({ select: { id: true } })
      * 
      */
     findMany<T extends MeasureProgressFindManyArgs>(args?: SelectSubset<T, MeasureProgressFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeasureProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -24511,9 +24527,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many MeasureProgresses and only return the `learnerId`
-     * const measureProgressWithLearnerIdOnly = await prisma.measureProgress.createManyAndReturn({
-     *   select: { learnerId: true },
+     * // Create many MeasureProgresses and only return the `id`
+     * const measureProgressWithIdOnly = await prisma.measureProgress.createManyAndReturn({
+     *   select: { id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -24602,9 +24618,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more MeasureProgresses and only return the `learnerId`
-     * const measureProgressWithLearnerIdOnly = await prisma.measureProgress.updateManyAndReturn({
-     *   select: { learnerId: true },
+     * // Update zero or more MeasureProgresses and only return the `id`
+     * const measureProgressWithIdOnly = await prisma.measureProgress.updateManyAndReturn({
+     *   select: { id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -24781,7 +24797,7 @@ export namespace Prisma {
     module<T extends MeasureProgress$moduleArgs<ExtArgs> = {}>(args?: Subset<T, MeasureProgress$moduleArgs<ExtArgs>>): Prisma__ModuleClient<$Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     program<T extends MeasureProgress$programArgs<ExtArgs> = {}>(args?: Subset<T, MeasureProgress$programArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     resource<T extends MeasureProgress$resourceArgs<ExtArgs> = {}>(args?: Subset<T, MeasureProgress$resourceArgs<ExtArgs>>): Prisma__ResourceClient<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    topic<T extends TopicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TopicDefaultArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    topic<T extends MeasureProgress$topicArgs<ExtArgs> = {}>(args?: Subset<T, MeasureProgress$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24811,11 +24827,12 @@ export namespace Prisma {
    * Fields of the MeasureProgress model
    */
   interface MeasureProgressFieldRefs {
+    readonly id: FieldRef<"MeasureProgress", 'Int'>
     readonly learnerId: FieldRef<"MeasureProgress", 'Int'>
     readonly topicId: FieldRef<"MeasureProgress", 'Int'>
     readonly completedAt: FieldRef<"MeasureProgress", 'DateTime'>
-    readonly progressType: FieldRef<"MeasureProgress", 'String'>
     readonly status: FieldRef<"MeasureProgress", 'String'>
+    readonly progressType: FieldRef<"MeasureProgress", 'String'>
     readonly programId: FieldRef<"MeasureProgress", 'Int'>
     readonly moduleId: FieldRef<"MeasureProgress", 'Int'>
     readonly resourceId: FieldRef<"MeasureProgress", 'Int'>
@@ -25269,6 +25286,25 @@ export namespace Prisma {
      */
     include?: ResourceInclude<ExtArgs> | null
     where?: ResourceWhereInput
+  }
+
+  /**
+   * MeasureProgress.topic
+   */
+  export type MeasureProgress$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Topic
+     */
+    select?: TopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Topic
+     */
+    omit?: TopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopicInclude<ExtArgs> | null
+    where?: TopicWhereInput
   }
 
   /**
@@ -26675,11 +26711,12 @@ export namespace Prisma {
 
 
   export const MeasureProgressScalarFieldEnum: {
+    id: 'id',
     learnerId: 'learnerId',
     topicId: 'topicId',
     completedAt: 'completedAt',
-    progressType: 'progressType',
     status: 'status',
+    progressType: 'progressType',
     programId: 'programId',
     moduleId: 'moduleId',
     resourceId: 'resourceId'
@@ -28493,11 +28530,12 @@ export namespace Prisma {
     AND?: MeasureProgressWhereInput | MeasureProgressWhereInput[]
     OR?: MeasureProgressWhereInput[]
     NOT?: MeasureProgressWhereInput | MeasureProgressWhereInput[]
+    id?: IntFilter<"MeasureProgress"> | number
     learnerId?: IntFilter<"MeasureProgress"> | number
-    topicId?: IntFilter<"MeasureProgress"> | number
+    topicId?: IntNullableFilter<"MeasureProgress"> | number | null
     completedAt?: DateTimeFilter<"MeasureProgress"> | Date | string
-    progressType?: StringFilter<"MeasureProgress"> | string
     status?: StringFilter<"MeasureProgress"> | string
+    progressType?: StringFilter<"MeasureProgress"> | string
     programId?: IntNullableFilter<"MeasureProgress"> | number | null
     moduleId?: IntNullableFilter<"MeasureProgress"> | number | null
     resourceId?: IntNullableFilter<"MeasureProgress"> | number | null
@@ -28505,15 +28543,16 @@ export namespace Prisma {
     module?: XOR<ModuleNullableScalarRelationFilter, ModuleWhereInput> | null
     program?: XOR<ProgramNullableScalarRelationFilter, ProgramWhereInput> | null
     resource?: XOR<ResourceNullableScalarRelationFilter, ResourceWhereInput> | null
-    topic?: XOR<TopicScalarRelationFilter, TopicWhereInput>
+    topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
   }
 
   export type MeasureProgressOrderByWithRelationInput = {
+    id?: SortOrder
     learnerId?: SortOrder
-    topicId?: SortOrder
+    topicId?: SortOrderInput | SortOrder
     completedAt?: SortOrder
-    progressType?: SortOrder
     status?: SortOrder
+    progressType?: SortOrder
     programId?: SortOrderInput | SortOrder
     moduleId?: SortOrderInput | SortOrder
     resourceId?: SortOrderInput | SortOrder
@@ -28525,15 +28564,15 @@ export namespace Prisma {
   }
 
   export type MeasureProgressWhereUniqueInput = Prisma.AtLeast<{
-    learnerId_topicId?: MeasureProgressLearnerIdTopicIdCompoundUniqueInput
+    id?: number
     AND?: MeasureProgressWhereInput | MeasureProgressWhereInput[]
     OR?: MeasureProgressWhereInput[]
     NOT?: MeasureProgressWhereInput | MeasureProgressWhereInput[]
     learnerId?: IntFilter<"MeasureProgress"> | number
-    topicId?: IntFilter<"MeasureProgress"> | number
+    topicId?: IntNullableFilter<"MeasureProgress"> | number | null
     completedAt?: DateTimeFilter<"MeasureProgress"> | Date | string
-    progressType?: StringFilter<"MeasureProgress"> | string
     status?: StringFilter<"MeasureProgress"> | string
+    progressType?: StringFilter<"MeasureProgress"> | string
     programId?: IntNullableFilter<"MeasureProgress"> | number | null
     moduleId?: IntNullableFilter<"MeasureProgress"> | number | null
     resourceId?: IntNullableFilter<"MeasureProgress"> | number | null
@@ -28541,15 +28580,16 @@ export namespace Prisma {
     module?: XOR<ModuleNullableScalarRelationFilter, ModuleWhereInput> | null
     program?: XOR<ProgramNullableScalarRelationFilter, ProgramWhereInput> | null
     resource?: XOR<ResourceNullableScalarRelationFilter, ResourceWhereInput> | null
-    topic?: XOR<TopicScalarRelationFilter, TopicWhereInput>
-  }, "learnerId_topicId">
+    topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
+  }, "id">
 
   export type MeasureProgressOrderByWithAggregationInput = {
+    id?: SortOrder
     learnerId?: SortOrder
-    topicId?: SortOrder
+    topicId?: SortOrderInput | SortOrder
     completedAt?: SortOrder
-    progressType?: SortOrder
     status?: SortOrder
+    progressType?: SortOrder
     programId?: SortOrderInput | SortOrder
     moduleId?: SortOrderInput | SortOrder
     resourceId?: SortOrderInput | SortOrder
@@ -28564,11 +28604,12 @@ export namespace Prisma {
     AND?: MeasureProgressScalarWhereWithAggregatesInput | MeasureProgressScalarWhereWithAggregatesInput[]
     OR?: MeasureProgressScalarWhereWithAggregatesInput[]
     NOT?: MeasureProgressScalarWhereWithAggregatesInput | MeasureProgressScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MeasureProgress"> | number
     learnerId?: IntWithAggregatesFilter<"MeasureProgress"> | number
-    topicId?: IntWithAggregatesFilter<"MeasureProgress"> | number
+    topicId?: IntNullableWithAggregatesFilter<"MeasureProgress"> | number | null
     completedAt?: DateTimeWithAggregatesFilter<"MeasureProgress"> | Date | string
-    progressType?: StringWithAggregatesFilter<"MeasureProgress"> | string
     status?: StringWithAggregatesFilter<"MeasureProgress"> | string
+    progressType?: StringWithAggregatesFilter<"MeasureProgress"> | string
     programId?: IntNullableWithAggregatesFilter<"MeasureProgress"> | number | null
     moduleId?: IntNullableWithAggregatesFilter<"MeasureProgress"> | number | null
     resourceId?: IntNullableWithAggregatesFilter<"MeasureProgress"> | number | null
@@ -30269,22 +30310,23 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateInput = {
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     learner: LearnerCreateNestedOneWithoutMeasureProgressInput
     module?: ModuleCreateNestedOneWithoutMeasureProgressInput
     program?: ProgramCreateNestedOneWithoutMeasureProgressInput
     resource?: ResourceCreateNestedOneWithoutMeasureProgressInput
-    topic: TopicCreateNestedOneWithoutMeasureProgressInput
+    topic?: TopicCreateNestedOneWithoutMeasureProgressInput
   }
 
   export type MeasureProgressUncheckedCreateInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
     resourceId?: number | null
@@ -30292,32 +30334,34 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     learner?: LearnerUpdateOneRequiredWithoutMeasureProgressNestedInput
     module?: ModuleUpdateOneWithoutMeasureProgressNestedInput
     program?: ProgramUpdateOneWithoutMeasureProgressNestedInput
     resource?: ResourceUpdateOneWithoutMeasureProgressNestedInput
-    topic?: TopicUpdateOneRequiredWithoutMeasureProgressNestedInput
+    topic?: TopicUpdateOneWithoutMeasureProgressNestedInput
   }
 
   export type MeasureProgressUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MeasureProgressCreateManyInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
     resourceId?: number | null
@@ -30325,16 +30369,17 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateManyMutationInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
   }
 
   export type MeasureProgressUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32083,23 +32128,20 @@ export namespace Prisma {
     isNot?: ResourceWhereInput | null
   }
 
-  export type MeasureProgressLearnerIdTopicIdCompoundUniqueInput = {
-    learnerId: number
-    topicId: number
-  }
-
   export type MeasureProgressCountOrderByAggregateInput = {
+    id?: SortOrder
     learnerId?: SortOrder
     topicId?: SortOrder
     completedAt?: SortOrder
-    progressType?: SortOrder
     status?: SortOrder
+    progressType?: SortOrder
     programId?: SortOrder
     moduleId?: SortOrder
     resourceId?: SortOrder
   }
 
   export type MeasureProgressAvgOrderByAggregateInput = {
+    id?: SortOrder
     learnerId?: SortOrder
     topicId?: SortOrder
     programId?: SortOrder
@@ -32108,28 +32150,31 @@ export namespace Prisma {
   }
 
   export type MeasureProgressMaxOrderByAggregateInput = {
+    id?: SortOrder
     learnerId?: SortOrder
     topicId?: SortOrder
     completedAt?: SortOrder
-    progressType?: SortOrder
     status?: SortOrder
+    progressType?: SortOrder
     programId?: SortOrder
     moduleId?: SortOrder
     resourceId?: SortOrder
   }
 
   export type MeasureProgressMinOrderByAggregateInput = {
+    id?: SortOrder
     learnerId?: SortOrder
     topicId?: SortOrder
     completedAt?: SortOrder
-    progressType?: SortOrder
     status?: SortOrder
+    progressType?: SortOrder
     programId?: SortOrder
     moduleId?: SortOrder
     resourceId?: SortOrder
   }
 
   export type MeasureProgressSumOrderByAggregateInput = {
+    id?: SortOrder
     learnerId?: SortOrder
     topicId?: SortOrder
     programId?: SortOrder
@@ -34043,10 +34088,12 @@ export namespace Prisma {
     update?: XOR<XOR<ResourceUpdateToOneWithWhereWithoutMeasureProgressInput, ResourceUpdateWithoutMeasureProgressInput>, ResourceUncheckedUpdateWithoutMeasureProgressInput>
   }
 
-  export type TopicUpdateOneRequiredWithoutMeasureProgressNestedInput = {
+  export type TopicUpdateOneWithoutMeasureProgressNestedInput = {
     create?: XOR<TopicCreateWithoutMeasureProgressInput, TopicUncheckedCreateWithoutMeasureProgressInput>
     connectOrCreate?: TopicCreateOrConnectWithoutMeasureProgressInput
     upsert?: TopicUpsertWithoutMeasureProgressInput
+    disconnect?: TopicWhereInput | boolean
+    delete?: TopicWhereInput | boolean
     connect?: TopicWhereUniqueInput
     update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutMeasureProgressInput, TopicUpdateWithoutMeasureProgressInput>, TopicUncheckedUpdateWithoutMeasureProgressInput>
   }
@@ -35222,20 +35269,21 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateWithoutLearnerInput = {
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     module?: ModuleCreateNestedOneWithoutMeasureProgressInput
     program?: ProgramCreateNestedOneWithoutMeasureProgressInput
     resource?: ResourceCreateNestedOneWithoutMeasureProgressInput
-    topic: TopicCreateNestedOneWithoutMeasureProgressInput
+    topic?: TopicCreateNestedOneWithoutMeasureProgressInput
   }
 
   export type MeasureProgressUncheckedCreateWithoutLearnerInput = {
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    id?: number
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
     resourceId?: number | null
@@ -35513,11 +35561,12 @@ export namespace Prisma {
     AND?: MeasureProgressScalarWhereInput | MeasureProgressScalarWhereInput[]
     OR?: MeasureProgressScalarWhereInput[]
     NOT?: MeasureProgressScalarWhereInput | MeasureProgressScalarWhereInput[]
+    id?: IntFilter<"MeasureProgress"> | number
     learnerId?: IntFilter<"MeasureProgress"> | number
-    topicId?: IntFilter<"MeasureProgress"> | number
+    topicId?: IntNullableFilter<"MeasureProgress"> | number | null
     completedAt?: DateTimeFilter<"MeasureProgress"> | Date | string
-    progressType?: StringFilter<"MeasureProgress"> | string
     status?: StringFilter<"MeasureProgress"> | string
+    progressType?: StringFilter<"MeasureProgress"> | string
     programId?: IntNullableFilter<"MeasureProgress"> | number | null
     moduleId?: IntNullableFilter<"MeasureProgress"> | number | null
     resourceId?: IntNullableFilter<"MeasureProgress"> | number | null
@@ -35624,21 +35673,22 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateWithoutProgramInput = {
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     learner: LearnerCreateNestedOneWithoutMeasureProgressInput
     module?: ModuleCreateNestedOneWithoutMeasureProgressInput
     resource?: ResourceCreateNestedOneWithoutMeasureProgressInput
-    topic: TopicCreateNestedOneWithoutMeasureProgressInput
+    topic?: TopicCreateNestedOneWithoutMeasureProgressInput
   }
 
   export type MeasureProgressUncheckedCreateWithoutProgramInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     moduleId?: number | null
     resourceId?: number | null
   }
@@ -35935,21 +35985,22 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateWithoutModuleInput = {
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     learner: LearnerCreateNestedOneWithoutMeasureProgressInput
     program?: ProgramCreateNestedOneWithoutMeasureProgressInput
     resource?: ResourceCreateNestedOneWithoutMeasureProgressInput
-    topic: TopicCreateNestedOneWithoutMeasureProgressInput
+    topic?: TopicCreateNestedOneWithoutMeasureProgressInput
   }
 
   export type MeasureProgressUncheckedCreateWithoutModuleInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     resourceId?: number | null
   }
@@ -36758,9 +36809,9 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateWithoutTopicInput = {
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     learner: LearnerCreateNestedOneWithoutMeasureProgressInput
     module?: ModuleCreateNestedOneWithoutMeasureProgressInput
     program?: ProgramCreateNestedOneWithoutMeasureProgressInput
@@ -36768,10 +36819,11 @@ export namespace Prisma {
   }
 
   export type MeasureProgressUncheckedCreateWithoutTopicInput = {
+    id?: number
     learnerId: number
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
     resourceId?: number | null
@@ -37177,21 +37229,22 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateWithoutResourceInput = {
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     learner: LearnerCreateNestedOneWithoutMeasureProgressInput
     module?: ModuleCreateNestedOneWithoutMeasureProgressInput
     program?: ProgramCreateNestedOneWithoutMeasureProgressInput
-    topic: TopicCreateNestedOneWithoutMeasureProgressInput
+    topic?: TopicCreateNestedOneWithoutMeasureProgressInput
   }
 
   export type MeasureProgressUncheckedCreateWithoutResourceInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
   }
@@ -40148,10 +40201,11 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateManyLearnerInput = {
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    id?: number
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
     resourceId?: number | null
@@ -40315,29 +40369,31 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateWithoutLearnerInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     module?: ModuleUpdateOneWithoutMeasureProgressNestedInput
     program?: ProgramUpdateOneWithoutMeasureProgressNestedInput
     resource?: ResourceUpdateOneWithoutMeasureProgressNestedInput
-    topic?: TopicUpdateOneRequiredWithoutMeasureProgressNestedInput
+    topic?: TopicUpdateOneWithoutMeasureProgressNestedInput
   }
 
   export type MeasureProgressUncheckedUpdateWithoutLearnerInput = {
-    topicId?: IntFieldUpdateOperationsInput | number
+    id?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MeasureProgressUncheckedUpdateManyWithoutLearnerInput = {
-    topicId?: IntFieldUpdateOperationsInput | number
+    id?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -40408,11 +40464,12 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateManyProgramInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     moduleId?: number | null
     resourceId?: number | null
   }
@@ -40476,30 +40533,32 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateWithoutProgramInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     learner?: LearnerUpdateOneRequiredWithoutMeasureProgressNestedInput
     module?: ModuleUpdateOneWithoutMeasureProgressNestedInput
     resource?: ResourceUpdateOneWithoutMeasureProgressNestedInput
-    topic?: TopicUpdateOneRequiredWithoutMeasureProgressNestedInput
+    topic?: TopicUpdateOneWithoutMeasureProgressNestedInput
   }
 
   export type MeasureProgressUncheckedUpdateWithoutProgramInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MeasureProgressUncheckedUpdateManyWithoutProgramInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -40572,11 +40631,12 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateManyModuleInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     resourceId?: number | null
   }
@@ -40604,30 +40664,32 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateWithoutModuleInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     learner?: LearnerUpdateOneRequiredWithoutMeasureProgressNestedInput
     program?: ProgramUpdateOneWithoutMeasureProgressNestedInput
     resource?: ResourceUpdateOneWithoutMeasureProgressNestedInput
-    topic?: TopicUpdateOneRequiredWithoutMeasureProgressNestedInput
+    topic?: TopicUpdateOneWithoutMeasureProgressNestedInput
   }
 
   export type MeasureProgressUncheckedUpdateWithoutModuleInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MeasureProgressUncheckedUpdateManyWithoutModuleInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -40703,10 +40765,11 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateManyTopicInput = {
+    id?: number
     learnerId: number
-    completedAt: Date | string
-    progressType: string
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
     resourceId?: number | null
@@ -40735,8 +40798,8 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateWithoutTopicInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     learner?: LearnerUpdateOneRequiredWithoutMeasureProgressNestedInput
     module?: ModuleUpdateOneWithoutMeasureProgressNestedInput
     program?: ProgramUpdateOneWithoutMeasureProgressNestedInput
@@ -40744,20 +40807,22 @@ export namespace Prisma {
   }
 
   export type MeasureProgressUncheckedUpdateWithoutTopicInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MeasureProgressUncheckedUpdateManyWithoutTopicInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     resourceId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -40834,11 +40899,12 @@ export namespace Prisma {
   }
 
   export type MeasureProgressCreateManyResourceInput = {
+    id?: number
     learnerId: number
-    topicId: number
-    completedAt: Date | string
-    progressType: string
+    topicId?: number | null
+    completedAt?: Date | string
     status: string
+    progressType: string
     programId?: number | null
     moduleId?: number | null
   }
@@ -40855,30 +40921,32 @@ export namespace Prisma {
 
   export type MeasureProgressUpdateWithoutResourceInput = {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     learner?: LearnerUpdateOneRequiredWithoutMeasureProgressNestedInput
     module?: ModuleUpdateOneWithoutMeasureProgressNestedInput
     program?: ProgramUpdateOneWithoutMeasureProgressNestedInput
-    topic?: TopicUpdateOneRequiredWithoutMeasureProgressNestedInput
+    topic?: TopicUpdateOneWithoutMeasureProgressNestedInput
   }
 
   export type MeasureProgressUncheckedUpdateWithoutResourceInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MeasureProgressUncheckedUpdateManyWithoutResourceInput = {
+    id?: IntFieldUpdateOperationsInput | number
     learnerId?: IntFieldUpdateOperationsInput | number
-    topicId?: IntFieldUpdateOperationsInput | number
+    topicId?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    progressType?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    progressType?: StringFieldUpdateOperationsInput | string
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
   }

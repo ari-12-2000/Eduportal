@@ -3,7 +3,7 @@
 import { CoursesList } from "@/components/courses-list"
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
-import { Course } from "@/types";
+import { Course } from "@/types/course";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { Course } from "@/types"
+import { Course } from "@/types/course"
 import { createContext, useContext, useState, useEffect, type ReactNode, SetStateAction, Dispatch } from "react"
 import { Code, Palette, Database, Smartphone, Brain, TrendingUp, ArrowRight, Award, BookOpen, BarChartBig, Megaphone, LineChart } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -10,6 +10,7 @@ interface CourseContextType {
     loading: boolean
     filterCategory: string
     categories: { name: string, icon: typeof Code, color: string }[]
+    setLoading: Dispatch<SetStateAction<boolean>>
     setFilterCategory: Dispatch<SetStateAction<string>>
 }
 
@@ -76,15 +77,16 @@ export function CourseProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         // Clear filter when moving away from search page to any other page except home
         console.log(previousPath);
-        if (previousPath === "/courses/search" && filterCategory) {
+        if (previousPath?.startsWith("/courses/search") && filterCategory) {
             console.log("Clearing filter - moved away from search page")
             setFilterCategory("")
         }
-
+        if(previousPath?.startsWith("/payment/") && loading)
+             setLoading(false)      
         setPreviousPath(pathname)
     }, [pathname])
 
-    return (<CourseContext.Provider value={{ courses, loading, categories, filterCategory, setFilterCategory }}>{children}</CourseContext.Provider>)
+    return (<CourseContext.Provider value={{ courses, loading, categories, filterCategory, setLoading, setFilterCategory }}>{children}</CourseContext.Provider>)
 }
 
 export function useCourses() {

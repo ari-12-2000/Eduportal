@@ -337,11 +337,12 @@ model ResourceView {
 }
 
 model MeasureProgress {
+  id         Int      @id @default(autoincrement())
   learnerId    Int       @map("learner_id")
-  topicId      Int       @map("topic_id")
-  completedAt  DateTime  @map("completed_at") @db.Timestamptz(6)
-  progressType String    @map("progress_type") @db.VarChar(20)
+  topicId      Int?       @map("topic_id")
+  completedAt  DateTime  @default(now()) @map("completed_at") @db.Timestamptz(6)
   status       String    @db.VarChar(20)
+  progressType String    @map("progress_type") @db.VarChar(20)
   programId    Int?      @map("program_id")
   moduleId     Int?      @map("module_id")
   resourceId   Int?      @map("resource_id")
@@ -349,11 +350,10 @@ model MeasureProgress {
   module       Module?   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   program      Program?  @relation(fields: [programId], references: [id], onDelete: Cascade)
   resource     Resource? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-  topic        Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
-
-  @@id([learnerId, topicId])
+  topic        Topic?     @relation(fields: [topicId], references: [id], onDelete: Cascade)
   @@map("measure_progress")
 }
+
 
 model Leaderboard {
   programId     Int       @map("program_id")

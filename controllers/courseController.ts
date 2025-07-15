@@ -31,7 +31,7 @@ export class CourseController {
     }
   }
 
-  // 2. Get a course by ID
+  // 2. Get a course by ID/price
   static async getCourseById({ params }: { params: Promise<{ programId: string }> }) {
     try {
       const { programId } = await params;
@@ -83,7 +83,7 @@ export class CourseController {
     }
   }
 
-  // 3. Create course
+// 3. Create course
   static async createCourse(req: NextRequest) {
     try {
       const data = await req.json();

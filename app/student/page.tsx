@@ -9,7 +9,7 @@ import { useCourses } from "@/contexts/course-context"
 export default function HomePage() {
   const router = useRouter()
   const { courses, categories, filterCategory, setFilterCategory, loading } = useCourses();
-  
+
 
   const handleCategoryClick = (categoryName: string) => {
     console.log(categoryName);
@@ -18,8 +18,8 @@ export default function HomePage() {
   }
 
   const handleBrowseCatalog = () => {
-   if(filterCategory)
-    setFilterCategory(""); 
+    if (filterCategory)
+      setFilterCategory("");
     router.push("/courses/search/")
   }
 
@@ -97,28 +97,35 @@ export default function HomePage() {
               Choose from our wide range of categories and start your learning journey today
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category: { name: string, icon: typeof Code, color: string }) => {
-              const Icon = category.icon;
-              return (
-              <Card
-                key={category.name}
-                className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md group"
-                onClick={() => handleCategoryClick(category.name)}
-              >
-                <CardContent className="p-6 text-center">
-                  <div
-                    className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+          {loading ? (<div className="grid grid-cols-4 lg:grid-cols-6 gap-6 mt-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-24 w-40 bg-black opacity-10 rounded-lg" />
+            ))}
+          </div>) :
+            (<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {categories.map((category: { name: string, icon: typeof Code, color: string }) => {
+                const Icon = category.icon;
+                return (
+                  <Card
+                    key={category.name}
+                    className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md group"
+                    onClick={() => handleCategoryClick(category.name)}
                   >
-                    <Icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-                    {category.name}
-                  </h3>
-                </CardContent>
-              </Card>
-            )})}
-          </div>
+                    <CardContent className="p-6 text-center">
+                      <div
+                        className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        <Icon className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                        {category.name}
+                      </h3>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>)
+          }
         </section>
 
         {/* Featured Courses */}
@@ -131,23 +138,35 @@ export default function HomePage() {
           </div>
 
           {loading ? (
-            <div className="space-y-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1, 2, 3].map((i) => (
-                  <Card key={i} className="overflow-hidden shadow-md">
-                    <div className="h-48 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
-                    <CardContent className="p-6">
-                      <div className="h-6 bg-gray-200 rounded animate-pulse mb-3" />
-                      <div className="h-4 bg-gray-200 rounded animate-pulse mb-2" />
-                      <div className="h-4 bg-gray-200 rounded animate-pulse mb-4 w-3/4" />
-                      <div className="flex justify-between items-center">
-                        <div className="h-6 bg-gray-200 rounded animate-pulse w-20" />
-                        <div className="h-8 bg-gray-200 rounded animate-pulse w-24" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="border border-gray-200 rounded-xl bg-white p-4 space-y-3"
+                >
+                  {/* Top badge */}
+                  <div className="h-4 w-20 bg-black opacity-10 rounded" />
+                  {/* Level and rating */}
+                  <div className="h-4 w-16 bg-black opacity-10 rounded" />
+                  {/* Title */}
+                  <div className="h-5 w-3/4 bg-black opacity-10 rounded" />
+                  {/* Description */}
+                  <div className="h-3 w-full bg-black opacity-10 rounded" />
+                  {/* Instructor */}
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="w-8 h-8 rounded-full bg-black opacity-10" />
+                    <div className="h-3 w-20 bg-black opacity-10 rounded" />
+                  </div>
+                  {/* Stats */}
+                  <div className="flex justify-between text-sm">
+                    <div className="h-3 w-8 bg-black opacity-10 rounded" />
+                    <div className="h-3 w-8 bg-black opacity-10 rounded" />
+                    <div className="h-3 w-8 bg-black opacity-10 rounded" />
+                  </div>
+                  {/* Button */}
+                  <div className="h-6 w-24 bg-black opacity-10 rounded-full mt-4 ml-auto" />
+                </div>
+              ))}
             </div>
           ) : (
             <CoursesList courses={courses} />

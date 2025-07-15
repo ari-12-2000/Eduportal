@@ -1,29 +1,50 @@
 "use client"
-
 import type React from "react"
-
-import { BookOpen, Layers, FileQuestion } from "lucide-react"
+import { BookOpen, Layers, FileQuestion, BookOpenCheck } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 
-export function ProgressCards() {
+interface Prop {
+  courseProgress: {
+    courses: number
+    completed: number
+  }
+  topicProgress: {
+    topics: number
+    completed: number
+  }
+  moduleProgress: {
+    modules: number
+    completed: number
+  }
+}
+
+export function ProgressCards({ courseProgress, topicProgress, moduleProgress }: Prop) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-0">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-0">
       <ProgressCard
         icon={BookOpen}
         title="Courses Progress"
-        current={4}
-        total={6}
+        current={courseProgress.completed}
+        total={courseProgress.courses}
         label="Courses completed"
         color="bg-blue-600"
       />
       <ProgressCard
         icon={Layers}
         title="Modules Progress"
-        current={12}
-        total={20}
+        current={moduleProgress.completed}
+        total={moduleProgress.modules}
         label="Modules completed"
         color="bg-indigo-600"
+      />
+      <ProgressCard
+        icon={BookOpenCheck}
+        title="Topics Progress"
+        current={topicProgress.completed}
+        total={topicProgress.topics}
+        label="Topics completed"
+        color="bg-green-600"
       />
       <ProgressCard
         icon={FileQuestion}
@@ -48,7 +69,6 @@ interface ProgressCardProps {
 
 function ProgressCard({ icon: Icon, title, current, total, label, color }: ProgressCardProps) {
   const percentage = (current / total) * 100
-
   return (
     <Card className="relative z-0">
       <CardContent className="pt-6">

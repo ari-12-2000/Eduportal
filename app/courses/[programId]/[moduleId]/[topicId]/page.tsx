@@ -6,10 +6,9 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import Loading from "./loading"
 import TopicResourceRenderer from "@/components/TopicResourceRenderer"
-import { useCourses } from "@/contexts/course-context"
 
 
 export default function TopicPage({ params }: { params: Promise<{ programId: string, moduleId: string, topicId: string }> }) {
@@ -20,10 +19,9 @@ export default function TopicPage({ params }: { params: Promise<{ programId: str
     const [moduleTopics, setModuleTopics] = useState<Map<number, number>>(new Map());
     const [sortedTopics, setSortedTopics] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState(true)
-    const {filterCategory, setFilterCategory} = useCourses();
+    
+
     useEffect(() => {
-        if(filterCategory)
-          setFilterCategory(""); 
         const fetchData = async () => {
             setIsLoading(true)
             try {
@@ -31,7 +29,9 @@ export default function TopicPage({ params }: { params: Promise<{ programId: str
                     fetch(`/topics/${topicId}`),
                     fetch(`/modules/${moduleId}`),
                 ]);
-
+                if (!topicRes.ok || !moduleRes.ok) {
+                    throw new Error('Failed to fetch data');
+                }
                 const [topicData, moduleData] = await Promise.all([
                     topicRes.json(),
                     moduleRes.json(),
@@ -75,6 +75,8 @@ export default function TopicPage({ params }: { params: Promise<{ programId: str
             </div>
         )
     }
+
+
     return (
         <div className="max-w-4xl mx-auto p-6">
             {/* Header */}
@@ -113,15 +115,15 @@ export default function TopicPage({ params }: { params: Promise<{ programId: str
             {/* Content */}
             <Card className="mb-6">
                 <CardContent className="p-6 space-y-6">
-                    {currentTopic.topicResources.sort((a: any, b: any) => a.position - b.position).map((prop: any, index: number) => <TopicResourceRenderer key={index} resource={prop.resource} />)}
+                    {currentTopic.topicResources.sort((a: any, b: any) => a.position - b.position).map((prop: any, index: number) => <TopicResourceRenderer resources={currentTopic.topicResources} topicId={topicId} topics={sortedTopics} moduleId={moduleId} key={index} resource={prop.resource} />)}
                 </CardContent>
             </Card>
-
 
             {/* Navigation */}
             <div className="flex items-center justify-between">
                 <div>
                     {typeof moduleTopics.get(Number(topicId)) === "number" && (moduleTopics.get(Number(topicId))! - 1 >= 0) && (
+
                         <Button variant="outline" onClick={() => router.push(`/courses/${programId}/${moduleId}/${sortedTopics[moduleTopics.get(Number(topicId))! - 1]}`)} className="flex items-center">
                             <ArrowLeft className="h-4 w-4 mr-2" />
                             Previous Topic
