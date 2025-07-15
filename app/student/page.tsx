@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import { CoursesList } from "@/components/courses-list"
 import { useCourses } from "@/contexts/course-context"
+import Link from "next/link"
 
 export default function HomePage() {
   const router = useRouter()
@@ -130,11 +131,17 @@ export default function HomePage() {
 
         {/* Featured Courses */}
         <section>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Available Courses</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our most popular courses taught by industry experts
-            </p>
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Available Courses</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Discover our most popular courses taught by industry experts
+              </p>
+            </div>
+
+            <Link href="/courses/search" className="text-lg text-blue-600 hover:underline flex items-center max-sm:hidden">
+              View all courses →
+            </Link>
           </div>
 
           {loading ? (
@@ -168,8 +175,12 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-          ) : (
-            <CoursesList courses={courses} />
+          ) : (<>
+            <CoursesList courses={courses!.slice(0,3)} />
+            <Link href="/courses/search" className="text-lg text-blue-600 hover:underline flex items-center justify-center md:hidden mt-4">
+              View all courses →
+            </Link>
+            </>
           )}
         </section>
       </div>
