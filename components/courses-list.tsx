@@ -40,13 +40,13 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
               key={course.id}
               className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
             >
-              <div className="h-48 relative bg-gray-100">
+              <div className="h-80 relative bg-gray-100">
                 {course.image ? (
                   <Image
                     src={course.image || "/placeholder.svg"}
                     alt={course.title}
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 ) : (
