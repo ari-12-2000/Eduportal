@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "@prisma/client": "^6.11.1",
+    "@prisma/client": "^6.12.0",
     "@radix-ui/react-accordion": "latest",
     "@radix-ui/react-alert-dialog": "latest",
     "@radix-ui/react-aspect-ratio": "latest",
@@ -76,7 +76,7 @@
     "@types/react-dom": "^19",
     "@types/sanitize-html": "^2.16.0",
     "postcss": "^8",
-    "prisma": "^6.11.1",
+    "prisma": "^6.12.0",
     "prisma-merge": "^0.2.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
