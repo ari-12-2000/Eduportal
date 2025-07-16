@@ -82,7 +82,7 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
                       src={course.instructorAvatar || "/placeholder.svg?height=32&width=32"}
                       alt={course.instructor}
                       fill
-                      className="rounded-full object-cover"
+                      className="rounded-full object-cover object-top"
                       sizes="32px"
                     />
                   </div>
@@ -92,7 +92,7 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
                   {course.totalTimeLimit && (
                     <div className="flex items-center">
                       <Clock className="h-4 w-4 mr-1" />
-                      <span>{course.totalTimeLimit}</span>
+                      <span>{course.totalTimeLimit} hours</span>
                     </div>
                   )}
                   <div className="flex items-center">
