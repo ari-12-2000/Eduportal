@@ -88,8 +88,6 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             text="Quizzes"
             active={isActive("/student/quizzes")}
           />
-          <SidebarItem href="/videos" icon={Video} text="Videos" active={isActive("/videos")} />
-          <SidebarItem href="/docs" icon={FileText} text="Docs" active={isActive("/docs")} />
         </nav>
         <div className="px-2 mt-6">
           <Button
