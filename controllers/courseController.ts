@@ -22,7 +22,7 @@ export class CourseController {
             select: { learnerId: true }
           }
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'asc' }
       });
       return NextResponse.json({ success: true, data: courses }, { status: 200 });
     } catch (error) {
