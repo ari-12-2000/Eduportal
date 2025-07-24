@@ -32,7 +32,6 @@ model Admin {
   createdAdmins Admin[]        @relation("AdminCreator")
   programs      Program[]      @relation("ProgramAuthor")
   questions     QuestionPool[] @relation("QuestionAuthor")
-  quizPapers    QuizPaper[]    @relation("QuizPaperAuthor")
 
   @@map("admins")
 }
@@ -108,12 +107,12 @@ model Program {
   updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz(6)
   maxParticipants  Int?              @map("max_participants")
+  quizzes          QuizAssignment[]
   enrollments      Enrollment[]      @relation("ProgramEnrollments")
   leaderboards     Leaderboard[]
   measureProgress  MeasureProgress[]
   programModules   ProgramModule[]
   author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  quizAssignments  QuizAssignment[]
 
   @@map("programs")
 }
@@ -169,7 +168,7 @@ model Topic {
   isDeleted           Boolean           @default(false) @map("is_deleted")
   deletedAt           DateTime?         @map("deleted_at") @db.Timestamptz(6)
   createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt           DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   description         String
   measureProgress     MeasureProgress[]
   moduleTopics        ModuleTopic[]
@@ -222,89 +221,78 @@ model TopicResource {
 }
 
 model QuestionPool {
-  id                 Int                 @id @default(autoincrement())
-  authorId           Int                 @map("author_id")
-  questionText       String              @map("question_text")
-  questionType       QuestionType        @map("question_type")
-  metadata           Json?
-  explanation        String?
-  timeLimitSec       Int?                @map("time_limit_sec")
-  points             Int                 @default(1)
-  option1            String?             @map("option_1")
-  option2            String?             @map("option_2")
-  option3            String?             @map("option_3")
-  option4            String?             @map("option_4")
-  option5            String?             @map("option_5")
-  option6            String?             @map("option_6")
-  answer             String?
-  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  questionAttempts   QuestionAttempt[]   @relation("QuestionAttempts")
-  author             Admin               @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  quizPaperQuestions QuizPaperQuestion[]
+  id           Int                  @id @default(autoincrement())
+  authorId     Int                  @map("author_id")
+  questionText String               @map("question_text")
+  questionType QuestionType         @map("question_type")
+  points       Int                  @default(1)
+  option1      String?              @map("option_1")
+  option2      String?              @map("option_2")
+  option3      String?              @map("option_3")
+  option4      String?              @map("option_4")
+  option5      String?              @map("option_5")
+  option6      String?              @map("option_6")
+  answer       String?
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  author       Admin                @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  assignments  AssignmentQuestion[]
 
   @@map("questions_pool")
 }
 
-model QuizPaper {
-  id          Int                 @id @default(autoincrement())
-  authorId    Int                 @map("author_id")
-  title       String              @db.VarChar(255)
-  createdAt   DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  assignments QuizAssignment[]
-  questions   QuizPaperQuestion[]
-  author      Admin               @relation("QuizPaperAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-
-  @@map("quiz_papers")
-}
-
-model QuizPaperQuestion {
-  quizPaperId Int          @map("quiz_paper_id")
-  questionId  Int          @map("question_id")
-  position    Int?
-  timeMode    Boolean      @default(false) @map("time_mode")
-  timeLimit   Int?         @map("time_limit")
-  question    QuestionPool @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  quizPaper   QuizPaper    @relation(fields: [quizPaperId], references: [id], onDelete: Cascade)
-
-  @@id([quizPaperId, questionId])
-  @@unique([quizPaperId, questionId])
-  @@map("quiz_paper_questions")
-}
-
 model QuizAssignment {
-  id              Int             @id @default(autoincrement())
-  quizPaperId     Int             @map("quiz_paper_id")
-  programId       Int?            @map("program_id")
-  startAt         DateTime?       @map("start_at") @db.Timestamptz(6)
-  endAt           DateTime?       @map("end_at") @db.Timestamptz(6)
-  uniqueLinkToken String          @unique @default(uuid()) @map("unique_link_token") @db.Uuid
-  timeMode        TimeMode        @default(none) @map("time_mode")
-  wrongAnsMode    WrongAnswerMode @default(none) @map("wrong_ans_mode")
-  resultMode      ResultMode      @default(none) @map("result_mode")
-  totalTimeLimit  Int?            @map("total_time_limit")
-  passingScore    Int?            @map("passing_score")
-  enabled         Boolean         @default(true)
-  isDeleted       Boolean         @default(false) @map("is_deleted")
-  deletedAt       DateTime?       @map("deleted_at") @db.Timestamptz(6)
-  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  program         Program?        @relation(fields: [programId], references: [id], onDelete: Cascade)
-  quizPaper       QuizPaper       @relation(fields: [quizPaperId], references: [id], onDelete: Cascade)
-  quizAttempts    QuizAttempt[]   @relation("AssignmentAttempts")
+  id              Int       @id @default(autoincrement())
+  rules           String
+  title           String
+  description     String
+  programId       Int?      @map("program_id")
+  // startAt         DateTime?       @map("start_at") @db.Timestamptz(6)
+  // endAt           DateTime?       @map("end_at") @db.Timestamptz(6)
+  uniqueLinkToken String    @unique @default(uuid()) @map("unique_link_token") @db.Uuid
+  // timeMode        TimeMode        @default(none) @map("time_mode")
+  //wrongAnsMode    WrongAnswerMode @default(none) @map("wrong_ans_mode")
+  //resultMode      ResultMode      @default(none) @map("result_mode")
+  //totalTimeLimit  Int?            @map("total_time_limit")
+  //passingScore    Int?            @map("passing_score")
+  enabled         Boolean   @default(true)
+  isDeleted       Boolean   @default(false) @map("is_deleted")
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  //Relation
+  program      Program?             @relation(fields: [programId], references: [id], onDelete: Cascade)
+  questions    AssignmentQuestion[]
+  quizAttempts QuizAttempt[]        @relation("AssignmentAttempts") //Learner's attempt. Same quiz assignment can be taken by multiple learners
 
   @@map("quiz_assignments")
 }
 
+model AssignmentQuestion {
+  questionId   Int      @map("question_id")
+  assignmentId Int      @map("assignment_id")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  //relation
+  question   QuestionPool   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  assignment QuizAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, assignmentId])
+  @@map("assignment_questions")
+}
+
 model QuizAttempt {
-  id               Int               @id @default(autoincrement())
-  assignmentId     Int               @map("assignment_id")
-  learnerId        Int               @map("learner_id")
-  startedAt        DateTime          @default(now()) @map("started_at") @db.Timestamptz(6)
-  submittedAt      DateTime?         @map("submitted_at") @db.Timestamptz(6)
-  totalTimeSpent   Int?              @map("total_time_spent")
-  score            Decimal?          @db.Decimal(5, 2)
-  passed           Boolean?
-  status           String            @db.VarChar(20)
-  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  id             Int       @id @default(autoincrement())
+  assignmentId   Int       @map("assignment_id")
+  learnerId      Int       @map("learner_id")
+  startedAt      DateTime  @default(now()) @map("started_at") @db.Timestamptz(6)
+  submittedAt    DateTime? @map("submitted_at") @db.Timestamptz(6)
+  totalTimeSpent Int?      @map("total_time_spent")
+  score          Decimal?  @db.Decimal(5, 2)
+  passed         Boolean?
+  status         String    @db.VarChar(20)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  //relation
   questionAttempts QuestionAttempt[]
   assignment       QuizAssignment    @relation("AssignmentAttempts", fields: [assignmentId], references: [id], onDelete: Cascade)
   learner          Learner           @relation("LearnerAttempts", fields: [learnerId], references: [id], onDelete: Cascade)
@@ -313,13 +301,12 @@ model QuizAttempt {
 }
 
 model QuestionAttempt {
-  attemptId    Int          @map("attempt_id")
-  questionId   Int          @map("question_id")
-  answerText   String?      @map("answer_text")
-  isCorrect    Boolean      @map("is_correct")
-  timeTakenSec Int?         @map("time_taken_sec")
-  attempt      QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
-  question     QuestionPool @relation("QuestionAttempts", fields: [questionId], references: [id], onDelete: Cascade)
+  attemptId    Int         @map("attempt_id")
+  questionId   Int         @map("question_id")
+  answerText   String?     @map("answer_text")
+  isCorrect    Boolean     @map("is_correct")
+  timeTakenSec Int?        @map("time_taken_sec")
+  attempt      QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
 
   @@id([attemptId, questionId])
   @@map("question_attempts")
@@ -345,6 +332,7 @@ model MeasureProgress {
   progressType String    @map("progress_type") @db.VarChar(20)
   programId    Int?      @map("program_id")
   moduleId     Int?      @map("module_id")
+  quizId       Int?      @map("quiz_id")
   resourceId   Int?      @map("resource_id")
   learner      Learner   @relation(fields: [learnerId], references: [id], onDelete: Cascade)
   module       Module?   @relation(fields: [moduleId], references: [id], onDelete: Cascade)

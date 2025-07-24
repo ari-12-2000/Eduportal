@@ -18,6 +18,11 @@ export class CourseController {
               }
             }
           },
+          quizzes: {
+            select: {
+              id: true
+            }
+          },
           enrollments: {
             select: { learnerId: true }
           }
@@ -66,6 +71,13 @@ export class CourseController {
               }
             }
           },
+          quizzes: {
+            select: {
+              id: true,
+              title:true,
+              description:true,
+            }
+          },
           enrollments: {
             select: { learnerId: true }
           }
@@ -83,7 +95,7 @@ export class CourseController {
     }
   }
 
-// 3. Create course
+  // 3. Create course
   static async createCourse(req: NextRequest) {
     try {
       const data = await req.json();
