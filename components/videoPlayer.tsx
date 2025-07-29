@@ -1,6 +1,4 @@
 "use client"
-
-import { useAuth } from "@/contexts/auth-context"
 import { useEffect, useRef } from "react"
 
 interface VideoPlayerProps {
@@ -68,7 +66,7 @@ const VideoPlayer = ({ src, handleMarkProgress, id, completedResources}: VideoPl
                 
                 
             >
-                <source src={src.replace("/upload/", "/upload/f_auto,q_auto:eco/")} type="video/mp4" />
+                <source src={src.replace("/upload/", "/upload/f_auto,q_auto/")} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
         </div>
