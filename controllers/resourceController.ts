@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { v2 as cloudinary } from 'cloudinary';
+import { ResourceType } from '@/lib/generated/prisma';
+import { CloudinaryUploadResult } from '@/types/cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export class ResourceController {
   // GET ALL RESOURCES
@@ -41,24 +50,71 @@ export class ResourceController {
   // CREATE RESOURCE
   static async createResource(req: NextRequest) {
     try {
-      const data = await req.json();
+      const formData = await req.formData();
+      const file = formData.get("file") as File | null;
+      const resourceType = formData.get("resourceType") as ResourceType;
+      const title = formData.get("title") as string;
+      const description = formData.get("description") as string;
 
-      if (!data.title?.trim() || !data.resourceType?.trim()) {
-        return NextResponse.json(
-          { error: 'Title and resource type are required' },
-          { status: 400 }
-        );
+      if (!file || !resourceType) {
+        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
       }
 
-      const resource = await prisma.resource.create({ data });
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      // Determine resource_type for Cloudinary
+      let cloudinaryResourceType: 'image' | 'video' | 'raw';
+      switch (resourceType) {
+        case 'video':
+          cloudinaryResourceType = 'video';
+          break;
+        case 'image':
+          cloudinaryResourceType = 'image';
+          break;
+        case 'document':
+        default:
+          cloudinaryResourceType = 'raw';
+          break;
+      }
+
+      const result = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: cloudinaryResourceType,
+            folder: `${cloudinaryResourceType}-uploads`,
+            eager: [
+              { quality: "auto", fetch_format: "mp4" }, // Async transformation
+            ],
+            eager_async: true,
+            eager_notification_url: `${process.env.NEXT_PUBLIC_BASE_URL}/resources/notification`,
+
+          },
+          (error: any, result: any) => {
+            if (error) reject(error);
+            else resolve(result as CloudinaryUploadResult);
+          }
+        );
+        uploadStream.end(buffer);
+      });
+
+      const resource = await prisma.resource.create({
+        data: {
+          title,
+          description,
+          url: result.secure_url,
+          resourceType,
+        },
+      });
 
       return NextResponse.json({ success: true, data: resource }, { status: 201 });
     } catch (error) {
-      console.error('Error creating resource:', error);
-      return NextResponse.json({ error: 'Failed to create resource' }, { status: 500 });
+      console.error("Error creating resource:", error);
+      return NextResponse.json({ error: "Failed to create resource" }, { status: 500 });
+    } finally {
+      await prisma.$disconnect();
     }
   }
-
   // UPDATE RESOURCE
   static async updateResource(req: NextRequest, { params }: { params: { id: string } }) {
     try {
@@ -80,4 +136,5 @@ export class ResourceController {
       return NextResponse.json({ error: 'Failed to update resource' }, { status: 500 });
     }
   }
+
 }

@@ -100,8 +100,8 @@ export class CourseController {
     try {
       const data = await req.json();
 
-      if (!data.title || !data.description) {
-        return NextResponse.json({ error: 'Name and description are required' }, { status: 400 });
+      if (!data.authorId || !data.title || !data.description) {
+        return NextResponse.json({ error: 'AuthorId, name and description are required' }, { status: 400 });
       }
 
       const program = await prisma.program.create({ data });
@@ -223,4 +223,5 @@ export class CourseController {
       return NextResponse.json({ error: 'Failed to map modules and programs' }, { status: 500 });
     }
   }
+
 }

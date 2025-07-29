@@ -29,6 +29,12 @@ export class LearnerController {
               },
               enrollments: {
                 select: { learnerId: true }
+              },
+
+              quizzes:{
+                 select:{
+                  id:true
+                 }
               }
             }
           }
@@ -72,18 +78,18 @@ export class LearnerController {
   }
 
   // 3. Unenroll a learner from a course
-  static async unenrollFromCourse(req: NextRequest, { params }: { params: { learnerId: string } }) {
+  static async unenrollFromCourse(req: NextRequest) {
     try {
-      const learnerId = Number(params.learnerId);
-      const { programId } = await req.json();
+      const { learnerId, programId } = await req.json();
       const parsedProgramId = Number(programId);
+      const parsedLearnerId = Number(learnerId);
 
-      if (isNaN(learnerId) || isNaN(parsedProgramId)) {
-        return NextResponse.json({ error: 'Invalid learner or program ID' }, { status: 400 });
+      if (isNaN(parsedLearnerId) || isNaN(parsedProgramId)) {
+        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
       }
 
       const enrollment = await prisma.enrollment.findFirst({
-        where: { learnerId, programId: parsedProgramId }
+        where: { learnerId:parsedLearnerId, programId: parsedProgramId }
       });
 
       if (!enrollment) {
@@ -165,7 +171,7 @@ export class LearnerController {
     console.error("Create progress error:", error);
     return NextResponse.json({ error: 'Failed to create progress' }, { status: 500 });
   }
-}
+ }
 
 
   // static async updateProgress(req: NextRequest) {
@@ -204,4 +210,38 @@ export class LearnerController {
   //     return NextResponse.json({ error: 'Failed to update progress' }, { status: 500 });
   //   }
   // }
+         
+  
+  //  4. Quiz Progress
+
+ static async createQuizProgress(req: NextRequest) {
+    try {
+      const data = await req.json();
+      const assignmentId = Number(data.assignmentId);
+      const learnerId = Number(data.learnerId);
+      const status = data.status?.toString() || "in_progress";
+
+      // Validate required fields
+      if (isNaN(assignmentId) || isNaN(learnerId) || !status) {
+        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      }
+
+      // Create quiz attempt
+      const quizAttempt = await prisma.quizAttempt.create({
+        data: {
+          assignmentId,
+          learnerId,
+          status,
+        },
+      });
+
+      return NextResponse.json({ success: true, data: quizAttempt }, { status: 201 });
+    } catch (err: any) {
+      console.error("Error creating quiz progress:", err);
+      return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });
+    }
+  }
+
+  
+
 }

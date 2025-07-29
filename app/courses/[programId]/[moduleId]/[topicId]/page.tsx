@@ -115,7 +115,8 @@ export default function TopicPage({ params }: { params: Promise<{ programId: str
             {/* Content */}
             <Card className="mb-6">
                 <CardContent className="p-6 space-y-6">
-                    {currentTopic.topicResources.sort((a: any, b: any) => a.position - b.position).map((prop: any, index: number) => <TopicResourceRenderer resources={currentTopic.topicResources} topicId={topicId} topics={sortedTopics} moduleId={moduleId} key={index} resource={prop.resource} />)}
+                    {currentTopic.topicResources.sort((a: any, b: any) => a.position - b.position).map((prop: any, index: number) => 
+                    <TopicResourceRenderer resources={currentTopic.topicResources} topicId={topicId} topics={sortedTopics} moduleId={moduleId} key={index} resource={prop.resource} />)}
                 </CardContent>
             </Card>
 

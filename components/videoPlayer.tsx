@@ -36,7 +36,7 @@ const VideoPlayer = ({ src, handleMarkProgress, id, completedResources}: VideoPl
         video.addEventListener("timeupdate", handleTimeUpdate)
         video.addEventListener("ended", handleEnded)
 
-        // If resource is already completed, seek to end once metadata is loaded
+        //If resource is already completed, seek to end once metadata is loaded
         if (completedResources.has(id)) {
             const handleLoadedMetadata = () => {
                 video.currentTime = video.duration
@@ -65,8 +65,10 @@ const VideoPlayer = ({ src, handleMarkProgress, id, completedResources}: VideoPl
                 width="100%"
                 controls
                 className="rounded shadow"
+                
+                
             >
-                <source src={src} type="video/mp4" />
+                <source src={src.replace("/upload/", "/upload/f_auto,q_auto:eco/")} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
         </div>

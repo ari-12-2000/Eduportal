@@ -168,7 +168,7 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
     return (
       <div className="w-full">
         <VideoPlayer
-          src="/videos/js-basics.mp4"
+          src={resource.url}
           handleMarkProgress={handleMarkProgress} id={resource.id} completedResources={completedResources}
         />
       </div>
