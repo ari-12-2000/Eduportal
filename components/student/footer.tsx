@@ -1,6 +1,10 @@
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+
 export function Footer() {
+  const pathname = usePathname()
   return (
-    <footer className="bg-white border-t py-3 px-4 text-center text-xs text-gray-500">
+    <footer className={cn("bg-white border-t py-3 px-4 text-center text-xs text-gray-500", (pathname === "/" || pathname.startsWith("/student")) ? "flex" : "hidden",)}>
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div>© 2023 EduPortal. All rights reserved.</div>
         <div className="flex space-x-4">

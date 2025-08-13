@@ -1,7 +1,7 @@
 import { BookOpen, Check } from 'lucide-react'
 import React, {useState } from 'react'
 import ReactMarkdown from "react-markdown"
-const DocumentViewer = ({ content, handleMarkProgress, id, completedResources, markedCompleted}: { content: string | null, handleMarkProgress: () => Promise<void>, id:number, completedResources:Set<number>, markedCompleted:boolean}) => {
+const DocumentViewer = ({ content, handleMarkProgress, id, completedResources, markedCompleted}: { content: string | null, handleMarkProgress: () => Promise<void>, id:number, completedResources:{ [key: number]:boolean}, markedCompleted:boolean}) => {
     const markProgress = () => {
         if (!markedCompleted) {
             handleMarkProgress()
@@ -19,7 +19,7 @@ const DocumentViewer = ({ content, handleMarkProgress, id, completedResources, m
                     transform transition-all duration-200 ease-in-out
                     flex items-center gap-2 justify-center
                     ${
-                      (markedCompleted ||  completedResources.has(id))
+                      (markedCompleted ||  completedResources[id])
                         ? "bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200"
                         : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-green-200"
                     }
@@ -29,9 +29,9 @@ const DocumentViewer = ({ content, handleMarkProgress, id, completedResources, m
                     focus:outline-none focus:ring-4 focus:ring-green-300 focus:ring-opacity-50
                 `}
         onClick={markProgress}
-        disabled={(markedCompleted ||  completedResources.has(id))}
+        disabled={(markedCompleted ||  completedResources[id])}
       >
-        {(markedCompleted ||  completedResources.has(id)) ?(
+        {(markedCompleted ||  completedResources[id]) ?(
           <>
             <Check className="w-5 h-5" />
             Completed

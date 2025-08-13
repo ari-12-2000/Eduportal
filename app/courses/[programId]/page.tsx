@@ -1,4 +1,5 @@
-import CourseClientWrapper from "@/components/course-client-wrapper";
+import CourseClientWrapper from "@/components/course/course-client-wrapper";
+import { Course } from "@/types/course";
 
 export const dynamicParams = false;
 
@@ -17,18 +18,15 @@ export default async function CourseDetail({
 }) {
     const { programId } = await params;
     const {enrolled} = await searchParams;
-    let courseData:any
+    let courseData:Course|null = null;
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${programId}`)
-        if (!res.ok)
-          throw new Error(`Failed to fetch course: ${res.status}`)
-        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${programId}`,{ next: { revalidate: 3600 } })
         const data = await res.json()
-        console.log("Course data:", data.data)
+        if(!res.ok)
+          throw new Error(data.error)
         courseData = data.data
       } catch (err: any) {
         console.error("Error fetching course:", err)
-        courseData = null;  
       }  
 
      return  <CourseClientWrapper  courseData={courseData} enrolled={enrolled}/>

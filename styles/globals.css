@@ -82,13 +82,18 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
-
-@layer base {
   * {
-    @apply border-border;
+    @apply border border-gray-200 p-0; /* ✅ This works */
   }
+
+ 
   body {
     @apply bg-background text-foreground;
   }
 }
+
+ @media (max-width: 639px) {
+    * {
+      font-size: 0.875rem; /* Tailwind’s 'text-sm' = 14px = 0.875rem */
+    }
+  }

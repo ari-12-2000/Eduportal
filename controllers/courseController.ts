@@ -20,7 +20,10 @@ export class CourseController {
           },
           quizzes: {
             select: {
-              id: true
+              id: true,
+              title: true,
+              uniqueLinkToken: true,
+              rules: true // Include rules for quizzes
             }
           },
           enrollments: {
@@ -74,8 +77,9 @@ export class CourseController {
           quizzes: {
             select: {
               id: true,
-              title:true,
-              description:true,
+              title: true,
+              uniqueLinkToken: true, // Include unique link token for quizzes
+              rules: true // Include rules for quizzes
             }
           },
           enrollments: {

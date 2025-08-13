@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/contexts/auth-context"
 import { CheckCircle, RotateCcw, Award } from "lucide-react"
 
 interface ThankYouScreenProps {
@@ -9,13 +10,13 @@ interface ThankYouScreenProps {
     success_text: string
   }
   onRestart: () => void
-  answers: any[]
   totalQuestions: number
+  attemptedQsns:number
 }
 
-export default function ThankYouScreen({ messages, onRestart, answers, totalQuestions }: ThankYouScreenProps) {
-  const answeredQuestions = answers.filter((answer) => answer !== null && answer !== "").length
-  const completionRate = Math.round((answeredQuestions / totalQuestions) * 100)
+export default function ThankYouScreen({ messages, onRestart, totalQuestions, attemptedQsns }: ThankYouScreenProps) {
+   const { user} = useAuth()
+  const completionRate = Math.round((attemptedQsns / totalQuestions) * 100)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center p-4">
@@ -35,7 +36,7 @@ export default function ThankYouScreen({ messages, onRestart, answers, totalQues
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6">
               <Award className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-blue-700">{answeredQuestions}</div>
+              <div className="text-2xl font-bold text-blue-700">{attemptedQsns}</div>
               <div className="text-sm text-blue-600">Questions Answered</div>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6">
@@ -56,7 +57,7 @@ export default function ThankYouScreen({ messages, onRestart, answers, totalQues
             className="px-8 py-4 rounded-full text-lg font-semibold border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-300"
           >
             <RotateCcw className="mr-2 w-5 h-5" />
-            Take Survey Again
+            Take Quiz Again
           </Button>
         </div>
       </div>

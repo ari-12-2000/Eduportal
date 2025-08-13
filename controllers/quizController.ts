@@ -57,37 +57,101 @@ export class QuizController {
 
     //QUESTIONPAPER -(questions are added from question pool)
 
-    static async addAssignmentQuestion(req: NextRequest) {
+    static async createQuestionPaper(req: NextRequest) {
         try {
-            const data = await req.json();
-            const questionId = Number(data.questionId);
-            const assignmentId = Number(data.assignmentId)
-            if (isNaN(assignmentId) || isNaN(questionId))
-                return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-            const addedquestion = await prisma.assignmentQuestion.create({ data: { questionId, assignmentId } });
-            return NextResponse.json({ success: true, data: addedquestion }, { status: 201 });
-        } catch (err) {
-            console.error("adding question error", err);
-            return NextResponse.json({ error: "Failed to add question" }, { status: 500 });
-        }
-    }
+            const body = await req.json();
 
-    static async deleteAssignmentQuestion(req:NextRequest) {
-        try {
-            let { questionId, assignmentId } = await req.json();
-            questionId = Number(questionId);
-            assignmentId= Number(assignmentId);
-            if (isNaN(questionId)||isNaN(assignmentId)) {
-                return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+            if (!body.name) {
+                return NextResponse.json({ error: 'Name is required' }, { status: 400 });
             }
 
-            await prisma.assignmentQuestion.delete({ where: { questionId_assignmentId: { questionId, assignmentId } } });
-            return NextResponse.json({ success: true, message: 'Question deleted' }, { status: 200 });
+            const newPaper = await prisma.questionPaper.create({
+                data: {
+                    name: body.name,
+                },
+            });
+
+            return NextResponse.json({ success: true, paper: newPaper }, { status: 201 });
         } catch (error) {
-            console.error("Delete program error:", error);
-            return NextResponse.json({ error: 'Failed to delete program' }, { status: 500 });
+            console.error('[CREATE_QUESTION_PAPER]', error);
+            return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
         }
     }
+
+
+    static async deleteQuestionPaper(req: NextRequest) {
+        try {
+            const body = await req.json();
+            const { id } = body;
+
+            if (!id) {
+                return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+            }
+
+            const deleted = await prisma.questionPaper.delete({
+                where: { id },
+            });
+
+            return NextResponse.json({ success: true, deleted });
+        } catch (error) {
+            console.error('[DELETE_QUESTION_PAPER]', error);
+            return NextResponse.json({ error: 'Failed to delete question paper' }, { status: 500 });
+        }
+    }
+
+    static async updateQuestionPaper(req: NextRequest) {
+        try {
+            const body = await req.json();
+            const { id, name } = body;
+
+            if (!id || !name) {
+                return NextResponse.json({ error: 'ID and name are required' }, { status: 400 });
+            }
+
+            const updated = await prisma.questionPaper.update({
+                where: { id },
+                data: { name },
+            });
+
+            return NextResponse.json({ success: true, updated });
+        } catch (error) {
+            console.error('[UPDATE_QUESTION_PAPER]', error);
+            return NextResponse.json({ error: 'Failed to update question paper' }, { status: 500 });
+        }
+    }
+
+    //QUESTIONPAPER QUESTIONS
+    static async addQuestionToPaper(req: NextRequest){
+        try {
+            const body = await req.json();
+            const { questionPaperId, questionId } = body;
+
+            if (!questionPaperId || !questionId) {
+                return NextResponse.json({ error: 'Paper ID and Question ID are required' }, { status: 400 });
+            }
+
+            // Check if the question exists
+            const questionExists = await prisma.questionPool.findUnique({
+                where: { id: questionId },
+            });
+
+            if (!questionExists) {
+                return NextResponse.json({ error: 'Question not found' }, { status: 404 });
+            }
+
+           //Add question to paper
+           const addition= await prisma.questionPaperQuestion.create({
+            data:{
+                questionPaperId, questionId
+            }
+           })
+           return NextResponse.json({ success: true, data: addition }, { status: 201 });
+        } catch (error) {
+            console.error('[ADD_QUESTION_TO_PAPER]', error);
+            return NextResponse.json({ error: 'Failed to add question to paper' }, { status: 500 });
+        }
+    }
+
 
     //ASSIGNMENT RELATED
     static async createAssignment(req: NextRequest) {
@@ -169,7 +233,7 @@ export class QuizController {
                     enabled: true,
                 },
                 include: {
-                    questions: true, // include questionPool relation
+                    questionPaper: true, // include questionPool relation
                 }
             });
 
@@ -185,14 +249,18 @@ export class QuizController {
         try {
             const { assignmentId } = await params;
 
-            if (isNaN(Number(assignmentId))) {
-                return NextResponse.json({ error: 'Invalid assignment ID' }, { status: 400 });
-            }
-
             const assignment = await prisma.quizAssignment.findUnique({
-                where: { id: Number(assignmentId) },
+                where: { uniqueLinkToken: assignmentId },
                 include: {
-                    questions: true, // include related question from questionPool
+                    questionPaper: {
+                        include:{
+                            questions:{
+                                include: {
+                                    question: true // include related question from questionPool
+                                }
+                            }
+                        }
+                    } // include related question from questionPool
                 },
             });
 
@@ -207,6 +275,5 @@ export class QuizController {
             return NextResponse.json({ error: "Failed to fetch assignment" }, { status: 500 });
         }
     }
-
 
 }

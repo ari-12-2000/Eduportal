@@ -4,15 +4,17 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Clock, Users } from "lucide-react"
 
 interface WelcomeScreenProps {
+  name:string
   welcomeData: {
     greeting: string
     text: string
     welcome_button: string
   }
+  
   onStart: () => void
 }
 
-export default function WelcomeScreen({ welcomeData, onStart }: WelcomeScreenProps) {
+export default function WelcomeScreen({ name, welcomeData, onStart }: WelcomeScreenProps) {
   return (
     <div className="min-h-screen bg-white flex flex-col lg:flex-row">
       {/* Mobile Image - Shows on top for mobile/tablet */}
@@ -20,7 +22,7 @@ export default function WelcomeScreen({ welcomeData, onStart }: WelcomeScreenPro
         <div
           className="h-full bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/team-collaboration.png')",
+            backgroundImage: "url('/images/quiz.png')",
           }}
         />
       </div>
@@ -41,8 +43,7 @@ export default function WelcomeScreen({ welcomeData, onStart }: WelcomeScreenPro
           {/* Description */}
           <div
             className="text-lg lg:text-xl text-gray-700 leading-relaxed text-center lg:text-left font-medium"
-            dangerouslySetInnerHTML={{ __html: welcomeData.text }}
-          />
+            ><p>{name}</p></div>
 
           {/* Info Items */}
           <div className="flex items-center justify-center lg:justify-start gap-8 text-gray-600">
@@ -73,9 +74,9 @@ export default function WelcomeScreen({ welcomeData, onStart }: WelcomeScreenPro
       {/* Right Side - Image (Desktop only) */}
       <div className="hidden lg:block flex-1">
         <div
-          className="h-full bg-cover bg-center bg-no-repeat"
+          className="h-full bg-cover bg-right bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/team-collaboration.png')",
+            backgroundImage: "url('/images/quiz.png')",
           }}
         />
       </div>

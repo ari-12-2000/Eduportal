@@ -17,9 +17,14 @@ interface Prop {
     modules: number
     completed: number
   }
+
+  quizProgress: {
+    quizzes: number
+    completed: number
+  }
 }
 
-export function ProgressCards({ courseProgress, topicProgress, moduleProgress }: Prop) {
+export function ProgressCards({ courseProgress, topicProgress, moduleProgress, quizProgress }: Prop) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-0">
       <ProgressCard
@@ -49,8 +54,8 @@ export function ProgressCards({ courseProgress, topicProgress, moduleProgress }:
       <ProgressCard
         icon={FileQuestion}
         title="Quizzes Progress"
-        current={18}
-        total={25}
+        current={quizProgress.completed}
+        total={quizProgress.quizzes}
         label="Quizzes completed"
         color="bg-purple-600"
       />

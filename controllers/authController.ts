@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs"
 import { prisma } from '@/lib/prisma';
 import { Admin, Program } from "@/lib/generated/prisma";
 import { GlobalVariables } from "@/globalVariables";
-import { Course } from "@/types/course";
 
 const JWT_SECRET = process.env.JWT_SECRET!
 
@@ -24,17 +23,6 @@ export class AuthController {
             include: {
               program: {
                 include: {
-                  programModules: {
-                    include: {
-                      module: {
-                        include: {
-                          moduleTopics: {
-                            select: { topicId: true }
-                          }
-                        }
-                      }
-                    }
-                  },
                   enrollments: {
                     select: { learnerId: true }
                   },
@@ -42,6 +30,7 @@ export class AuthController {
               }
             }
           },
+
           measureProgress: {
             include: {
               program: {
@@ -65,17 +54,26 @@ export class AuthController {
                 }
               },
             }
+          },
+
+          quizAttempts: {
+            include: {
+              assignment: {
+                select: { rules: true }
+              }
+            }
           }
         }
       })
 
       let userType = GlobalVariables.non_admin.role1;
-      let enrolledCourses: Course[] = []
-      let enrolledCourseIDs: number[] = []
-      let completedPrograms: number[] = []
-      let completedModules: number[] = []
-      let completedResources: number[] = []
-      let completedTopics: number[] = []
+      let enrolledCourseIDs: { [key: number]: boolean } = {}
+      let completedPrograms: { [key: number]: boolean } = {}
+      let completedModules: { [key: number]: boolean } = {}
+      let completedResources: { [key: number]: boolean } = {}
+      let completedTopics: { [key: number]: boolean } = {}
+      let completedQuizzes: { [key: number]: number } = {}
+      let attemptedQuizzes: { [key: number]: { start: Date, score: number } } = {}
       let admin
 
       if (!learner) {
@@ -85,25 +83,46 @@ export class AuthController {
         }
         userType = GlobalVariables.admin
       } else {
-        enrolledCourses = learner.enrollments.map(e => ({
-          ...e.program,
-          price: e.program.price !== null ? e.program.price.toString() : null
-        }))
-        enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
+
+        learner.enrollments.map(e => enrolledCourseIDs[e.program.id] = true)
         learner.measureProgress.forEach((progress: any) => {
           if (progress.program?.id) {
-            completedPrograms.push(progress.program.id)
+            completedPrograms[progress.program.id] = true
           }
           if (progress.module?.id) {
-            completedModules.push(progress.module.id)
+            completedModules[progress.module.id] = true
           }
           if (progress.resource?.id) {
-            completedResources.push(progress.resource.id)
+            completedResources[progress.resource.id] = true
           }
           if (progress.topic?.id) {
-            completedTopics.push(progress.topic.id)
+            completedTopics[progress.topic.id] = true
           }
         })
+
+        learner.quizAttempts.forEach((attempt) => {
+          let score = attempt.score !== null && typeof attempt.score === 'object' && 'toNumber' in attempt.score
+            ? attempt.score.toNumber()
+            : attempt.score ?? 0
+
+          console.log(attempt.status)  
+          if (attempt.status === 'Completed')
+            completedQuizzes[attempt.assignmentId] = score
+          else if (attempt.status === 'In progress') {
+            attemptedQuizzes[attempt.assignmentId] = {
+              start: attempt.startedAt,
+              score,
+            }
+            let rules:any=attempt.assignment.rules
+            if(rules.time_limit_seconds){
+               let timeLimit=rules.time_limit_seconds
+               if(attempt.startedAt<new Date(Date.now() - timeLimit * 1000))  
+                 completedQuizzes[attempt.assignmentId] = score
+              }
+          }
+        })
+
+        console.log('Attempted', attemptedQuizzes, 'Completed', completedQuizzes)
       }
 
       const user = admin || learner
@@ -138,12 +157,13 @@ export class AuthController {
         profile_image: user!.profile_image || "",
         role: userType,
         adminType: userType === GlobalVariables.admin ? (user as Admin).adminType : undefined,
-        enrolledCourses,
         enrolledCourseIDs,
         completedPrograms,
         completedModules,
         completedResources,
-        completedTopics
+        completedTopics,
+        completedQuizzes,
+        attemptedQuizzes
       }
 
       return NextResponse.json({ success: true, user: userData, token }, { status: 200 })
@@ -214,11 +234,13 @@ export class AuthController {
         email: newUser.email,
         role,
         profile_image: newUser.profile_image || "",
-        enrolledCourses: [],
-        completedPrograms: [],
-        completedModules: [],
-        completedResources: [],
-        completedTopics: []
+        enrolledCourseIDs: {},
+        completedPrograms: {},
+        completedModules: {},
+        completedResources: {},
+        completedTopics: {},
+        completedQuizzes: {},
+        attemptedQuizzes: {},
       }
 
       return NextResponse.json({
@@ -234,117 +256,141 @@ export class AuthController {
     }
   }
 
-  static async refreshUser(req: NextRequest) {
-    try {
-      const token = req.headers.get("Authorization")?.split(" ")[1]
-      if (!token) {
-        return NextResponse.json({ error: "No token provided" }, { status: 401 })
-      }
-      const decoded = jwt.verify(token, JWT_SECRET) as { id: number, email: string, role: string, adminType?: string }
-      const learner = await prisma.learner.findUnique({
-        where: { id: decoded.id },
-        include: {
-          enrollments: {
-            include: {
-              program: {
-                include: {
-                  programModules: {
-                    include: {
-                      module: {
-                        include: {
-                          moduleTopics: {
-                            select: { topicId: true },
-                          },
-                        },
-                      },
-                    },
-                  },
-                  enrollments: {
-                    select: { learnerId: true },
-                  },
-                },
-              },
-            },
-          },
-          measureProgress: {
-            include: {
-              program: {
-                select: {
-                  id: true
-                }
-              },
-              module: {
-                select: {
-                  id: true
-                }
-              },
-              resource: {
-                select: {
-                  id: true
-                }
-              },
-              topic: {
-                select: {
-                  id: true
-                }
-              },
-            }
-          }
-        },
-      })
+  // static async refreshUser(req: NextRequest) {
+  //   try {
+  //     const token = req.headers.get("Authorization")?.split(" ")[1]
+  //     if (!token) {
+  //       return NextResponse.json({ error: "No token provided" }, { status: 401 })
+  //     }
+  //     const decoded = jwt.verify(token, JWT_SECRET) as { id: number, email: string, role: string, adminType?: string }
+  //     const learner = await prisma.learner.findUnique({
+  //       where: { id: decoded.id },
+  //       include: {
+  //         enrollments: {
+  //           include: {
+  //             program: {
+  //               include: {
+  //                 programModules: {
+  //                   include: {
+  //                     module: {
+  //                       include: {
+  //                         moduleTopics: {
+  //                           select: { topicId: true },
+  //                         },
+  //                       },
+  //                     },
+  //                   },
+  //                 },
+  //                 enrollments: {
+  //                   select: { learnerId: true },
+  //                 },
+  //                 quizzes: {
+  //                   select: {
+  //                     id: true,
+  //                     title: true,
+  //                     uniqueLinkToken: true, // Include unique link token for quizzes
+  //                     rules: true // Include rules for quizzes
+  //                   }
+  //                 },
+  //               },
+  //             },
+  //           },
+  //         },
+  //         measureProgress: {
+  //           include: {
+  //             program: {
+  //               select: {
+  //                 id: true
+  //               }
+  //             },
+  //             module: {
+  //               select: {
+  //                 id: true
+  //               }
+  //             },
+  //             resource: {
+  //               select: {
+  //                 id: true
+  //               }
+  //             },
+  //             topic: {
+  //               select: {
+  //                 id: true
+  //               }
+  //             },
+  //           }
+  //         },
+  //         quizAttempts: {
+  //           select: {
+  //             assignmentId: true,
+  //             status: true,
+  //           }
+  //         }
+  //       },
+  //     })
 
-      let userType = GlobalVariables.non_admin.role1
-      let enrolledCourses: Course[] = []
-      let enrolledCourseIDs: number[] = []
-      let completedPrograms: number[] = []
-      let completedModules: number[] = []
-      let completedResources: number[] = []
-      let completedTopics: number[] = []
+  //     let userType = GlobalVariables.non_admin.role1
+  //     let enrolledCourses: Course[] = []
+  //     let enrolledCourseIDs: number[] = []
+  //     let completedPrograms: number[] = []
+  //     let completedModules: number[] = []
+  //     let completedResources: number[] = []
+  //     let completedTopics: number[] = []
+  //     let completedQuizzes: number[] = []
+  //     let attemptedQuizzes: number[] = []
 
-      if (!learner) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 })
-      }
+  //     if (!learner) {
+  //       return NextResponse.json({ error: "User not found" }, { status: 404 })
+  //     }
 
-      enrolledCourses = learner.enrollments.map(e => ({
-        ...e.program,
-        price: e.program.price !== null ? e.program.price.toString() : null
-      }))
-      enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
-      learner.measureProgress.forEach((progress: any) => {
-          if (progress.program?.id) {
-            completedPrograms.push(progress.program.id)
-          }
-          if (progress.module?.id) {
-            completedModules.push(progress.module.id)
-          }
-          if (progress.resource?.id) {
-            completedResources.push(progress.resource.id)
-          }
-          if (progress.topic?.id) {
-            completedTopics.push(progress.topic.id)
-          }
-        })
+  //     enrolledCourses = learner.enrollments.map(e => ({
+  //       ...e.program,
+  //       price: e.program.price !== null ? e.program.price.toString() : null
+  //     }))
+  //     enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
+  //     learner.measureProgress.forEach((progress: any) => {
+  //       if (progress.program?.id) {
+  //         completedPrograms.push(progress.program.id)
+  //       }
+  //       if (progress.module?.id) {
+  //         completedModules.push(progress.module.id)
+  //       }
+  //       if (progress.resource?.id) {
+  //         completedResources.push(progress.resource.id)
+  //       }
+  //       if (progress.topic?.id) {
+  //         completedTopics.push(progress.topic.id)
+  //       }
+  //     })
 
-      const userData = {
-        id: learner.id,
-        email: learner.email,
-        first_name: learner.first_name,
-        last_name: learner.last_name,
-        profile_image: learner.profile_image || "",
-        role: userType,
-        enrolledCourses,
-        enrolledCourseIDs,
-        completedPrograms,
-        completedModules,
-        completedResources,
-        completedTopics
-      }
+  //     learner.quizAttempts.forEach((attempt: any) => {
+  //       if (attempt.status === 'Completed')
+  //         completedQuizzes.push(attempt.assignmentId)
+  //       else if (attempt.status === 'In progress')
+  //         attemptedQuizzes.push(attempt.assignmentId)
+  //     })
+  //     const userData = {
+  //       id: learner.id,
+  //       email: learner.email,
+  //       first_name: learner.first_name,
+  //       last_name: learner.last_name,
+  //       profile_image: learner.profile_image || "",
+  //       role: userType,
+  //       enrolledCourses,
+  //       enrolledCourseIDs,
+  //       completedPrograms,
+  //       completedModules,
+  //       completedResources,
+  //       completedTopics,
+  //       completedQuizzes,
+  //       attemptedQuizzes
+  //     }
 
-      return NextResponse.json({ user: userData }, { status: 200 })
+  //     return NextResponse.json({ user: userData }, { status: 200 })
 
-    } catch (error) {
-      console.error("Refresh user error:", error)
-      return NextResponse.json({ error: "Internal server error" }, { status: 500 })
-    }
-  }
+  //   } catch (error) {
+  //     console.error("Refresh user error:", error)
+  //     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  //   }
+  // }
 }

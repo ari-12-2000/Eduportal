@@ -221,28 +221,32 @@ model TopicResource {
 }
 
 model QuestionPool {
-  id           Int                  @id @default(autoincrement())
-  authorId     Int                  @map("author_id")
-  questionText String               @map("question_text")
-  questionType QuestionType         @map("question_type")
-  points       Int                  @default(1)
-  option1      String?              @map("option_1")
-  option2      String?              @map("option_2")
-  option3      String?              @map("option_3")
-  option4      String?              @map("option_4")
-  option5      String?              @map("option_5")
-  option6      String?              @map("option_6")
+  id           Int          @id @default(autoincrement())
+  authorId     Int          @map("author_id")
+  questionText String       @map("question_text")
+  questionType QuestionType @map("question_type")
+  points       Int          @default(1)
+  option1      String?      @map("option_1")
+  option2      String?      @map("option_2")
+  option3      String?      @map("option_3")
+  option4      String?      @map("option_4")
+  option5      String?      @map("option_5")
+  option6      String?      @map("option_6")
+  config       Json? //JSON containing additional configuration for the question
   answer       String?
-  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  author       Admin                @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  assignments  AssignmentQuestion[]
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  author       Admin        @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  //relation
+  questionPapers QuestionPaperQuestion[]
 
   @@map("questions_pool")
 }
 
 model QuizAssignment {
   id              Int       @id @default(autoincrement())
-  rules           String
+  rules           Json //JSON containing rules for the quiz
+  questionPaperId Int       @map("question_paper_id") //link to questionPaper table
   title           String
   description     String
   programId       Int?      @map("program_id")
@@ -260,24 +264,36 @@ model QuizAssignment {
   createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
   //Relation
-  program      Program?             @relation(fields: [programId], references: [id], onDelete: Cascade)
-  questions    AssignmentQuestion[]
-  quizAttempts QuizAttempt[]        @relation("AssignmentAttempts") //Learner's attempt. Same quiz assignment can be taken by multiple learners
+  program       Program?      @relation(fields: [programId], references: [id], onDelete: Cascade)
+  questionPaper QuestionPaper @relation(fields: [questionPaperId], references: [id], onDelete: Cascade)
+  quizAttempts  QuizAttempt[] @relation("AssignmentAttempts") //Learner's attempt. Same quiz assignment can be taken by multiple learners
 
   @@map("quiz_assignments")
 }
 
-model AssignmentQuestion {
-  questionId   Int      @map("question_id")
-  assignmentId Int      @map("assignment_id")
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+model QuestionPaper {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  //relation
-  question   QuestionPool   @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  assignment QuizAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  // Relations
+  questions       QuestionPaperQuestion[]
+  quizAssignments QuizAssignment[] // One paper can be used in many quizzes
 
-  @@id([questionId, assignmentId])
-  @@map("assignment_questions")
+  @@map("question_papers")
+}
+
+model QuestionPaperQuestion {
+  questionId      Int      @map("question_id")
+  questionPaperId Int      @map("question_paper_id")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  question      QuestionPool  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionPaper QuestionPaper @relation(fields: [questionPaperId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, questionPaperId])
+  @@map("question_paper_questions")
 }
 
 model QuizAttempt {
@@ -285,6 +301,7 @@ model QuizAttempt {
   assignmentId   Int       @map("assignment_id")
   learnerId      Int       @map("learner_id")
   startedAt      DateTime  @default(now()) @map("started_at") @db.Timestamptz(6)
+  endedAt        DateTime? @map("ended_at") @db.Timestamptz(6)
   submittedAt    DateTime? @map("submitted_at") @db.Timestamptz(6)
   totalTimeSpent Int?      @map("total_time_spent")
   score          Decimal?  @db.Decimal(5, 2)
@@ -376,6 +393,7 @@ enum ResourceType {
 
 enum QuestionType {
   mcq_single
+  mcq_multiple
   true_false
   fill_blank
   slider

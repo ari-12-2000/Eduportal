@@ -1,7 +1,7 @@
 "use client"
 import Loading from "@/app/courses/[programId]/[moduleId]/[topicId]/loading"
-import { RefObject, useEffect, useRef, useState } from "react"
-import { useAuth } from "@/contexts/auth-context"
+import { useEffect, useRef, useState } from "react"
+import { useAuth, User } from "@/contexts/auth-context"
 import VideoPlayer from "./videoPlayer"
 import DocumentViewer from "./documentViewer"
 import { toast } from "./ui/use-toast"
@@ -9,15 +9,15 @@ import { CheckCircle } from "lucide-react"
 import { Resource } from "@/lib/generated/prisma"
 
 
-export default function TopicResourceRenderer({ topicId,  topics, moduleId, resource, resources }: { topicId: string,  topics: number[], moduleId: string, resource: Resource, resources: any }) {
+export default function TopicResourceRenderer({ topicId, topics, moduleId, resource, resources }: { topicId: string, topics: number[], moduleId: string, resource: Resource, resources: any }) {
   const [markdownContent, setMarkdownContent] = useState<string | null>(null)
   const [markedCompleted, setMarkedCompleted] = useState(false)
   const countResource = useRef<number>(0)
-  const { user, refreshUser } = useAuth();
-  const completedTopics = new Set(user?.completedTopics || []);
-  const completedModules = new Set(user?.completedModules || []);
-  const completedResources = new Set(user?.completedResources || []);
-  
+  const { user, setUser/*, refreshUser*/ } = useAuth();
+  let completedTopics = user!.completedTopics
+  let completedModules = user!.completedModules
+  let completedResources = user!.completedResources
+
 
   useEffect(() => {
     if (resource.resourceType === "document") {
@@ -33,8 +33,8 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
 
 
   const handleMarkProgress = async () => {
-    setMarkedCompleted(true);
-    if (!completedResources.has(resource.id)) {
+    let flag1 = false, flag2 = false, flag3 = false;
+    if (!completedResources[Number(resource.id)]) {
       try {
         const res = await fetch("/student/progress", {
           method: "POST",
@@ -47,12 +47,13 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
           }),
         });
 
+        const data = await res.json();
         if (!res.ok) {
-          throw new Error(`Server responded with ${res.status}`);
+          throw new Error(data.error);
         }
 
         countResource.current += 1;
-
+        flag1 = true;
         toast({
           title: "Progress marked",
           description: (
@@ -63,20 +64,17 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
           ),
         });
 
-        // ✅ Get updated user directly
-
-
         // ✅ Now perform topic completion
-        if (resources.length <= countResource.current && !completedTopics.has(Number(topicId))) {
-          // const updatedUser = await refreshUser();
-          // if (!updatedUser) { console.log('user could not be refreshed'); return };
-          const temp = [...completedResources, resource.id]
+        if (resources.length <= countResource.current && !completedTopics[Number(topicId)]) {
+          let id1=Number(resource.id)
+          let temp = {...completedResources}
+          temp[id1]=true
           const allResourcesCompleted = resources.every((prop: any) =>
-            temp.includes(prop.resource.id)
+            temp[prop.resource.id]
           );
 
           if (allResourcesCompleted) {
-            await fetch("/student/progress", {
+            const res = await fetch("/student/progress", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -87,6 +85,11 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
               }),
             });
 
+            const data = await res.json();
+            if (!res.ok) {
+              throw new Error(data.error);
+            }
+            flag2 = true;
             toast({
               title: "Progress marked",
               description: (
@@ -100,16 +103,16 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
         }
 
         // ✅ Now check module completion
-        if (!completedModules.has(Number(moduleId))) {
-          console.log('last topic in module')
-          const temp = [...completedTopics, Number(topicId)]
+        if (!completedModules[Number(moduleId)]) {
+          let temp = []
+          for(let key in completedModules)
+            temp.push(Number(key))
           const allTopicsCompleted = topics.every((topic) =>
             temp.includes(topic)
           );
 
           if (allTopicsCompleted) {
-            console.log('all topics completed');
-            await fetch("/student/progress", {
+            const res = await fetch("/student/progress", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -120,6 +123,11 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
               }),
             });
 
+            const data = await res.json();
+            if (!res.ok) {
+              throw new Error(data.error);
+            }
+            flag3 = true;
             toast({
               title: "Progress marked",
               description: (
@@ -131,11 +139,25 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
             });
           }
         }
-        refreshUser();
+        let updatedUser:User;
+        if (flag1 && flag2 && flag3) {
+
+          updatedUser={ ...user!, completedResources: {...completedResources, [resource.id]:true}, completedTopics: {...completedTopics, [Number(topicId)]:true}, completedModules: {...completedModules, [Number(moduleId)]:true} }
+          
+
+        } else if (flag1 && flag2) {
+          updatedUser={...user!, completedResources: {...completedResources, [resource.id]:true}, completedTopics: {...completedTopics, [Number(topicId)]:true}}
+      
+        } else if (flag1) {
+          updatedUser={...user!, completedResources: {...completedResources, [resource.id]:true}}
+        }
+        setUser(updatedUser!)
+        localStorage.setItem('eduportal-user',JSON.stringify(updatedUser!))
+
       } catch (error: any) {
         setMarkedCompleted(false);
         toast({
-          title: "Failed",
+          title: "Failed", 
           description: error.message || "Something went wrong.",
           variant: "destructive",
         });
@@ -150,8 +172,8 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
     return (
       <div className="prose max-w-none">
         {markdownContent ? (
-          <DocumentViewer content={markdownContent} handleMarkProgress={handleMarkProgress} id={resource.id} completedResources={completedResources} 
-                            markedCompleted={markedCompleted}/>
+          <DocumentViewer content={markdownContent} handleMarkProgress={handleMarkProgress} id={resource.id} completedResources={completedResources}
+            markedCompleted={markedCompleted} />
         ) : (
           <Loading />
         )}
@@ -159,7 +181,7 @@ export default function TopicResourceRenderer({ topicId,  topics, moduleId, reso
     )
   }
 
-  if (completedResources.has(resource.id)) {
+  if (completedResources[resource.id]) {
     countResource.current = countResource.current + 1;
 
   }

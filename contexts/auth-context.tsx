@@ -1,23 +1,27 @@
 "use client"
 
 import { GlobalVariables } from "@/globalVariables"
-import { Course } from "@/types/course"
 import { createContext, useContext, useState, useEffect, type ReactNode, SetStateAction, Dispatch } from "react"
 
-interface User {
+export interface User {
   id: string
-  first_name: string,
-  last_name: string,
+  first_name: string
+  last_name: string
   email: string
   role: string
   avatar?: string
   adminType?: string
-  enrolledCourses: Course[]
-  enrolledCourseIDs: number[]
-  completedTopics: number[]
-  completedModules: number[]
-  completedPrograms: number[]
-  completedResources: number[]
+  // qsnAttempts?: Record<number, { answer: string; isCorrect: boolean }>
+  // quizId?:number,
+  // score?: number
+  //  enrolledCourses: Course[],
+  enrolledCourseIDs: { [key: number]:boolean}
+  completedTopics: { [key: number]:boolean}
+  completedModules: { [key: number]:boolean}
+  completedPrograms: { [key: number]:boolean}
+  completedResources: { [key: number]:boolean}
+  completedQuizzes: { [key: number]:number}
+  attemptedQuizzes: { [key: number]: {start:Date, score:number} }
 }
 
 interface AuthContextType {
@@ -30,7 +34,7 @@ interface AuthContextType {
   ) => Promise<{ success: boolean; message?: string }>
   logout: () => void
   isLoading: boolean
-  refreshUser: () => Promise<User| null>
+  //refreshUser: () => Promise<User| null>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -44,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const storedUser = localStorage.getItem("eduportal-user")
     const storedToken = localStorage.getItem("eduportal-token")
     if (storedUser && storedToken) {
+
       setUser(JSON.parse(storedUser))
     }
     setIsLoading(false)
@@ -64,9 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json()
 
       if (data.success) {
-        setUser(data.user)
-        localStorage.setItem("eduportal-user", JSON.stringify(data.user))
-        localStorage.setItem("eduportal-token", data.token)
+        dataProcessing(data)
         setIsLoading(false)
         return { success: true }
       } else {
@@ -94,9 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json()
 
       if (data.success) {
-        setUser(data.user)
-        localStorage.setItem("eduportal-user", JSON.stringify(data.user))
-        localStorage.setItem("eduportal-token", data.token)
+        dataProcessing(data)
         setIsLoading(false)
         return { success: true, message: data.message }
       } else {
@@ -109,48 +110,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  let isRefreshing = false;
+  function dataProcessing(data: any) {
 
-const refreshUser = async (): Promise<User | null> => {
-  if (isRefreshing) {
-    console.warn("Skipping duplicate refreshUser call");
-    return null;
+     localStorage.setItem("eduportal-user", JSON.stringify(data.user))
+     localStorage.setItem("eduportal-token", data.token)
+     setUser(data.user)
   }
 
-  isRefreshing = true;
+  // const refreshUser = async (): Promise<User | null> => {
+  //   if (isRefreshing) {
+  //     console.warn("Skipping duplicate refreshUser call");
+  //     return null;
+  //   }
 
-  const token = localStorage.getItem("eduportal-token");
-  console.log(token);
-  if (!token || token === "null" || token === "undefined" || token.trim() === "") {
-    isRefreshing = false;
-    logout();
-    return null;
-  }
+  //   isRefreshing = true;
 
-  try {
-    const response = await fetch("/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  //   const token = localStorage.getItem("eduportal-token");
+  //   console.log(token);
+  //   if (!token || token === "null" || token === "undefined" || token.trim() === "") {
+  //     isRefreshing = false;
+  //     logout();
+  //     return null;
+  //   }
 
-    if (response.ok) {
-      const data = await response.json();
-      setUser(data.user);
-      localStorage.setItem("eduportal-user", JSON.stringify(data.user));
-      return data.user;
-    } else {
-      const errorText = await response.text();
-      console.error("refreshUser failed:", errorText);
-    }
-  } catch (error) {
-    console.error("Failed to refresh user data:", error);
-  } finally {
-    isRefreshing = false;
-  }
+  //   try {
+  //     const response = await fetch("/auth/me", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-  return null;
-};
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setUser(data.user);
+  //       localStorage.setItem("eduportal-user", JSON.stringify(data.user));
+  //       return data.user;
+  //     } else {
+  //       const errorText = await response.text();
+  //       console.error("refreshUser failed:", errorText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to refresh user data:", error);
+  //   } finally {
+  //     isRefreshing = false;
+  //   }
+
+  //   return null;
+  // };
 
   const logout = () => {
     setUser(null)
@@ -158,7 +164,7 @@ const refreshUser = async (): Promise<User | null> => {
     localStorage.removeItem("eduportal-token")
   }
 
-  return <AuthContext.Provider value={{ user, setUser, login, signup, logout, isLoading , refreshUser}}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, setUser, login, signup, logout, isLoading }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

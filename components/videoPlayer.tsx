@@ -5,7 +5,7 @@ interface VideoPlayerProps {
     src: string
     handleMarkProgress: () => Promise<void>
     id: number
-    completedResources: Set<number>
+    completedResources: { [key: number]:boolean}
 }
 
 const VideoPlayer = ({ src, handleMarkProgress, id, completedResources}: VideoPlayerProps) => {
@@ -35,7 +35,7 @@ const VideoPlayer = ({ src, handleMarkProgress, id, completedResources}: VideoPl
         video.addEventListener("ended", handleEnded)
 
         //If resource is already completed, seek to end once metadata is loaded
-        if (completedResources.has(id)) {
+        if (completedResources[id]) {
             const handleLoadedMetadata = () => {
                 video.currentTime = video.duration
             }

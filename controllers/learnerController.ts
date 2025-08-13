@@ -31,10 +31,10 @@ export class LearnerController {
                 select: { learnerId: true }
               },
 
-              quizzes:{
-                 select:{
-                  id:true
-                 }
+              quizzes: {
+                select: {
+                  id: true
+                }
               }
             }
           }
@@ -89,7 +89,7 @@ export class LearnerController {
       }
 
       const enrollment = await prisma.enrollment.findFirst({
-        where: { learnerId:parsedLearnerId, programId: parsedProgramId }
+        where: { learnerId: parsedLearnerId, programId: parsedProgramId }
       });
 
       if (!enrollment) {
@@ -106,72 +106,72 @@ export class LearnerController {
   }
 
   static async createProgress(req: NextRequest) {
-  try {
-    const {
-      learnerId,
-      programId,
-      moduleId,
-      resourceId,
-      topicId
-    }: {
-      learnerId: number | string;
-      programId?: number | string;
-      moduleId?: number | string;
-      resourceId?: number | string;
-      topicId?: number | string;
-    } = await req.json();
+    try {
+      const {
+        learnerId,
+        programId,
+        moduleId,
+        resourceId,
+        topicId
+      }: {
+        learnerId: number | string;
+        programId?: number | string;
+        moduleId?: number | string;
+        resourceId?: number | string;
+        topicId?: number | string;
+      } = await req.json();
 
-    const parsedLearnerId = Number(learnerId);
-    if (isNaN(parsedLearnerId)) {
-      return NextResponse.json({ error: 'Invalid learner ID' }, { status: 400 });
+      const parsedLearnerId = Number(learnerId);
+      if (isNaN(parsedLearnerId)) {
+        return NextResponse.json({ error: 'Invalid learner ID' }, { status: 400 });
+      }
+
+      // Helper function to safely parse optional values
+      const parseOptionalNumber = (val: any): number | undefined => {
+        const num = Number(val);
+        return isNaN(num) ? undefined : num;
+      };
+
+      const parsedProgramId = parseOptionalNumber(programId);
+      const parsedModuleId = parseOptionalNumber(moduleId);
+      const parsedResourceId = parseOptionalNumber(resourceId);
+      const parsedTopicId = parseOptionalNumber(topicId);
+
+      const progressType = parsedProgramId
+        ? 'program'
+        : parsedModuleId
+          ? 'module'
+          : parsedResourceId
+            ? 'resource'
+            : parsedTopicId
+              ? 'topic'
+              : null;
+
+      if (!progressType) {
+        return NextResponse.json({ error: 'At least one content ID (program/module/resource/topic) is required' }, { status: 400 });
+      }
+
+      const progressData: any = {
+        learnerId: parsedLearnerId,
+        progressType, // automatically inferred
+        status: 'Completed'
+      };
+      if (parsedProgramId !== undefined) progressData.programId = parsedProgramId;
+      if (parsedModuleId !== undefined) progressData.moduleId = parsedModuleId;
+      if (parsedResourceId !== undefined) progressData.resourceId = parsedResourceId;
+      if (parsedTopicId !== undefined) progressData.topicId = parsedTopicId;
+
+      const progress = await prisma.measureProgress.create({
+        data: progressData
+      });
+
+      return NextResponse.json({ success: true, data: progress }, { status: 201 });
+
+    } catch (error) {
+      console.error("Create progress error:", error);
+      return NextResponse.json({ error: 'Failed to create progress' }, { status: 500 });
     }
-
-    // Helper function to safely parse optional values
-    const parseOptionalNumber = (val: any): number | undefined => {
-      const num = Number(val);
-      return isNaN(num) ? undefined : num;
-    };
-
-    const parsedProgramId = parseOptionalNumber(programId);
-    const parsedModuleId = parseOptionalNumber(moduleId);
-    const parsedResourceId = parseOptionalNumber(resourceId);
-    const parsedTopicId = parseOptionalNumber(topicId);
-
-    const progressType = parsedProgramId
-      ? 'program'
-      : parsedModuleId
-      ? 'module'
-      : parsedResourceId
-      ? 'resource'
-      : parsedTopicId
-      ? 'topic'
-      : null;
-
-    if (!progressType) {
-      return NextResponse.json({ error: 'At least one content ID (program/module/resource/topic) is required' }, { status: 400 });
-    }
-
-    const progressData: any = {
-      learnerId: parsedLearnerId,
-      progressType, // automatically inferred
-      status: 'Completed'
-    };
-    if (parsedProgramId !== undefined) progressData.programId = parsedProgramId;
-    if (parsedModuleId !== undefined) progressData.moduleId = parsedModuleId;
-    if (parsedResourceId !== undefined) progressData.resourceId = parsedResourceId;
-    if (parsedTopicId !== undefined) progressData.topicId = parsedTopicId;
-
-    const progress = await prisma.measureProgress.create({
-      data: progressData
-    });
-
-    return NextResponse.json({ success: true, data: progress }, { status: 201 });
-
-  } catch (error) {
-    console.error("Create progress error:", error);
-    return NextResponse.json({ error: 'Failed to create progress' }, { status: 500 });
   }
- }
 
 
   // static async updateProgress(req: NextRequest) {
@@ -210,38 +210,154 @@ export class LearnerController {
   //     return NextResponse.json({ error: 'Failed to update progress' }, { status: 500 });
   //   }
   // }
-         
-  
+
+
   //  4. Quiz Progress
 
- static async createQuizProgress(req: NextRequest) {
+  static async saveQuizAttempt(
+    req: NextRequest,
+    { params }: { params: Promise<{ assignmentId: string, learnerId: string }> }
+  ) {
     try {
       const data = await req.json();
-      const assignmentId = Number(data.assignmentId);
-      const learnerId = Number(data.learnerId);
-      const status = data.status?.toString() || "in_progress";
+      const { questionAttempts: _, ...quizAttemptData } = data;
+      const { assignmentId, learnerId } = await params;
 
-      // Validate required fields
-      if (isNaN(assignmentId) || isNaN(learnerId) || !status) {
+      const assignmentIdNum = Number(assignmentId);
+      const learnerIdNum = Number(learnerId);
+      const status = data.status;
+      const questionAttempts: Record<number, { answer: string; isCorrect: boolean }> = data.questionAttempts || {};
+
+      if (isNaN(assignmentIdNum) || isNaN(learnerIdNum) || !status) {
         return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
       }
 
-      // Create quiz attempt
-      const quizAttempt = await prisma.quizAttempt.create({
-        data: {
-          assignmentId,
-          learnerId,
-          status,
+      // Step 1: Find the latest attempt for this learner + assignment
+      let latestAttempt = await prisma.quizAttempt.findFirst({
+        where: {
+          assignmentId: assignmentIdNum,
+          learnerId: learnerIdNum
         },
+        orderBy: {
+          createdAt: 'desc'
+        }
       });
 
+      let quizAttempt;
+
+      quizAttempt = await prisma.quizAttempt.update({
+        where: { id: latestAttempt!.id },
+        data: { ...quizAttemptData }
+      });
+
+      // Delete previous question attempts for this attempt (overwrite)
+      await prisma.questionAttempt.deleteMany({
+        where: { attemptId: quizAttempt.id }
+      });
+
+      // Step 2: Add new questionAttempts
+      const questionAttemptData = Object.entries(questionAttempts).map(([questionIdStr, value]) => ({
+        attemptId: quizAttempt.id,
+        questionId: Number(questionIdStr),
+        answerText: value.answer,
+        isCorrect: value.isCorrect,
+      }));
+
+      if (questionAttemptData.length > 0) {
+        await prisma.questionAttempt.createMany({
+          data: questionAttemptData
+        });
+      }
+
       return NextResponse.json({ success: true, data: quizAttempt }, { status: 201 });
+
     } catch (err: any) {
-      console.error("Error creating quiz progress:", err);
-      return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });
+      console.error("Error saving quiz attempt:", err);
+      return NextResponse.json({ error: "Failed to save quiz attempt" }, { status: 500 });
     }
   }
 
-  
+
+
+  static async getQuizAttempt({ params }: { params: Promise<{ assignmentId: string, learnerId: string, timeLimit?: string }> }) {
+    try {
+      const { assignmentId, learnerId, timeLimit } = await params;
+
+      const learnerIdNum = Number(learnerId);
+      const assignmentIdNum = Number(assignmentId);
+
+      if (isNaN(assignmentIdNum) || isNaN(learnerIdNum)) {
+        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      }
+
+      const whereCondition: any = {
+        assignmentId: assignmentIdNum,  // ✅ number
+        learnerId: learnerIdNum,        // ✅ number
+        status: "In progress",
+        OR: []
+      };
+
+      // Only add time limit condition if time_limit query param is present
+      if (timeLimit) {
+        const startedAfter = new Date(Date.now() - Number(timeLimit));
+        whereCondition.OR.push({ startedAt: { gt: startedAfter } });
+      }
+
+      const quizAttempt = await prisma.quizAttempt.findFirst({
+        where: whereCondition,
+        orderBy: {
+          createdAt: "desc"
+        },
+        include: {
+          questionAttempts: true
+        }
+      });
+
+      if (!quizAttempt) {
+        return NextResponse.json({ error: "Quiz attempt not found" }, { status: 404 });
+      }
+
+      const attempts: Record<number, { answer: string; isCorrect: boolean }> = {};
+
+      quizAttempt.questionAttempts.forEach((attempt) => {
+        attempts[attempt.questionId] = {
+          answer: attempt.answerText ?? '',
+          isCorrect: attempt.isCorrect,
+        };
+      });
+
+
+      return NextResponse.json({ data: { attempts, score: quizAttempt.score || 0, passed: quizAttempt.passed } }, { status: 200 });
+
+    } catch (err: any) {
+      console.error("Error fetching quiz attempts:", err);
+      return NextResponse.json({ error: "Error fetching quiz attempts" }, { status: 500 });
+    }
+  }
+
+  static async createQuizAttempt(req: NextRequest, { params }: { params: Promise<{ assignmentId: string, learnerId: string }> }) {
+    try {
+      const { assignmentId, learnerId } = await params;
+
+      const assignmentIdNum = Number(assignmentId);
+      const learnerIdNum = Number(learnerId);
+      if (isNaN(assignmentIdNum) || isNaN(learnerIdNum)) {
+        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      }
+      const data = await req.json();
+      const res = await prisma.quizAttempt.create({
+        data: {
+          ...data, // ✅ merges request body fields into the data object
+          assignmentId: assignmentIdNum,
+          learnerId: learnerIdNum
+        }
+      });
+      return NextResponse.json({ success: true, data: res }, { status: 201 });
+
+    } catch (err: any) {
+      console.error("Error creating quiz attempt:", err);
+      return NextResponse.json({ error: "Failed to create quiz attempt" }, { status: 500 });
+    }
+  }
 
 }

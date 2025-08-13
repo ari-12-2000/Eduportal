@@ -6,37 +6,56 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { CoursesList } from "@/components/courses-list"
-import type { ProgramModule } from "@/types/course"
+import type { Course, ProgramModule } from "@/types/course"
 import { Achievements } from "@/components/student/achievements"
 import { Leaderboard } from "@/components/student/leaderboard"
+import NotFound from "@/components/not-found"
+import { useCourses } from "@/contexts/course-context"
 
 export default function DashboardPage() {
   const { user } = useAuth()
-  const completedTopics = new Set(user?.completedTopics || [])
-  let totalModules= 0, totalTopics=0;
+  const {courses} = useCourses()
+  const completedTopics = user!.completedTopics
+  const completedQuizzes= user!.completedQuizzes
+  let totalModules= 0, totalTopics=0, totalQuizzes=0;
+  const enrolled:Course[]= courses!.filter((course:Course)=>user!.enrolledCourseIDs[course.id])
   // Fix the filtering logic for active courses
-  const activeCourses = (user!.enrolledCourses || []).filter((course) => {
-    totalModules+=course.programModules.length;
-    return course.programModules.some((programModule: ProgramModule) => {
-      totalTopics+=programModule.module.moduleTopics.length;
-      return programModule.module.moduleTopics.some((prop) => !completedTopics.has(prop.topicId))
-    })
-  })
+  const activeCourses = (enrolled || []).filter((course) => {
+  totalModules += course.programModules.length;
 
-  let moduleProgress={modules:totalModules, completed:user!.completedModules.length||0}
-  let topicProgress={topics:totalTopics, completed:user!.completedTopics.length||0}
-  let courseProgress={courses:user!.enrolledCourses.length, completed:user!.enrolledCourses.length-activeCourses.length}
-  
+  // Check incomplete topics
+  const hasIncompleteTopic = course.programModules.some((programModule) => {
+    const topics = programModule.module.moduleTopics;
+    totalTopics += topics.length;
+    return topics.some((topic) => !completedTopics[Number(topic.topicId)]);
+  });
+
+  // Check incomplete quizzes
+  const hasIncompleteQuiz = course.quizzes.some((quiz) => {
+    totalQuizzes++
+    return !completedQuizzes[quiz.id];
+  });
+
+  return hasIncompleteTopic || hasIncompleteQuiz;
+});
+
+
+  let moduleProgress={modules:totalModules, completed:Object.keys(user!.completedModules).length||0}
+  let topicProgress={topics:totalTopics, completed:Object.keys(user!.completedTopics).length||0}
+  let courseProgress={courses:enrolled.length, completed:Object.keys(user!.enrolledCourseIDs).length-activeCourses.length}
+  let quizProgress={quizzes:totalQuizzes, completed:Object.keys(user!.completedQuizzes).length||0}
+  if(!courses)
+    return <NotFound resource="Courses"/>
   return (
     <div className="max-w-7xl mx-auto">
-      {user!.enrolledCourses.length > 0 ? (
+      {enrolled.length > 0 ? (
         <>
           <section className="mb-6">
             <h1 className="text-2xl font-bold text-gray-800">Welcome back, {user!.first_name}!</h1>
             <p className="text-gray-600">Continue your learning journey. You've been making great progress!</p>
           </section>
 
-          <ProgressCards courseProgress={courseProgress} moduleProgress={moduleProgress} topicProgress={topicProgress}/>
+          <ProgressCards courseProgress={courseProgress} moduleProgress={moduleProgress} topicProgress={topicProgress} quizProgress={quizProgress}/>
 
           <section className="mt-8">
             <div className="flex items-center justify-between mb-4">
@@ -64,7 +83,7 @@ export default function DashboardPage() {
                       View All Completed Courses
                     </Button>
                   </Link>
-                  <Link href="/student">
+                  <Link href="/">
                     <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
                       Browse New Courses
                     </Button>
@@ -96,8 +115,8 @@ export default function DashboardPage() {
               Discover a wide range of expertly designed courses. Learn at your own pace, grow your skills, and unlock
               new opportunities.
             </p>
-            <Link href="/student">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Link href="/">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                 Browse Courses
               </Button>
             </Link>

@@ -6,7 +6,8 @@ import { useState } from "react"
 import { Search, Bell, MessageSquare, Menu, ArrowLeft } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 interface HeaderProps {
   toggleSidebar: () => void
@@ -15,9 +16,10 @@ interface HeaderProps {
 export function Header({ toggleSidebar }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchValue, setSearchValue] = useState("")
-  const router=useRouter();
+  const pathname = usePathname()
+  const router = useRouter();
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value=e.target.value;
+    let value = e.target.value;
     setSearchValue(value)
     if (value.trim()) {
       router.push(`/courses/search?q=${encodeURIComponent(value.trim())}`)
@@ -25,7 +27,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
   }
 
   return (
-    <header className="bg-white border-b px-4 py-2 flex items-center justify-between z-20 sticky top-0 shadow-sm">
+    <header className={cn("bg-white border-b px-4 py-2 items-center justify-between z-30  sticky top-0 shadow-sm", (pathname === "/" || pathname.startsWith("/student")) ? "flex" : "hidden",)}>
       <div className="flex items-center">
         <Button
           variant="ghost"
@@ -65,7 +67,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
             <div className="relative w-full flex items-center">
 
               <button onClick={() => setSearchOpen(false)} aria-label="Close search" className="absolute rounded-full p-2 left-0 top-1/2 -translate-y-1/2 text-gray-500">
-               <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="h-4 w-4" />
               </button>
               <Input
                 type="search"
@@ -76,7 +78,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
                 onChange={handleSearchChange}
               />
               <button className="absolute rounded-full right-0 top-1/2 -translate-y-1/2 text-gray-400 p-2">
-              <Search className="h-4 w-4"/>
+                <Search className="h-4 w-4" />
               </button>
             </div>
           </div>

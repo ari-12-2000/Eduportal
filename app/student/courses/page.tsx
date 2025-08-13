@@ -3,13 +3,14 @@
 import { CoursesList } from "@/components/courses-list"
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
-import { Course } from "@/types/course";
+import { useCourses } from "@/contexts/course-context";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export default function CoursesPage() {
   const { user } = useAuth()
-  const hasCourses = user!.enrolledCourses.length > 0
+  const {courses} = useCourses()
+  const hasCourses = Object.keys(user!.enrolledCourseIDs).length> 0
 
   return (<div className="max-w-7xl mx-auto text-center">
      <div className="mb-10">
@@ -24,7 +25,7 @@ export default function CoursesPage() {
         </div>
 
     {hasCourses ? (
-        <CoursesList courses={user!.enrolledCourses} />
+        <CoursesList courses={courses} />
     ) : (<div className="mt-20 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-full mx-auto mb-6">
               <Sparkles className="w-8 h-8" />
@@ -35,7 +36,7 @@ export default function CoursesPage() {
             <p className="text-gray-600 max-w-lg mx-auto mb-6">
               Explore our course library to start learning. From beginner to advanced, there’s something for everyone.
             </p>
-            <Link href="/student">
+            <Link href="/">
               <Button className="bg-blue-600 hover:bg-blue-700 text-white text-md px-6 py-3 rounded-lg">
                 Browse Courses
               </Button>

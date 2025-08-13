@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { razorpay } from "@/lib/utils";    
+import { razorpay } from "@/lib/config";    
 import { v4 as uuidv4 } from 'uuid';
 
 export class PurchaseController {

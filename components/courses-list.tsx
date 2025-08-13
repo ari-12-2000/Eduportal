@@ -15,8 +15,8 @@ import { usePathname } from "next/navigation"
 export function CoursesList({ courses }: { courses: Course[] | null }) {
   const { user } = useAuth()
   const pathname = usePathname()
-  const enrolledCourses = new Set(user!.enrolledCourseIDs || [])
-  const learnerCompletedTopics = new Set(user!.completedTopics || [])
+  const enrolledCourseIDs = user?.enrolledCourseIDs || {}
+  const learnerCompletedTopics = user?.completedTopics || {}
 
   function CourseDetail(totalModules: ProgramModule[]) {
     let topics = 0,
@@ -24,7 +24,7 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
     totalModules.forEach((prop: ProgramModule) => {
       topics += prop.module.moduleTopics.length
       completedTopics += prop.module.moduleTopics.filter((prop: ModuleTopic) =>
-        learnerCompletedTopics.has(prop.topicId),
+        learnerCompletedTopics[Number(prop.topicId)],
       ).length
     })
     return { modules: totalModules.length, topics, progress: Math.round((completedTopics / topics) * 100) }
@@ -34,7 +34,7 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       {courses!.map((course) => {
         const { modules, topics, progress } = CourseDetail(course.programModules)
-        if (!pathname?.startsWith("/dashboard") && progress !== 100)
+        if (!(pathname?.startsWith("/dashboard") && progress == 100) && !(pathname?.startsWith("/student/courses") && !enrolledCourseIDs[Number(course.id)]))  
           return (
             <Card
               key={course.id}
@@ -104,26 +104,26 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
                     <span>{topics} topics</span>
                   </div>
                 </div>
-                {user!.role === `${GlobalVariables.non_admin.role1}` && (
+               
                   <>
-                    {enrolledCourses.has(course.id) ? (
+                    {enrolledCourseIDs[Number(course.id)] ? (
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-gray-600">Progress</span>
                           <span className="font-medium text-blue-600">{progress}%</span>
                         </div>
-                        <Progress value={progress} className="h-2" />
+                        <Progress value={progress} className="h-2  [&>div]:bg-blue-600" />
                       </div>
                     ) : (
                       <div className="text-sm text-blue-600 mb-3">Not started</div>
                     )}
                     <div className="flex items-center justify-between">
                       <div className="text-2xl font-bold text-gray-900">
-                        {!enrolledCourses.has(course.id) && <span>₹ {course.price!}</span>}
+                        {!enrolledCourseIDs[Number(course.id)] && <span>₹ {course.price!}</span>}
                       </div>
-                      {enrolledCourses.has(course.id) ? (
+                      {enrolledCourseIDs[Number(course.id)] ? (
                         <Link href={`/courses/${course.id}`}>
-                          <Button className="bg-blue-600 hover:bg-blue-700">Continue Learning</Button>
+                          <Button className="bg-violet-600 hover:bg-violet-700">Continue Learning</Button>
                         </Link>
                       ) : (
                         <Link href={`/payment/${course.id}`}>
@@ -132,7 +132,7 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
                       )}
                     </div>
                   </>
-                )}
+                
               </CardContent>
             </Card>
           )

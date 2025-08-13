@@ -10,7 +10,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
-import Loading from "./loading"
 import { CoursesList } from "@/components/courses-list"
 import { Course } from "@/types/course"
 import { useCourses } from "@/contexts/course-context"
@@ -33,7 +32,7 @@ const defaultFilterState: FilterState = {
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
-  const { courses, filterCategory, loading } = useCourses()
+  const { courses, filterCategory } = useCourses()
 
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([])
@@ -144,7 +143,7 @@ export default function SearchPage() {
     })
   }
 
-  if (loading) return <Loading />
+ 
 
   return (
     <div className="flex min-h-screen bg-gray-50">

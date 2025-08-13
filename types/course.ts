@@ -1,3 +1,5 @@
+import { JsonValue } from "@/lib/generated/prisma/runtime/library";
+
 export interface Course {
   id: number;
   authorId: number;
@@ -6,12 +8,12 @@ export interface Course {
   category: string;
   instructor: string;
   instructorAvatar: string | null;
-  image: string| null;
-  rating: number| null;
-  level: string| null;
-  price: string| null; // Changed from number to string to match Prisma schema
+  image: string | null;
+  rating: number | null;
+  level: string | null;
+  price: string | null; // Changed from number to string to match Prisma schema
   type: string | null;
-  totalTimeLimit: number| null;
+  totalTimeLimit: number | null;
   status: number | null;
   uniqueHash: string | null;
   startDate: Date | null;
@@ -30,6 +32,14 @@ export interface Course {
   deletedAt: Date | null;
   programModules: ProgramModule[];
   enrollments: Enrollment[];
+  quizzes: {
+
+    id: number,
+    title: string,
+    uniqueLinkToken: string; // Include unique link token for quizzes
+    rules: JsonValue
+
+  }[]
 }
 
 export interface Enrollment {
@@ -46,7 +56,7 @@ export interface ProgramModule {
 export interface Module {
   id: number;
   title: string;
-  description: string| null;
+  description: string | null;
   prerequisiteModuleId: number | null;
   status: number | null;
   isDeleted: boolean;

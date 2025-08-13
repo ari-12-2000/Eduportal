@@ -40,7 +40,7 @@ export default function LoginPage() {
         if (user.role === "admin") {
           router.push("/admin")
         } else {
-          router.push("/student")
+          router.push("/")
         }
       }
     } else {
@@ -87,7 +87,7 @@ export default function LoginPage() {
       if (signupData.role === `${GlobalVariables.non_admin.role2}`) {
         router.push("/guest")
       } else {
-        router.push("/student")
+        router.push("/")
       }
     } else {
       setError(result.message || "Signup failed")
