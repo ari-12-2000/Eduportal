@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils"
 import { CoursesList } from "@/components/courses-list"
 import { Course } from "@/types/course"
 import { useCourses } from "@/contexts/course-context"
+import { Home } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface FilterState {
   priceRange: [number, number]
@@ -44,15 +46,13 @@ export default function SearchPage() {
     "Web Development",
     "UI/UX Design",
     "Data Science",
-    "Mobile Development",
+    "Database",
     "Machine Learning",
     "Digital Marketing",
-    "Cybersecurity",
-    "Cloud Computing",
   ]
 
   const levels = ["Beginner", "Intermediate", "Advanced"]
-
+  const router = useRouter();
   useEffect(() => setMounted(true), [])
 
   useEffect(() => {
@@ -143,158 +143,170 @@ export default function SearchPage() {
     })
   }
 
- 
 
-  return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Mobile Filter Button */}
+
+ return (
+  <div className="flex min-h-screen bg-gray-50">
+    {/* Mobile Filter Button */}
+    <Button
+      variant="outline"
+      size="sm"
+      className="fixed top-4 left-4 z-50 lg:hidden"
+      onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+    >
+      <Filter className="h-4 w-4 mr-2" />
+      Filters
+    </Button>
+
+    {/* Sidebar */}
+    <aside
+      className={cn(
+        "fixed inset-y-0 left-0 z-40 w-80 bg-white border-r transition-transform duration-300 ease-in-out -translate-x-full xl:translate-x-0",
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+        mounted ? "block" : "hidden",
+      )}
+    >
+      <div className="p-6 h-full overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={clearFilters} className="text-blue-600">
+              Clear All
+            </Button>
+            <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setIsSidebarOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Price Range */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Price</h3>
+          <Slider
+            value={filters.priceRange}
+            onValueChange={handlePriceChange}
+            min={0}
+            max={500}
+            step={10}
+            className="mb-4"
+          />
+          <div className="flex justify-between text-sm text-gray-600">
+            <span>₹{filters.priceRange[0]}</span>
+            <span>₹{filters.priceRange[1]}</span>
+          </div>
+        </div>
+
+        {/* Categories */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Category</h3>
+          <div className="space-y-3">
+            {categories.map((cat) => (
+              <div key={cat} className="flex items-center space-x-2">
+                <Checkbox
+                  id={cat}
+                  checked={filters.categories.includes(cat)}
+                  onCheckedChange={(checked) => handleCheckboxChange("categories", cat, checked as boolean)}
+                />
+                <Label htmlFor={cat}>{cat}</Label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Levels */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Level</h3>
+          <div className="space-y-3">
+            {levels.map((level) => (
+              <div key={level} className="flex items-center space-x-2">
+                <Checkbox
+                  id={level}
+                  checked={filters.levels.includes(level)}
+                  onCheckedChange={(checked) => handleCheckboxChange("levels", level, checked as boolean)}
+                />
+                <Label htmlFor={level}>{level}</Label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Ratings */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Ratings</h3>
+          <RadioGroup
+            value={filters.ratings}
+            onValueChange={(value) => setFilters((prev) => ({ ...prev, ratings: value }))}
+          >
+            {[4, 3, 2, 1].map((rating) => (
+              <div key={rating} className="flex items-center space-x-2">
+                <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} />
+                <Label htmlFor={`rating-${rating}`} className="flex items-center text-sm font-normal">
+                  {rating}
+                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 ml-1" />
+                  <span className="ml-1">and above</span>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+      </div>
+    </aside>
+
+    {/* Overlay for mobile */}
+    {isSidebarOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
+    )}
+
+    {/* Main Content */}
+    <main className="flex-1 xl:ml-[320px] xl:w-[calc(100vw - 320px)]">
       <Button
         variant="outline"
         size="sm"
-        className="fixed top-4 left-4 z-50 lg:hidden"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        onClick={() => router.push("/")}
+        className="flex items-center gap-2 mb-4 absolute top-4 right-4"
       >
-        <Filter className="h-4 w-4 mr-2" />
-        Filters
+        <span className="flex items-center justify-center rounded-full bg-gray-100 p-1.5">
+          <Home className="h-4 w-4 text-gray-600" />
+        </span>
+        Home
       </Button>
-
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-white border-r transition-transform duration-300 ease-in-out lg:translate-x-0",
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
-          mounted ? "block" : "hidden",
-        )}
-      >
-        <div className="p-6 h-full overflow-y-auto">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-blue-600">
-                Clear All
-              </Button>
-              <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setIsSidebarOpen(false)}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Price Range */}
-          <div className="mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Price</h3>
-            <Slider
-              value={filters.priceRange}
-              onValueChange={handlePriceChange}
-              min={0}
-              max={500}
-              step={10}
-              className="mb-4"
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Search Header */}
+        <div className="mb-8 md:ml-0 ml-0 flex flex-col items-center md:items-start">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Search Courses</h1>
+          <form onSubmit={handleSearch} className="max-w-2xl w-full relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Input
+              type="text"
+              placeholder="Search for courses, instructors, or topics..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-12 py-3 text-lg border-2 border-gray-200 rounded-lg focus:border-blue-500 w-full"
             />
-            <div className="flex justify-between text-sm text-gray-600">
-              <span>₹{filters.priceRange[0]}</span>
-              <span>₹{filters.priceRange[1]}</span>
-            </div>
-          </div>
-
-          {/* Categories */}
-          <div className="mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Category</h3>
-            <div className="space-y-3">
-              {categories.map((cat) => (
-                <div key={cat} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={cat}
-                    checked={filters.categories.includes(cat)}
-                    onCheckedChange={(checked) => handleCheckboxChange("categories", cat, checked as boolean)}
-                  />
-                  <Label htmlFor={cat}>{cat}</Label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Levels */}
-          <div className="mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Level</h3>
-            <div className="space-y-3">
-              {levels.map((level) => (
-                <div key={level} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={level}
-                    checked={filters.levels.includes(level)}
-                    onCheckedChange={(checked) => handleCheckboxChange("levels", level, checked as boolean)}
-                  />
-                  <Label htmlFor={level}>{level}</Label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Ratings */}
-          <div className="mb-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Ratings</h3>
-            <RadioGroup
-              value={filters.ratings}
-              onValueChange={(value) => setFilters((prev) => ({ ...prev, ratings: value }))}
-            >
-              {[4, 3, 2, 1].map((rating) => (
-                <div key={rating} className="flex items-center space-x-2">
-                  <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} />
-                  <Label htmlFor={`rating-${rating}`} className="flex items-center text-sm font-normal">
-                    {rating}
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 ml-1" />
-                    <span className="ml-1">and above</span>
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
+          </form>
         </div>
-      </aside>
 
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
-      )}
-
-      {/* Main Content */}
-      <main className="flex-1 lg:ml-[320px] lg:w-[calc(100vw - 320px)]">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          {/* Search Header */}
-          <div className="mb-8 lg:ml-0 ml-16">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Search Courses</h1>
-            <form onSubmit={handleSearch} className="max-w-2xl relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                type="text"
-                placeholder="Search for courses, instructors, or topics..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 py-3 text-lg border-2 border-gray-200 rounded-lg focus:border-blue-500"
-              />
-            </form>
-          </div>
-
-          {/* Course Count */}
-          <div className="mb-6 lg:ml-0 ml-16 text-gray-600">
-            {filteredCourses.length} course{filteredCourses.length !== 1 && "s"} found
-            {searchTerm && ` for "${searchTerm}"`}
-          </div>
-
-          {/* Course Results */}
-          <div className="lg:ml-0 ml-16">
-            {filteredCourses.length > 0 ? (
-              <CoursesList courses={filteredCourses} />
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No courses found matching your criteria.</p>
-                <p className="text-gray-400 mt-2">Try adjusting your filters or search terms.</p>
-              </div>
-            )}
-          </div>
+        {/* Course Count */}
+        <div className="mb-6 md:ml-0 ml-0 text-gray-600 text-center md:text-left">
+          {filteredCourses.length} course{filteredCourses.length !== 1 && "s"} found
+          {searchTerm && ` for "${searchTerm}"`}
         </div>
-      </main>
-    </div>
-  )
+
+        {/* Course Results */}
+        <div className="md:ml-0 ml-0">
+          {filteredCourses.length > 0 ? (
+            <CoursesList courses={filteredCourses} />
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No courses found matching your criteria.</p>
+              <p className="text-gray-400 mt-2">Try adjusting your filters or search terms.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+  </div>
+);
+
 }

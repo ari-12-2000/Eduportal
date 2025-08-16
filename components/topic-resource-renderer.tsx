@@ -104,11 +104,11 @@ export default function TopicResourceRenderer({ topicId, topics, moduleId, resou
 
         // ✅ Now check module completion
         if (!completedModules[Number(moduleId)]) {
-          let temp = []
-          for(let key in completedModules)
-            temp.push(Number(key))
+          let temp ={...completedModules}
+          temp[Number(moduleId)]=true;
+         
           const allTopicsCompleted = topics.every((topic) =>
-            temp.includes(topic)
+            temp[topic]
           );
 
           if (allTopicsCompleted) {

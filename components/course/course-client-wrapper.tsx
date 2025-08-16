@@ -392,7 +392,7 @@ const CourseClientWrapper = ({ courseData, enrolled }: { courseData: Course | nu
                                     </div>
 
                                     <div className="space-y-6">
-                                        {courseData.quizzes.map((quiz, index) => <CourseQuiz key={quiz.id} quiz={quiz} index={index} />)}
+                                        {courseData.quizzes.map((quiz, index) => <Link key={quiz.id} href={`/courses/${courseData.id}/quiz/${quiz.uniqueLinkToken}`}><CourseQuiz key={quiz.id} quiz={quiz} index={index} /></Link>)}
                                     </div>
                                 </CardContent>
                             )}

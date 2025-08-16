@@ -20,14 +20,14 @@ const CourseQuiz = ({ quiz, index }: {
     const quizAttempted = attemptedQuizzes[quiz.id]
 
     function getQuizStatus() {
-        if (quizCompleted) {
+        if (quizCompleted!==undefined) {
             return { status: quizCompleted >= 0.7 ? "passed" : "failed" };
         }
         if (quizAttempted) {
             const { start, score } = quizAttempted;
             const timeLimit = quiz.rules.settings.time_limit_seconds;
             const expired = timeLimit ? start < new Date(Date.now() - timeLimit * 1000) : false;
-
+            console.log(start,new Date(Date.now() - timeLimit * 1000), expired)
             if (expired && score >= 0.7) {
                 return { status: "passed", completedUpdate: { [quiz.id]: score } };
             }
@@ -93,8 +93,9 @@ const CourseQuiz = ({ quiz, index }: {
         }
     ]
     const colorScheme = quizColors[index % quizColors.length]
+    console.log(user, status)
     return (
-        <Link key={quiz.id} href={`/quiz/${quiz.uniqueLinkToken}`}>
+        
             <div
                 className={`max-sm:p-4 cursor-pointer border-2 rounded-xl p-6 group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300 ${status === "passed"
                     ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 ring-2 ring-green-400 ring-offset-2"
@@ -201,7 +202,7 @@ const CourseQuiz = ({ quiz, index }: {
                 </div>
 
             </div>
-        </Link>
+        
     );
 }
 

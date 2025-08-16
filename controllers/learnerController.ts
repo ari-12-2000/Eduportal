@@ -299,7 +299,7 @@ export class LearnerController {
 
       // Only add time limit condition if time_limit query param is present
       if (timeLimit) {
-        const startedAfter = new Date(Date.now() - Number(timeLimit));
+        const startedAfter = new Date(Date.now() - Number(timeLimit)*1000);
         whereCondition.OR.push({ startedAt: { gt: startedAfter } });
       }
 
@@ -327,7 +327,7 @@ export class LearnerController {
       });
 
 
-      return NextResponse.json({ data: { attempts, score: quizAttempt.score || 0, passed: quizAttempt.passed } }, { status: 200 });
+      return NextResponse.json({ data: { startedAt:quizAttempt.startedAt, attempts, score: quizAttempt.score || 0, passed: quizAttempt.passed } }, { status: 200 });
 
     } catch (err: any) {
       console.error("Error fetching quiz attempts:", err);

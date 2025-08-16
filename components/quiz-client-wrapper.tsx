@@ -8,7 +8,7 @@ import { QuizAssignmentUI } from "@/types/quiz"
 import NotFound from "./not-found"
 import { useAuth } from "@/contexts/auth-context"
 import { toast } from "./ui/use-toast"
-import Loading from "@/app/quiz/loading"
+import Loading from "@/app/courses/[programId]/quiz/loading"
 
 
 type ScreenType = "welcome" | "quiz" | "thank_you"
@@ -24,7 +24,7 @@ export default function QuizClientWrapper({ quizData }: QuizAppProps) {
   const { user, setUser } = useAuth()
   const numberOfQsns = quizData?.questionPaper.questions.length || 0 // Initialize answers array when quiz data loads
   const totalScore = useRef<number>(0)
-  const [userAttempt, setUserAttempt] = useState<{ quizId: number;qsnAttempts: Record<number, { answer: string; isCorrect: boolean }> } | null | undefined>(null)
+  const [userAttempt, setUserAttempt] = useState<{ quizId: number; qsnAttempts: Record<number, { answer: string; isCorrect: boolean }> } | null | undefined>(null)
   const [loading, setLoading] = useState<boolean>(false)
 
   let rules: any = quizData?.rules
@@ -32,9 +32,7 @@ export default function QuizClientWrapper({ quizData }: QuizAppProps) {
     if (quizData) {
 
       // Set up time limit if specified
-      if (rules.settings.time_limit_seconds > 0) {
-        setTimeRemaining(rules.settings.time_limit_seconds)
-      }
+
 
       // Determine initial screen based on enable_screens
       const enabledScreens = rules.settings.enable_screens
@@ -81,14 +79,35 @@ export default function QuizClientWrapper({ quizData }: QuizAppProps) {
         localStorage.removeItem("userAttempt") // Clear previous attempt if not found
         data = await res.json()
         if (res.ok) {
-          const updatedUser={ ...user!, attemptedQuizzes: { ...user!.attemptedQuizzes, [quizData!.id]: { start: data.startedAt, score: 0 } } }
+          const { [quizData!.id]: _, ...remainingCompleted } = user!.completedQuizzes;
+
+          const updatedUser = {
+            ...user!,
+            attemptedQuizzes: {
+              ...user!.attemptedQuizzes,
+              [quizData!.id]: {
+                start: data.startedAt,
+                score: 0
+              }
+            },
+            completedQuizzes: remainingCompleted
+          };
           setUser(updatedUser)
-          localStorage.setItem("eduportal-user",JSON.stringify(updatedUser))
+          localStorage.setItem("eduportal-user", JSON.stringify(updatedUser))
         }
       }//quiz is not attempted yet
 
       if (!res.ok) {
         throw new Error(data.error)
+      }
+      if (rules.settings.time_limit_seconds) {
+        const startedAt = new Date(data.data.startedAt); // parse to Date
+        const now = new Date();
+        const elapsed = Math.floor((now.getTime() - startedAt.getTime()) / 1000);
+
+        console.log(startedAt, now, elapsed);
+
+        setTimeRemaining(Math.max(rules.settings.time_limit_seconds - elapsed, 0));
       }
       const attempts: Record<number, { answer: string; isCorrect: boolean }> = data?.data.attempts || {}
       const isPresent = localStorage.getItem("userAttempt")
@@ -124,11 +143,11 @@ export default function QuizClientWrapper({ quizData }: QuizAppProps) {
       alert(rules.messages.success_text || "Quiz completed!")
     }
     try {
-      let computed=user!.attemptedQuizzes[quizData!.id].score;
+      let computed = user!.attemptedQuizzes[quizData!.id].score;
       let data = {
         score: computed,
         questionAttempts: userAttempt!.qsnAttempts,
-        status:  "Completed",
+        status: "Completed",
         passed: computed >= 0.7,
       }
       const res = await fetch(`/quiz/${quizData!.id}/${user!.id}/submit`, {
@@ -140,9 +159,10 @@ export default function QuizClientWrapper({ quizData }: QuizAppProps) {
       if (!res.ok) {
         throw new Error(res2.error || "Failed to save quiz attempt");
       }
-      const updatedUser={ ...user!, completedQuizzes: { ...user!.completedQuizzes, [quizData!.id]: computed } }
+      console.log(user!.attemptedQuizzes[quizData!.id], computed)
+      const updatedUser = { ...user!, completedQuizzes: { ...user!.completedQuizzes, [quizData!.id]: computed } }
       setUser(updatedUser);
-      localStorage.setItem('eduportal-user',JSON.stringify(updatedUser))
+      localStorage.setItem('eduportal-user', JSON.stringify(updatedUser))
 
     } catch (err) {
       console.error("Error saving quiz attempt:", err)

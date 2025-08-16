@@ -1,55 +1,101 @@
 "use client"
 
-import { useState, useEffect, useRef, type Dispatch, type SetStateAction, RefObject, useMemo } from "react"
+import {
+  useState,
+  useEffect,
+  useRef,
+  type Dispatch,
+  type SetStateAction,
+  type RefObject,
+  useMemo,
+} from "react"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Clock, AlertTriangle, CheckCircle2, Circle, Send, Menu, ChevronUp, ChevronDown } from "lucide-react"
-import { QuizAssignmentUI, SliderConfig } from "@/types/quiz"
-import { QuestionPool } from "@/lib/generated/prisma"
-import debounce from 'lodash.debounce';
+import {
+  Clock,
+  CheckCircle2,
+  Circle,
+  Send,
+  Menu,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react"
+import type { QuizAssignmentUI, SliderConfig } from "@/types/quiz"
+import type { QuestionPool } from "@/lib/generated/prisma"
+import debounce from "lodash.debounce"
 import { useAuth } from "@/contexts/auth-context"
 import { toast } from "./ui/use-toast"
 
-
 interface QuizScreenProps {
   quizData: QuizAssignmentUI
-  onComplete: (length:number) => void | Promise<void>
+  onComplete: (length: number) => void | Promise<void>
   timeRemaining: number | null
-  totalPoints:RefObject<number>
-  setUserAttempt: Dispatch<SetStateAction<{ quizId: number; qsnAttempts: Record<number, { answer: string; isCorrect: boolean }> } | null | undefined>>
-  userAttempt: { quizId: number; qsnAttempts: Record<number, { answer: string; isCorrect: boolean }> } | null |undefined
+  totalPoints: RefObject<number>
+  setUserAttempt: Dispatch<SetStateAction<{quizId: number , qsnAttempts: Record<number,{ answer: string; isCorrect: boolean }>}| null| undefined>>
+  userAttempt:
+    | {
+        quizId: number
+        qsnAttempts: Record<
+          number,
+          { answer: string; isCorrect: boolean }
+        >
+      }
+    | null
+    | undefined
 }
 
-export default function QuizScreen({ quizData, onComplete, totalPoints, timeRemaining, userAttempt, setUserAttempt }: QuizScreenProps) {
-
+export default function QuizScreen({
+  quizData,
+  onComplete,
+  totalPoints,
+  timeRemaining,
+  userAttempt,
+  setUserAttempt,
+}: QuizScreenProps) {
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const questionRefs = useRef<(HTMLDivElement | null)[]>([])
   const { user, setUser } = useAuth()
-  const qsnAttempts: Record<number, { answer: string; isCorrect: boolean }> = userAttempt!.qsnAttempts || {}
-  const questions = useMemo(()=>[...quizData.questionPaper.questions].sort(
-    (a, b) => a.questionId - b.questionId).map((q) => q.question),[quizData])
-  totalPoints.current = useMemo(()=>questions.reduce((sum, q) => sum + (q.points || 0), 0),[questions])
 
-  // Intersection Observer to track active question
+  const qsnAttempts: Record<
+    number,
+    { answer: string; isCorrect: boolean }
+  > = userAttempt!.qsnAttempts || {}
+
+  const questions = useMemo(
+    () =>
+      [...quizData.questionPaper.questions]
+        .sort((a, b) => a.questionId - b.questionId)
+        .map((q) => q.question),
+    [quizData]
+  )
+
+  totalPoints.current = useMemo(
+    () =>
+      questions.reduce((sum, q) => sum + (q.points || 0), 0),
+    [questions]
+  )
+
+  // Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = questionRefs.current.findIndex((ref) => ref === entry.target)
+            const index = questionRefs.current.findIndex(
+              (ref) => ref === entry.target
+            )
             if (index !== -1) {
               setActiveQuestion(index)
             }
           }
         })
       },
-      { threshold: 0.5, rootMargin: "-100px 0px -100px 0px" },
+      { threshold: 0.5, rootMargin: "-100px 0px -100px 0px" }
     )
 
     questionRefs.current.forEach((ref) => {
@@ -59,18 +105,113 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
     return () => observer.disconnect()
   }, [])
 
-  // Format time as MM:SS
+  // Format time
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`
+  }
+
+  const renderTimer = () => {
+    if (timeRemaining === null) return null
+
+    const isUrgent = timeRemaining < 300
+    const isCritical = timeRemaining < 60
+
+    const totalDuration = 1800
+    const progress = Math.max(
+      0,
+      Math.min(
+        100,
+        ((totalDuration - timeRemaining) / totalDuration) * 100
+      )
+    )
+
+    return (
+      <div className="relative">
+        <div className="relative w-16 h-16 mx-auto mb-2">
+          <svg
+            className="w-16 h-16 transform -rotate-90"
+            viewBox="0 0 64 64"
+          >
+            <circle
+              cx="32"
+              cy="32"
+              r="28"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+              className="text-gray-200"
+            />
+            <circle
+              cx="32"
+              cy="32"
+              r="28"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+              strokeDasharray={`${2 * Math.PI * 28}`}
+              strokeDashoffset={`${
+                2 * Math.PI * 28 * (1 - progress / 100)
+              }`}
+              className={`transition-all duration-1000 ease-in-out ${
+                isCritical
+                  ? "text-red-500"
+                  : isUrgent
+                  ? "text-orange-500"
+                  : "text-blue-500"
+              }`}
+              strokeLinecap="round"
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Clock
+              className={`w-6 h-6 ${
+                isCritical
+                  ? "text-red-600"
+                  : isUrgent
+                  ? "text-orange-600"
+                  : "text-blue-600"
+              }`}
+            />
+          </div>
+        </div>
+
+        <div className="text-center">
+          <div
+            className={`text-lg font-bold font-mono tracking-wider transition-colors duration-300 ${
+              isCritical
+                ? "text-red-600"
+                : isUrgent
+                ? "text-orange-600"
+                : "text-gray-700"
+            }`}
+          >
+            {formatTime(timeRemaining)}
+          </div>
+          <div className="text-xs text-gray-500 mt-1">
+            {isCritical
+              ? "Time's up soon!"
+              : isUrgent
+              ? "Hurry up!"
+              : "Time remaining"}
+          </div>
+        </div>
+
+        {isCritical && (
+          <div className="absolute inset-0 rounded-full animate-pulse bg-red-100 opacity-30 -z-10"></div>
+        )}
+      </div>
+    )
   }
 
   const questionsAttempted = Object.keys(qsnAttempts).length
 
   const saveAttemptToServer = debounce(async (attempts: Record<number, { answer: string; isCorrect: boolean }>, score: number) => {
     try {
-      let data = {
+      const data = {
       score,
       questionAttempts: attempts,
       status: Object.keys(attempts).length === questions.length ? "Completed" : "In progress",
@@ -112,6 +253,11 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
       quizId: quizData.id,
       qsnAttempts: updatedAttempt
     })
+
+    localStorage.setItem("userAttempt",JSON.stringify({
+      quizId: quizData.id,
+      qsnAttempts: updatedAttempt
+    }))
     // Auto-advance for single-answer question types
 
     const isSingleAnswerType = question.questionType === "mcq_single" || question.questionType === "slider"
@@ -272,8 +418,6 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
       //           </Label>
       //         </div>
       //       ))}
-      //     </div>
-      //   )
 
       case "text":
       case "fill_blank":
@@ -336,9 +480,8 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
             <div className="flex items-center justify-between text-sm text-gray-600">
               
               {timeRemaining !== null && (
-                <div className={`flex items-center gap-2 ${timeRemaining < 60 ? "text-red-600" : "text-orange-600"}`}>
-                  <AlertTriangle className="w-4 h-4" />
-                  <span>{formatTime(timeRemaining)}</span>
+                <div className="mb-4 p-4 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border border-gray-100 w-full">
+                  {renderTimer()}
                 </div>
               )}
             </div>
@@ -393,6 +536,11 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
                           {questionsAttempted} of {questions.length} completed
                         </p>
                       </div>
+                      {timeRemaining !== null && (
+                        <div className="mb-6 p-4 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border border-gray-100">
+                          {renderTimer()}
+                        </div>
+                      )}
                       <div className="max-h-[60vh] overflow-y-auto">{renderQuestionNavigation()}</div>
                     </div>
                   </SheetContent>
@@ -404,9 +552,17 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
               <div className="flex items-center gap-4 text-sm text-gray-600">
                 
                 {timeRemaining !== null && (
-                  <div className={`flex items-center gap-1 ${timeRemaining < 60 ? "text-red-600" : "text-orange-600"}`}>
-                    <AlertTriangle className="w-4 h-4" />
-                    <span>{formatTime(timeRemaining)}</span>
+                  <div
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300 ${
+                      timeRemaining < 60
+                        ? "bg-red-50 border-red-200 text-red-700"
+                        : timeRemaining < 300
+                          ? "bg-orange-50 border-orange-200 text-orange-700"
+                          : "bg-blue-50 border-blue-200 text-blue-700"
+                    }`}
+                  >
+                    <Clock className="w-4 h-4" />
+                    <span className="font-mono font-semibold text-sm">{formatTime(timeRemaining)}</span>
                   </div>
                 )}
               </div>
@@ -439,7 +595,6 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
                   <div className="space-y-4">{renderQuestion(question, index)}</div>
                 </div>
               ))}
-            </div>
 
             {/* Mobile Navigation & Submit */}
             <div className="md:hidden sticky bottom-0 bg-white border-t border-gray-200 p-4 mt-8">
@@ -475,5 +630,7 @@ export default function QuizScreen({ quizData, onComplete, totalPoints, timeRema
         </div>
       </div>
     </div>
+    </div>
   )
 }
+

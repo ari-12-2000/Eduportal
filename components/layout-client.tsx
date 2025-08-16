@@ -24,7 +24,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
   return (
     <div className='bg-gray-50 flex'>
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
       <div className={cn("flex-1 flex flex-col", (pathname === "/" || pathname.startsWith("/student")) ? "lg:ml-64" : undefined)}>
         <Header toggleSidebar={toggleSidebar} />
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
