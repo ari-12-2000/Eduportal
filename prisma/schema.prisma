@@ -47,6 +47,7 @@ model Learner {
   communicationEmail Bytes?            @map("communication_email")
   password           String?
   profile_image      String?
+  image_id           String?
   organisation       String?           @db.VarChar(255)
   designation        String?           @db.VarChar(255)
   department         String?           @db.VarChar(255)

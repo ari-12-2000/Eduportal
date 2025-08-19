@@ -8,6 +8,8 @@ import { useAuth } from "@/contexts/auth-context"
 import { SidebarItem } from "@/components/sidebar-item"
 import { GlobalVariables } from "@/globalVariables"
 import { ProfilePhotoUpload } from "@/components/profile-photo-upload"
+import { toast } from "../ui/use-toast"
+
 
 interface SidebarProps {
   isOpen: boolean
@@ -15,24 +17,21 @@ interface SidebarProps {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export function Sidebar({ isOpen, toggleSidebar, setSidebarOpen }: SidebarProps) {
-  const { user, logout } = useAuth()
+export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
+  const { user, logout, setUser } = useAuth()
   const pathname = usePathname()
   const router = useRouter()
   // Add state for client-side rendering
   const [mounted, setMounted] = useState(false)
   const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false)
-  const [profilePhoto, setProfilePhoto] = useState<string>("")
+  const profilePhoto= user?.profile_image ?? ""
 
   // Only update the path on the client side after component mounts
   useEffect(() => {
     setMounted(true)
-    const savedPhoto = localStorage.getItem("profilePhoto")
-    if (savedPhoto) {
-      setProfilePhoto(savedPhoto)
-    }
   }, [])
 
+  
   if (!mounted) {
     // Don't render at all until after mount (prevents hydration mismatch)
     return null
@@ -47,9 +46,48 @@ export function Sidebar({ isOpen, toggleSidebar, setSidebarOpen }: SidebarProps)
     router.push("/")
   }
 
-  const handlePhotoUpdate = (photo: string) => {
-    setProfilePhoto(photo)
-    localStorage.setItem("profilePhoto", photo)
+  const uploadToDB = async (orgPhoto: File): Promise<string> => {
+    try {
+      const form = new window.FormData();
+      form.append("file", orgPhoto);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/student/${user?.id}/photo`,
+        {
+          method: "PUT",
+          body: form, // fetch নিজেই multipart/form-data boundary handle করে
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+
+      return data.data.profile_image;
+    } catch (err: any) {
+      console.error("Upload failed:", err);
+      toast({
+        title: "Failed",
+        description: "Couldn't update photo. Try again after sometime:",
+        variant: "destructive",
+      });
+      return "";
+    }
+  }
+
+  const handlePhotoUpdate = async (photo: string, orgPhoto: File | null) => {
+    if (photo) {
+      const updatedUser={...user!,profile_image:photo} 
+      setUser(updatedUser) 
+    }
+    let url: string = ''
+    if (orgPhoto)
+      url = await uploadToDB(orgPhoto)
+    const updatedUser={...user!,profile_image:url} 
+    setUser(updatedUser) 
+    localStorage.setItem("eduportal-user", JSON.stringify(updatedUser))
   }
 
   const handleProfilePhotoClick = () => {
@@ -162,7 +200,7 @@ export function Sidebar({ isOpen, toggleSidebar, setSidebarOpen }: SidebarProps)
       <ProfilePhotoUpload
         isOpen={isPhotoUploadOpen}
         onClose={() => setIsPhotoUploadOpen(false)}
-        currentPhoto={profilePhoto}
+        currentPhoto={user?.profile_image ??''}
         onPhotoUpdate={handlePhotoUpdate}
       />
     </>

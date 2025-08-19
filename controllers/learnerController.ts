@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { cloudinary } from '@/lib/config';
+import { CloudinaryUploadResult } from '@/types/cloudinary';
 
 export class LearnerController {
   // 1. Get all enrolled courses for a learner
@@ -12,7 +14,7 @@ export class LearnerController {
       }
 
       const enrollment = await prisma.enrollment.findMany({
-        where: { learnerId },
+        where: { id: Number(learnerId) },
         include: {
           program: {
             include: {
@@ -299,7 +301,7 @@ export class LearnerController {
 
       // Only add time limit condition if time_limit query param is present
       if (timeLimit) {
-        const startedAfter = new Date(Date.now() - Number(timeLimit)*1000);
+        const startedAfter = new Date(Date.now() - Number(timeLimit) * 1000);
         whereCondition.OR.push({ startedAt: { gt: startedAfter } });
       }
 
@@ -327,7 +329,7 @@ export class LearnerController {
       });
 
 
-      return NextResponse.json({ data: { startedAt:quizAttempt.startedAt, attempts, score: quizAttempt.score || 0, passed: quizAttempt.passed } }, { status: 200 });
+      return NextResponse.json({ data: { startedAt: quizAttempt.startedAt, attempts, score: quizAttempt.score || 0, passed: quizAttempt.passed } }, { status: 200 });
 
     } catch (err: any) {
       console.error("Error fetching quiz attempts:", err);
@@ -357,6 +359,109 @@ export class LearnerController {
     } catch (err: any) {
       console.error("Error creating quiz attempt:", err);
       return NextResponse.json({ error: "Failed to create quiz attempt" }, { status: 500 });
+    }
+  }
+
+
+  //5. profile photo
+  static async updateProfilePhoto(
+    req: NextRequest,
+    { params }: { params: Promise<{ learnerId: string }> }
+  ) {
+    try {
+      const { learnerId } = await params;
+      const id = Number(learnerId);
+
+      if (isNaN(id)) {
+        return NextResponse.json(
+          { error: "Missing required fields" },
+          { status: 400 }
+        );
+      }
+
+      const learner = await prisma.learner.findUnique({
+        where: { id },
+      });
+
+      if (!learner) {
+        return NextResponse.json(
+          { error: "Learner not found" },
+          { status: 404 }
+        );
+      }
+
+          const formData = await req.formData();
+    const file = formData.get("file") as File | null;
+
+    if (!file) {
+      return NextResponse.json(
+        { error: "Missing file" },
+        { status: 400 }
+      );
+    }
+
+    // 📌 File কে buffer বানানো (Cloudinary তে পাঠানোর জন্য)
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // 🔹 Photo upload to Cloudinary (upload_stream দিয়ে buffer পাঠাতে হবে)
+    const uploadResponse= await new Promise<CloudinaryUploadResult>((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: "learners" },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result as CloudinaryUploadResult);
+        }
+      ).end(buffer);
+    });
+
+    const updated = await prisma.learner.update({
+      where: { id },
+      data: { 
+        profile_image: uploadResponse.secure_url ,
+        image_id:uploadResponse.public_id},
+    });
+
+    return NextResponse.json({ data: updated }, { status: 200 });
+
+    } catch (err) {
+      console.error("Update error:", err);
+      return NextResponse.json(
+        { error: "Failed to update" },
+        { status: 500 }
+      );
+    }
+  }
+
+
+
+  static async deleteProfilePhoto({ params }: { params: Promise<{ learnerId: string }> }) {
+    try {
+      const { learnerId } = await params
+      const id = Number(learnerId)
+      if (isNaN(id))
+        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      let learner = await prisma.learner.findUnique({
+        where: { id },
+      })
+      if (!learner)
+        return NextResponse.json({ error: 'Learner not found' }, { status: 404 })
+
+      const res = await cloudinary.uploader.destroy(learner.image_id!);
+      if (res.result !== "ok" && res.result !== "not found") {
+         return NextResponse.json({ error: 'Cloudinary delete failed' }, { status: 500 })
+      }
+
+      const deleted = await prisma.learner.update({
+        where: { id: id },
+        data: { profile_image: null }
+      })
+
+
+      return NextResponse.json({ data: deleted }, { status: 200 })
+    } catch (err) {
+      console.error("Delete error:", err);
+      return NextResponse.json({ error: 'Failed to delete' }, { status: 500 })
     }
   }
 

@@ -1,33 +1,42 @@
 "use client"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import type React from "react"
 
 import { X, Camera, ImageIcon, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/contexts/auth-context"
+import { toast } from "./ui/use-toast"
 
 interface ProfilePhotoUploadProps {
   isOpen: boolean
   onClose: () => void
   currentPhoto?: string
-  onPhotoUpdate: (photo: string) => void
+  onPhotoUpdate: (photo: string, file: File | null) => void
 }
 
 export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdate }: ProfilePhotoUploadProps) {
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(currentPhoto || null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [orgPhoto, setOrgPhoto] = useState<File | null>(null)
+  const { user, setUser } = useAuth();
+  
+
+    useEffect(() => {
+    return () => {
+      if (selectedPhoto?.startsWith("blob:")) {
+        URL.revokeObjectURL(selectedPhoto)
+      }
+    }
+  }, [selectedPhoto])
 
   if (!isOpen) return null
 
   const handleFileSelect = (file: File) => {
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result as string
-        setSelectedPhoto(result)
-      }
-      reader.readAsDataURL(file)
+      const previewUrl = URL.createObjectURL(file)
+      setSelectedPhoto(previewUrl)
     }
   }
 
@@ -35,6 +44,7 @@ export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdat
     const file = e.target.files?.[0]
     if (file) {
       handleFileSelect(file)
+      setOrgPhoto(file)
     }
   }
 
@@ -44,6 +54,7 @@ export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdat
     const file = e.dataTransfer.files[0]
     if (file) {
       handleFileSelect(file)
+      setOrgPhoto(file)
     }
   }
 
@@ -59,15 +70,41 @@ export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdat
 
   const handleSave = () => {
     if (selectedPhoto) {
-      onPhotoUpdate(selectedPhoto)
+      onPhotoUpdate(selectedPhoto, orgPhoto)
     }
     onClose()
   }
 
-  const handleDelete = () => {
-    setSelectedPhoto(null)
-    onPhotoUpdate("")
-    onClose()
+  const handleDelete = async () => {
+    if(!currentPhoto)
+      return
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/student/${user!.id}/photo`,
+        {
+          method: "DELETE"
+        }
+      );
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.error)
+      const updatedUser={...user!,profile_image:''} 
+    setUser(updatedUser) 
+    localStorage.setItem("eduportal-user", JSON.stringify(updatedUser))
+      setSelectedPhoto(null)
+      setOrgPhoto(null)
+      onPhotoUpdate("", null)
+    } catch (err: any) {
+      toast({
+        title: "Failed",
+        description: "Couldn't delete photo. Try again after sometime:",
+        variant: "destructive",
+      });
+    } finally {
+      onClose()
+    }
+
+
   }
 
   return (

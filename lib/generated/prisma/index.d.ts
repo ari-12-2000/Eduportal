@@ -4503,6 +4503,7 @@ export namespace Prisma {
     communicationEmail: Uint8Array | null
     password: string | null
     profile_image: string | null
+    image_id: string | null
     organisation: string | null
     designation: string | null
     department: string | null
@@ -4535,6 +4536,7 @@ export namespace Prisma {
     communicationEmail: Uint8Array | null
     password: string | null
     profile_image: string | null
+    image_id: string | null
     organisation: string | null
     designation: string | null
     department: string | null
@@ -4567,6 +4569,7 @@ export namespace Prisma {
     communicationEmail: number
     password: number
     profile_image: number
+    image_id: number
     organisation: number
     designation: number
     department: number
@@ -4615,6 +4618,7 @@ export namespace Prisma {
     communicationEmail?: true
     password?: true
     profile_image?: true
+    image_id?: true
     organisation?: true
     designation?: true
     department?: true
@@ -4647,6 +4651,7 @@ export namespace Prisma {
     communicationEmail?: true
     password?: true
     profile_image?: true
+    image_id?: true
     organisation?: true
     designation?: true
     department?: true
@@ -4679,6 +4684,7 @@ export namespace Prisma {
     communicationEmail?: true
     password?: true
     profile_image?: true
+    image_id?: true
     organisation?: true
     designation?: true
     department?: true
@@ -4798,6 +4804,7 @@ export namespace Prisma {
     communicationEmail: Uint8Array | null
     password: string | null
     profile_image: string | null
+    image_id: string | null
     organisation: string | null
     designation: string | null
     department: string | null
@@ -4849,6 +4856,7 @@ export namespace Prisma {
     communicationEmail?: boolean
     password?: boolean
     profile_image?: boolean
+    image_id?: boolean
     organisation?: boolean
     designation?: boolean
     department?: boolean
@@ -4889,6 +4897,7 @@ export namespace Prisma {
     communicationEmail?: boolean
     password?: boolean
     profile_image?: boolean
+    image_id?: boolean
     organisation?: boolean
     designation?: boolean
     department?: boolean
@@ -4922,6 +4931,7 @@ export namespace Prisma {
     communicationEmail?: boolean
     password?: boolean
     profile_image?: boolean
+    image_id?: boolean
     organisation?: boolean
     designation?: boolean
     department?: boolean
@@ -4955,6 +4965,7 @@ export namespace Prisma {
     communicationEmail?: boolean
     password?: boolean
     profile_image?: boolean
+    image_id?: boolean
     organisation?: boolean
     designation?: boolean
     department?: boolean
@@ -4976,7 +4987,7 @@ export namespace Prisma {
     role?: boolean
   }
 
-  export type LearnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "gender" | "dob" | "email" | "phone" | "communicationEmail" | "password" | "profile_image" | "organisation" | "designation" | "department" | "location" | "hierarchy_level" | "totalPoints" | "isActive" | "isDeleted" | "deletedAt" | "isVerified" | "lastLogin" | "createdBy" | "createdAt" | "updatedAt" | "uniqueHash" | "status" | "extraConfig" | "metaData" | "role", ExtArgs["result"]["learner"]>
+  export type LearnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "gender" | "dob" | "email" | "phone" | "communicationEmail" | "password" | "profile_image" | "image_id" | "organisation" | "designation" | "department" | "location" | "hierarchy_level" | "totalPoints" | "isActive" | "isDeleted" | "deletedAt" | "isVerified" | "lastLogin" | "createdBy" | "createdAt" | "updatedAt" | "uniqueHash" | "status" | "extraConfig" | "metaData" | "role", ExtArgs["result"]["learner"]>
   export type LearnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Learner$enrollmentsArgs<ExtArgs>
     leaderboards?: boolean | Learner$leaderboardsArgs<ExtArgs>
@@ -5016,6 +5027,7 @@ export namespace Prisma {
       communicationEmail: Uint8Array | null
       password: string | null
       profile_image: string | null
+      image_id: string | null
       organisation: string | null
       designation: string | null
       department: string | null
@@ -5475,6 +5487,7 @@ export namespace Prisma {
     readonly communicationEmail: FieldRef<"Learner", 'Bytes'>
     readonly password: FieldRef<"Learner", 'String'>
     readonly profile_image: FieldRef<"Learner", 'String'>
+    readonly image_id: FieldRef<"Learner", 'String'>
     readonly organisation: FieldRef<"Learner", 'String'>
     readonly designation: FieldRef<"Learner", 'String'>
     readonly department: FieldRef<"Learner", 'String'>
@@ -26268,6 +26281,7 @@ export namespace Prisma {
     communicationEmail: 'communicationEmail',
     password: 'password',
     profile_image: 'profile_image',
+    image_id: 'image_id',
     organisation: 'organisation',
     designation: 'designation',
     department: 'department',
@@ -26884,6 +26898,7 @@ export namespace Prisma {
     communicationEmail?: BytesNullableFilter<"Learner"> | Uint8Array | null
     password?: StringNullableFilter<"Learner"> | string | null
     profile_image?: StringNullableFilter<"Learner"> | string | null
+    image_id?: StringNullableFilter<"Learner"> | string | null
     organisation?: StringNullableFilter<"Learner"> | string | null
     designation?: StringNullableFilter<"Learner"> | string | null
     department?: StringNullableFilter<"Learner"> | string | null
@@ -26923,6 +26938,7 @@ export namespace Prisma {
     communicationEmail?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
+    image_id?: SortOrderInput | SortOrder
     organisation?: SortOrderInput | SortOrder
     designation?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
@@ -26965,6 +26981,7 @@ export namespace Prisma {
     communicationEmail?: BytesNullableFilter<"Learner"> | Uint8Array | null
     password?: StringNullableFilter<"Learner"> | string | null
     profile_image?: StringNullableFilter<"Learner"> | string | null
+    image_id?: StringNullableFilter<"Learner"> | string | null
     organisation?: StringNullableFilter<"Learner"> | string | null
     designation?: StringNullableFilter<"Learner"> | string | null
     department?: StringNullableFilter<"Learner"> | string | null
@@ -27004,6 +27021,7 @@ export namespace Prisma {
     communicationEmail?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     profile_image?: SortOrderInput | SortOrder
+    image_id?: SortOrderInput | SortOrder
     organisation?: SortOrderInput | SortOrder
     designation?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
@@ -27044,6 +27062,7 @@ export namespace Prisma {
     communicationEmail?: BytesNullableWithAggregatesFilter<"Learner"> | Uint8Array | null
     password?: StringNullableWithAggregatesFilter<"Learner"> | string | null
     profile_image?: StringNullableWithAggregatesFilter<"Learner"> | string | null
+    image_id?: StringNullableWithAggregatesFilter<"Learner"> | string | null
     organisation?: StringNullableWithAggregatesFilter<"Learner"> | string | null
     designation?: StringNullableWithAggregatesFilter<"Learner"> | string | null
     department?: StringNullableWithAggregatesFilter<"Learner"> | string | null
@@ -28539,6 +28558,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -28577,6 +28597,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -28614,6 +28635,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28652,6 +28674,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28690,6 +28713,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -28721,6 +28745,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28752,6 +28777,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30480,6 +30506,7 @@ export namespace Prisma {
     communicationEmail?: SortOrder
     password?: SortOrder
     profile_image?: SortOrder
+    image_id?: SortOrder
     organisation?: SortOrder
     designation?: SortOrder
     department?: SortOrder
@@ -30519,6 +30546,7 @@ export namespace Prisma {
     communicationEmail?: SortOrder
     password?: SortOrder
     profile_image?: SortOrder
+    image_id?: SortOrder
     organisation?: SortOrder
     designation?: SortOrder
     department?: SortOrder
@@ -30551,6 +30579,7 @@ export namespace Prisma {
     communicationEmail?: SortOrder
     password?: SortOrder
     profile_image?: SortOrder
+    image_id?: SortOrder
     organisation?: SortOrder
     designation?: SortOrder
     department?: SortOrder
@@ -34510,6 +34539,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -34547,6 +34577,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -34588,6 +34619,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -34625,6 +34657,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -34824,6 +34857,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34861,6 +34895,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34917,6 +34952,7 @@ export namespace Prisma {
     communicationEmail?: BytesNullableFilter<"Learner"> | Uint8Array | null
     password?: StringNullableFilter<"Learner"> | string | null
     profile_image?: StringNullableFilter<"Learner"> | string | null
+    image_id?: StringNullableFilter<"Learner"> | string | null
     organisation?: StringNullableFilter<"Learner"> | string | null
     designation?: StringNullableFilter<"Learner"> | string | null
     department?: StringNullableFilter<"Learner"> | string | null
@@ -35653,6 +35689,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -35690,6 +35727,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -35818,6 +35856,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35855,6 +35894,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37561,6 +37601,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -37598,6 +37639,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -37715,6 +37757,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37752,6 +37795,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37858,6 +37902,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -37895,6 +37940,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -37979,6 +38025,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38016,6 +38063,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38090,6 +38138,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -38127,6 +38176,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -38355,6 +38405,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38392,6 +38443,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38628,6 +38680,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -38665,6 +38718,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -38793,6 +38847,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38830,6 +38885,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39240,6 +39296,7 @@ export namespace Prisma {
     communicationEmail?: Uint8Array | null
     password?: string | null
     profile_image?: string | null
+    image_id?: string | null
     organisation?: string | null
     designation?: string | null
     department?: string | null
@@ -39335,6 +39392,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39372,6 +39430,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39409,6 +39468,7 @@ export namespace Prisma {
     communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image?: NullableStringFieldUpdateOperationsInput | string | null
+    image_id?: NullableStringFieldUpdateOperationsInput | string | null
     organisation?: NullableStringFieldUpdateOperationsInput | string | null
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null

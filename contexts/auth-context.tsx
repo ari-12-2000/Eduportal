@@ -9,7 +9,7 @@ export interface User {
   last_name: string
   email: string
   role: string
-  avatar?: string
+  profile_image?: string
   adminType?: string
   // qsnAttempts?: Record<number, { answer: string; isCorrect: boolean }>
   // quizId?:number,
