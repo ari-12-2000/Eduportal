@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className={cn("bg-white border-t py-3 px-4 text-center text-xs text-gray-500", (pathname === "/" || pathname.startsWith("/student")) ? "flex" : "hidden",)}>
       <div className="flex justify-between items-center max-w-7xl mx-auto">
-        <div>© 2023 EduPortal. All rights reserved.</div>
+        <div>© 2025 EduPortal. All rights reserved.</div>
         <div className="flex space-x-4">
           <a href="#" className="hover:text-gray-700">
             <span className="sr-only">Twitter</span>
