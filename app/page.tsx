@@ -65,7 +65,7 @@ export default function HomePage() {
               </Button>
               <Button
                 size="lg"
-                className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300"
+                className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={handleBrowseCatalog}
               >
                 <BookOpen className="mr-2 h-5 w-5" />
