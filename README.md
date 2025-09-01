@@ -1,4 +1,4 @@
-EduPortal (Coursera Clone) 
+EduPortal 
 • Developed a full stack robust, scalable, maintainable responsive educational web application involving 
 quizzes, self-paced courses for students, professionals. A learner’s dashboard tracking achievements of 
 professional learners. It has content with insightful animations, icons, accordions, loading skeletons, 
