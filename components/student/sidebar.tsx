@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect, type SetStateAction, type Dispatch } from "react"
-import { Home, LayoutDashboard, BookOpen, LogOut, X, LogIn, User, GraduationCap, ClipboardCheck } from "lucide-react"
+import { Home, LayoutDashboard, BookOpen, LogOut, X, LogIn} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname, useRouter } from "next/navigation"
@@ -169,16 +169,10 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
               active={isActive("/student/dashboard")}
             />
             <SidebarItem
-              href="/student/programs"
-              icon={GraduationCap}
-              text="Enrolled Track"
-              active={isActive("/student/programs")}
-            />
-            <SidebarItem
-              href="/student/quizzes"
-              icon={ClipboardCheck}
-              text="Quizzes"
-              active={isActive("/student/quizzes")}
+              href="/student/courses"
+              icon={BookOpen}
+              text="My Courses"
+              active={isActive("/student/courses")}
             />
 
           </nav>
