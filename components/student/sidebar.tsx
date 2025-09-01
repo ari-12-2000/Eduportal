@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect, type SetStateAction, type Dispatch } from "react"
-import { Home, LayoutDashboard, BookOpen, LogOut, X, LogIn, User } from "lucide-react"
+import { Home, LayoutDashboard, BookOpen, LogOut, X, LogIn, User, GraduationCap, ClipboardCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname, useRouter } from "next/navigation"
@@ -9,7 +9,7 @@ import { SidebarItem } from "@/components/sidebar-item"
 import { GlobalVariables } from "@/globalVariables"
 import { ProfilePhotoUpload } from "@/components/profile-photo-upload"
 import { toast } from "../ui/use-toast"
-
+import FallbackAvatar from "../FallbackAvatar"
 
 interface SidebarProps {
   isOpen: boolean
@@ -24,14 +24,14 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   // Add state for client-side rendering
   const [mounted, setMounted] = useState(false)
   const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false)
-  const profilePhoto= user?.profile_image ?? ""
+  const profilePhoto = user?.profile_image ?? ""
 
   // Only update the path on the client side after component mounts
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  
+
   if (!mounted) {
     // Don't render at all until after mount (prevents hydration mismatch)
     return null
@@ -79,14 +79,14 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
 
   const handlePhotoUpdate = async (photo: string, orgPhoto: File | null) => {
     if (photo) {
-      const updatedUser={...user!,profile_image:photo} 
-      setUser(updatedUser) 
+      const updatedUser = { ...user!, profile_image: photo }
+      setUser(updatedUser)
     }
     let url: string = ''
     if (orgPhoto)
       url = await uploadToDB(orgPhoto)
-    const updatedUser={...user!,profile_image:url} 
-    setUser(updatedUser) 
+    const updatedUser = { ...user!, profile_image: url }
+    setUser(updatedUser)
     localStorage.setItem("eduportal-user", JSON.stringify(updatedUser))
   }
 
@@ -142,7 +142,9 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
                     />
                   </div>
                 ) : (
-                  <User className="h-14 w-14 rounded-full bg-gray-200 p-3 text-gray-500 group-hover:bg-gray-300 transition-colors" />
+                  <div className="h-14 w-14 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-blue-300 transition-colors bg-transparent">
+                    <FallbackAvatar />
+                  </div>
                 )}
                 <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="text-white text-xs font-medium">Edit</span>
@@ -167,11 +169,18 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
               active={isActive("/student/dashboard")}
             />
             <SidebarItem
-              href="/student/courses"
-              icon={BookOpen}
-              text="My Courses"
-              active={isActive("/student/courses")}
+              href="/student/programs"
+              icon={GraduationCap}
+              text="Enrolled Track"
+              active={isActive("/student/programs")}
             />
+            <SidebarItem
+              href="/student/quizzes"
+              icon={ClipboardCheck}
+              text="Quizzes"
+              active={isActive("/student/quizzes")}
+            />
+
           </nav>
           <div className="px-2 mt-6">
             {user ? (
@@ -200,7 +209,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       <ProfilePhotoUpload
         isOpen={isPhotoUploadOpen}
         onClose={() => setIsPhotoUploadOpen(false)}
-        currentPhoto={user?.profile_image ??''}
+        currentPhoto={user?.profile_image ?? ''}
         onPhotoUpdate={handlePhotoUpdate}
       />
     </>
