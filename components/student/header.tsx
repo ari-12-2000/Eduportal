@@ -32,17 +32,24 @@ export function Header({ toggleSidebar }: HeaderProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="mr-2 text-gray-500 flex lg:hidden"
+          className="mr-2 text-gray-500 flex xl:hidden"
           onClick={toggleSidebar}
           aria-label="Open sidebar"
         >
           <Menu className="h-5 w-5" />
         </Button>
 
-        <div className={`md:hidden ${searchOpen ? "hidden" : "block"}`}>
+        <div className={`lg:hidden ${searchOpen ? "hidden" : "block"}`}>
           <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
             <span className="text-white font-bold">E</span>
           </div>
+        </div>
+
+        <div className="hidden ml-2 lg:flex items-center xl:hidden">
+            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
+              <span className="text-white font-bold">E</span>
+            </div>
+            <span className="ml-2 text-xl font-semibold text-gray-800">Eduportal</span>
         </div>
       </div>
 

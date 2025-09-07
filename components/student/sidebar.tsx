@@ -102,9 +102,9 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     <>
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-20 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out -translate-x-full xl:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
-          pathname === "/" || pathname.startsWith("/student") ? "block" : "hidden",
+          pathname === "/" || pathname.startsWith("/student") ? "fixed" : "hidden",
         )}
       >
         <div className="flex items-center justify-between h-16 px-4 border-b">
@@ -118,7 +118,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="xl:hidden"
               onClick={toggleSidebar}
               aria-label="Close sidebar"
             >

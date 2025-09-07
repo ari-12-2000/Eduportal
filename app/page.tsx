@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation"
 import { CoursesList } from "@/components/courses-list"
 import { useCourses } from "@/contexts/course-context"
 import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context"
+import Loading from "./loading"
 
 
  const categoryIcons = {
@@ -21,8 +23,8 @@ import Link from "next/link"
 
 export default function HomePage() {
   const router = useRouter()
-  const { courses, categories, filterCategory, setFilterCategory, loading } = useCourses();
-
+  const { courses, categories, filterCategory, setFilterCategory } = useCourses();
+ const {isLoading} = useAuth();
 
   const handleCategoryClick = (categoryName: string) => {
     console.log(categoryName);
@@ -35,8 +37,7 @@ export default function HomePage() {
       setFilterCategory("");
     router.push("/courses/search/")
   }
-
-  return (
+   return (
     <div className=" bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden">
@@ -110,12 +111,8 @@ export default function HomePage() {
               Choose from our wide range of categories and start your learning journey today
             </p>
           </div>
-          {loading? (<div className="grid grid-cols-4 lg:grid-cols-6 gap-6 mt-4">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-24 w-40 bg-black opacity-10 rounded-lg" />
-            ))}
-          </div>) :
-            (<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {categories.map((cat:{ category: string }) => {
                 const Icon = categoryIcons[cat.category as keyof typeof categoryIcons].icon || Code;
                 console.log(Icon);
@@ -140,8 +137,8 @@ export default function HomePage() {
                 )
               })}
               
-            </div>)// only this part is causing issue and last icon is loading
-          }
+            </div>
+          
         </section>
 
         {/* Featured Courses */}
@@ -159,7 +156,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {loading ? (
+          {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
                 <div
