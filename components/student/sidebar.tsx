@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect, type SetStateAction, type Dispatch } from "react"
-import { Home, LayoutDashboard, BookOpen, LogOut, X, LogIn} from "lucide-react"
+import { Home, LayoutDashboard, BookOpen, LogOut, X, LogIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { usePathname, useRouter } from "next/navigation"
@@ -10,6 +10,7 @@ import { GlobalVariables } from "@/globalVariables"
 import { ProfilePhotoUpload } from "@/components/profile-photo-upload"
 import { toast } from "../ui/use-toast"
 import FallbackAvatar from "../FallbackAvatar"
+import { useSession } from "next-auth/react"
 
 interface SidebarProps {
   isOpen: boolean
@@ -18,7 +19,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
-  const { user, logout, setUser } = useAuth()
+  const { user, logout, setUser, isLoading } = useAuth()
   const pathname = usePathname()
   const router = useRouter()
   // Add state for client-side rendering
@@ -98,6 +99,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     }
   }
 
+  const { data: session } = useSession()
   return (
     <>
       <aside
@@ -128,37 +130,47 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
         </div>
         <div className="pt-5 pb-4 overflow-y-auto">
           <div className="px-4 mb-6  flex justify-center">
-            <div className="inline-flex flex-col items-center ">
-              <button
-                onClick={handleProfilePhotoClick}
-                className="relative group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full"
-              >
-                {profilePhoto ? (
-                  <div className="h-14 w-14 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-blue-300 transition-colors">
-                    <img
-                      src={profilePhoto || "/placeholder.svg"}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
+            {isLoading ? (<div className="inline-flex flex-col items-center animate-pulse p-2 rounded-lg">
+              {/* Profile photo skeleton */}
+              <div className="h-14 w-14 rounded-full bg-gray-200 mb-2" />
+
+              {/* Name skeleton */}
+              <div className="h-4 w-24 bg-gray-200 rounded mb-1" />
+
+              {/* Role skeleton */}
+              <div className="h-3 w-16 bg-gray-200 rounded" />
+            </div>) :
+              (<div className="inline-flex flex-col items-center">
+                <button
+                  onClick={handleProfilePhotoClick}
+                  className="relative group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full"
+                >
+                  {profilePhoto ? (
+                    <div className="h-14 w-14 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-blue-300 transition-colors">
+                      <img
+                        src={profilePhoto || "/placeholder.svg"}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-14 w-14 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-blue-300 transition-colors bg-transparent">
+                      <FallbackAvatar />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="text-white text-xs font-medium">Edit</span>
                   </div>
-                ) : (
-                  <div className="h-14 w-14 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-blue-300 transition-colors bg-transparent">
-                    <FallbackAvatar />
-                  </div>
-                )}
-                <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">Edit</span>
+                </button>
+                <div className="mt-1">
+                  <p className="text-sm font-medium text-gray-900">
+                    {user?.first_name} {user?.last_name}
+                  </p>
+                  <p className={`mt-1 ${user ? "text-xs" : "text-sm"} text-center text-gray-500`}>
+                    {GlobalVariables.non_admin.role1}
+                  </p>
                 </div>
-              </button>
-              <div className="mt-1">
-                <p className="text-sm font-medium text-gray-900">
-                  {user?.first_name} {user?.last_name}
-                </p>
-                <p className={`mt-1 ${user ? "text-xs" : "text-sm"} text-center text-gray-500`}>
-                  {GlobalVariables.non_admin.role1}
-                </p>
-              </div>
-            </div>
+              </div>)}
           </div>
           <nav className="mt-2 px-2 space-y-1">
             <SidebarItem href="/" icon={Home} text="Home" active={isActive("/")} />
@@ -177,7 +189,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
 
           </nav>
           <div className="px-2 mt-6">
-            {user ? (
+            {session?.user ? (
               <Button
                 variant="ghost"
                 className="w-full justify-start text-gray-600 hover:bg-gray-50 hover:text-gray-900"
