@@ -13,7 +13,7 @@ import { GlobalVariables } from "@/globalVariables"
 import { usePathname } from "next/navigation"
 
 export function CoursesList({ courses }: { courses: Course[] | null }) {
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
   const pathname = usePathname()
   const enrolledCourseIDs = user?.enrolledCourseIDs || {}
   const learnerCompletedTopics = user?.completedTopics || {}
@@ -34,7 +34,7 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       {courses!.map((course) => {
         const { modules, topics, progress } = CourseDetail(course.programModules)
-        if (!(pathname?.startsWith("/dashboard") && progress == 100) && !(pathname?.startsWith("/student/courses") && !enrolledCourseIDs[Number(course.id)]))  
+        if (!(pathname?.startsWith("/dashboard") && progress == 100) && !(pathname?.startsWith("/student/courses") && !enrolledCourseIDs[Number(course.id)]))
           return (
             <Card
               key={course.id}
@@ -104,35 +104,37 @@ export function CoursesList({ courses }: { courses: Course[] | null }) {
                     <span>{topics} topics</span>
                   </div>
                 </div>
-               
-                  <>
-                    {enrolledCourseIDs[Number(course.id)] ? (
-                      <div className="mb-4">
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Progress</span>
-                          <span className="font-medium text-blue-600">{progress}%</span>
-                        </div>
-                        <Progress value={progress} className="h-2  [&>div]:bg-blue-600" />
+
+                <>
+                  {enrolledCourseIDs[Number(course.id)] ? (
+                    <div className="mb-4">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-600">Progress</span>
+                        <span className="font-medium text-blue-600">{progress}%</span>
                       </div>
-                    ) : (
-                      <div className="text-sm text-blue-600 mb-3">Not started</div>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold text-gray-900">
-                        {!enrolledCourseIDs[Number(course.id)] && <span>₹ {course.price!}</span>}
-                      </div>
-                      {enrolledCourseIDs[Number(course.id)] ? (
-                        <Link href={`/courses/${course.id}`}>
-                          <Button className="bg-violet-600 hover:bg-violet-700">Continue Learning</Button>
-                        </Link>
-                      ) : (
-                        <Link href={`/payment/${course.id}`}>
-                          <Button className="bg-green-600 hover:bg-green-700">Enroll Now</Button>
-                        </Link>
-                      )}
+                      <Progress value={progress} className="h-2  [&>div]:bg-blue-600" />
                     </div>
-                  </>
-                
+                  ) : (
+                    <div className="text-sm text-blue-600 mb-3">Not started</div>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <div className="text-2xl font-bold text-gray-900">
+                      {!enrolledCourseIDs[Number(course.id)] && <span>₹ {course.price!}</span>}
+                    </div>
+
+                    {enrolledCourseIDs[Number(course.id)] ? (
+                      <Link href={`/courses/${course.id}`}>
+                        <Button className="bg-violet-600 hover:bg-violet-700">Continue Learning</Button>
+                      </Link>
+                    ) : (
+                      <Link href={`/payment/${course.id}`}>
+                        <Button className="bg-green-600 hover:bg-green-700">Enroll Now</Button>
+                      </Link>
+                    )
+                    }
+                  </div>
+                </>
+
               </CardContent>
             </Card>
           )

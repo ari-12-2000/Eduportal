@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, CheckCircle2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { GlobalVariables } from "@/globalVariables"
 import { Eye, EyeOff } from "lucide-react"
+import { getSession } from "next-auth/react"
 
 export default function LoginPage() {
   const [loginData, setLoginData] = useState({ email: "", password: "" })
@@ -24,6 +25,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
 
   const { login, signup, isLoading } = useAuth()
+
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -33,16 +35,15 @@ export default function LoginPage() {
 
     const result = await login(loginData.email, loginData.password)
     if (result.success) {
-      const storedUser = localStorage.getItem("eduportal-user")
-   
-      if (storedUser) {
-        const user = JSON.parse(storedUser)
-        if (user.role === "admin") {
-          router.push("/admin")
-        } else {
-          router.push("/")
-        }
+      setSuccess(result.message || "Logged in successfully")
+      const session = await getSession()
+
+      if (session?.user.role === "admin") {
+        router.push("/admin")
+      } else {
+        router.push("/")
       }
+
     } else {
       setError(result.message || "Login failed")
     }
@@ -58,13 +59,13 @@ export default function LoginPage() {
     if (
       !first_name.trim() ||
       !last_name.trim() ||
-      !email.trim() 
+      !email.trim()
     ) {
       setError("All fields are required.")
       return
     }
-    
-    if(!password.trim() && role===`${GlobalVariables.non_admin.role1}`){
+
+    if (!password.trim() && role === `${GlobalVariables.non_admin.role1}`) {
       setError("Password is required.")
     }
 
@@ -115,9 +116,9 @@ export default function LoginPage() {
             </Alert>
           )}
           {success && (
-            <Alert className="mb-4 border-green-200 bg-green-50">
-              <AlertCircle className="h-4 w-4 text-green-600" />
-              <AlertDescription className="text-green-800">{success}</AlertDescription>
+            <Alert className="mb-4 border-green-100 bg-green-50 text-green-800">
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <AlertDescription className="font-medium">{success}</AlertDescription>
             </Alert>
           )}
 

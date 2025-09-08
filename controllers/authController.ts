@@ -1,21 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
-import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import { prisma } from '@/lib/prisma';
-import { Admin, Program } from "@/lib/generated/prisma";
+import { Admin} from "@/lib/generated/prisma";
 import { GlobalVariables } from "@/globalVariables";
 
-const JWT_SECRET = process.env.JWT_SECRET!
-
 export class AuthController {
-  static async login(req: NextRequest) {
+  static async getUserData(email:string) {
     try {
-      const { email, password } = await req.json()
-
-      if (!email?.trim() || !password?.trim()) {
-        return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
-      }
-
       let learner = await prisma.learner.findUnique({
         where: { email },
         include: {
@@ -126,10 +117,6 @@ export class AuthController {
       }
 
       const user = admin || learner
-      const isPasswordValid = await bcrypt.compare(password, user!.password!)
-      if (!isPasswordValid) {
-        return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
-      }
 
       if (userType === GlobalVariables.admin) {
         await prisma.admin.update({
@@ -137,17 +124,6 @@ export class AuthController {
           data: { lastLogin: new Date() },
         })
       }
-
-      const token = jwt.sign(
-        {
-          id: user!.id,
-          email: user!.email,
-          role: userType,
-          adminType: userType === GlobalVariables.admin ? (user as Admin).adminType : undefined,
-        },
-        JWT_SECRET,
-        { expiresIn: "7d" }
-      )
 
       const userData = {
         id: user!.id,
@@ -166,7 +142,7 @@ export class AuthController {
         attemptedQuizzes
       }
 
-      return NextResponse.json({ success: true, user: userData, token }, { status: 200 })
+      return NextResponse.json({ success: true, user: userData }, { status: 200 })
 
     } catch (error) {
       console.error("Login error:", error)
@@ -216,37 +192,15 @@ export class AuthController {
         },
       })
 
-      const token = jwt.sign(
-        {
-          id: newUser.id,
-          email: newUser.email,
-          role
-        },
-        JWT_SECRET,
-        { expiresIn: "7d" }
-      )
-
-
       const userData = {
         id: newUser.id,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
         email: newUser.email,
         role,
-        profile_image: newUser.profile_image || "",
-        enrolledCourseIDs: {},
-        completedPrograms: {},
-        completedModules: {},
-        completedResources: {},
-        completedTopics: {},
-        completedQuizzes: {},
-        attemptedQuizzes: {},
       }
 
       return NextResponse.json({
         success: true,
         user: userData,
-        token,
         message: "Account created successfully",
       }, { status: 201 })
 

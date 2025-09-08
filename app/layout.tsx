@@ -5,6 +5,8 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "@/components/ui/toaster";
 import CourseProviderWrapper from "@/contexts/CourseProviderWrapper";
 import LayoutClient from "@/components/layout-client"; // new name
+import SessionProviderWrapper from "@/contexts/SessionProviderWrapper";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
-          <CourseProviderWrapper>
-            
+         <SessionProviderWrapper>
+          <AuthProvider>
+            <CourseProviderWrapper>
+
               <LayoutClient>{children}</LayoutClient>
-           
-          </CourseProviderWrapper>
-        </AuthProvider>
+
+            </CourseProviderWrapper>
+          </AuthProvider>
+        </SessionProviderWrapper>
         <Toaster />
       </body>
     </html>

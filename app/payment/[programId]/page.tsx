@@ -25,6 +25,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
 
   const handlePayment = async (price: string) => {
     setIsProcessing(true)
+    setLoading(true);
     try {
       const res1 = await fetch("/purchase", {
         method: "POST",
@@ -49,7 +50,6 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
         handler: async (response: any) => {
           console.log("Payment successful", response)
           try {
-            setLoading(true);
             const res2 = await fetch("/courses/student", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -64,7 +64,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
               enrolledCourseIDs: { ...user!.enrolledCourseIDs, [programId]: true },
             };
             setUser(updatedUser);
-            localStorage.setItem("eduportal-user", JSON.stringify(updatedUser));
+          
             router.push(`/courses/${programId}?enrolled=true`)
           } catch (err) {
             toast({
@@ -98,16 +98,12 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
   const course = courses?.find((course: Course) => course.id === Number(programId))
 
   useEffect(() => {
-    if (!user) {
-      router.replace("/login");
-      return;
-    }
     if (!course) {
       router.replace("/courses"); // or "/404"
       return;
     }
     setIsChecking(false);
-  }, [user, course, router]);
+  }, [course, router]);
 
    console.log(isChecking);
   if (isChecking || loading) {
