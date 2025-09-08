@@ -23,22 +23,10 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   // Add state for client-side rendering
-  const [mounted, setMounted] = useState(false)
   const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false)
   const profilePhoto = user?.profile_image ?? ""
 
-  // Only update the path on the client side after component mounts
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-
-  if (!mounted) {
-    // Don't render at all until after mount (prevents hydration mismatch)
-    return null
-  }
-
-  const isActive = (path: string) => {
+ const isActive = (path: string) => {
     return pathname === path
   }
 
