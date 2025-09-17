@@ -74,6 +74,7 @@ model Learner {
   measureProgress    MeasureProgress[]
   quizAttempts       QuizAttempt[]     @relation("LearnerAttempts")
   resourceViews      ResourceView[]
+  passwordResets     PasswordReset[]
 
   @@map("learners")
 }
@@ -105,7 +106,7 @@ model Program {
   isActive         Boolean           @default(true) @map("is_active")
   isDeleted        Boolean           @default(false) @map("is_deleted")
   createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz(6)
   maxParticipants  Int?              @map("max_participants")
   quizzes          QuizAssignment[]
@@ -371,6 +372,15 @@ model Leaderboard {
 
   @@id([programId, learnerId])
   @@map("leaderboard")
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expires   DateTime
+  learnerId Int      @map("learner_id")
+  learner   Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 enum AdminType {

@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { BookOpen, FileText, Star, Users, Shield, CreditCard, ArrowLeft, CheckCircle } from "lucide-react"
+import Image from "next/image"
 
 
 const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => {
@@ -64,7 +65,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
               enrolledCourseIDs: { ...user!.enrolledCourseIDs, [programId]: true },
             };
             setUser(updatedUser);
-          
+
             router.push(`/courses/${programId}?enrolled=true`)
           } catch (err) {
             toast({
@@ -74,8 +75,8 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
             })
             router.push("/courses/search")
             setLoading(false)
-            
-          } 
+
+          }
         },
         theme: {
           color: "#3b82f6",
@@ -105,7 +106,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
     setIsChecking(false);
   }, [course, router]);
 
-   console.log(isChecking);
+  console.log(isChecking);
   if (isChecking || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
@@ -172,12 +173,15 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
 
               <CardContent className="p-8">
                 {/* Instructor Info */}
-                <div className="flex items-center mb-6 p-4 bg-gray-50 rounded-lg">
-                  <img
-                    src={course!.instructorAvatar || "/placeholder.svg?height=60&width=60"}
-                    alt={course!.instructor}
-                    className="w-12 h-12 rounded-full mr-4 border-2 border-white shadow-md"
-                  />
+                <div className="flex relative sm: items-center mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="relative w-12 aspect-square mr-4">
+                    <Image
+                      src={course!.instructorAvatar || "/placeholder.svg"}
+                      alt={course!.instructor}
+                      fill
+                      className="rounded-full object-cover object-top"
+                    />
+                  </div>
                   <div>
                     <p className="font-semibold text-gray-900">Instructor</p>
                     <p className="text-gray-700 font-medium">{course!.instructor}</p>

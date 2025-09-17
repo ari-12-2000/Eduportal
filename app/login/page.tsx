@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import validator from "validator";
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
@@ -33,19 +33,35 @@ export default function LoginPage() {
     setError("")
     setSuccess("")
 
-    const result = await login(loginData.email, loginData.password)
-    if (result.success) {
-      setSuccess(result.message || "Logged in successfully")
-      const session = await getSession()
+    const { email, password } = loginData
 
-      if (session?.user.role === "admin") {
-        router.push("/admin")
+    if (!email.trim() || !password.trim()) {
+      setError("Email and password are required.")
+      return
+    }
+
+    if (!validator.isEmail(email)) {
+      setError("Invalid email format.")
+      return
+    }
+
+    try {
+      const result = await login(loginData.email, loginData.password)
+      if (result.success) {
+        setSuccess(result.message || "Logged in successfully")
+        const session = await getSession()
+
+        if (session?.user.role === "admin") {
+          router.push("/admin")
+        } else {
+          router.push("/")
+        }
+
       } else {
-        router.push("/")
+        setError(result.message || "Login failed")
       }
-
-    } else {
-      setError(result.message || "Login failed")
+    } catch (err) {
+      setError("Login failed due to network error")
     }
   }
 
@@ -69,29 +85,37 @@ export default function LoginPage() {
       setError("Password is required.")
     }
 
+    if (!validator.isEmail(email)) {
+      setError("Invalid email format.")
+      return
+    }
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/
     if (!passwordRegex.test(password)) {
       setError("Password must be at least 8 characters long and include uppercase, lowercase, and a special character.")
       return
     }
 
-    const result = await signup(
-      first_name.trim(),
-      last_name.trim(),
-      email.trim(),
-      password.trim(),
-      signupData.role
-    )
-    if (result.success) {
-      setSuccess(result.message || "Account created successfully")
-      // Redirect based on role
-      if (signupData.role === `${GlobalVariables.non_admin.role2}`) {
-        router.push("/guest")
+    try {
+      const result = await signup(
+        first_name.trim(),
+        last_name.trim(),
+        email.trim(),
+        password.trim(),
+        signupData.role
+      )
+      if (result.success) {
+        setSuccess(result.message || "Account created successfully")
+        // Redirect based on role
+        if (signupData.role === `${GlobalVariables.non_admin.role2}`) {
+          router.push("/guest")
+        } else {
+          router.push("/")
+        }
       } else {
-        router.push("/")
+        setError(result.message || "Signup failed")
       }
-    } else {
-      setError(result.message || "Signup failed")
+    } catch (err) {
+      setError("Signup failed due to network error")
     }
   }
 
@@ -129,6 +153,7 @@ export default function LoginPage() {
             </TabsList>
 
             <TabsContent value="login">
+              <h2 className="sr-only">Login Form</h2>
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
@@ -165,6 +190,7 @@ export default function LoginPage() {
             </TabsContent>
 
             <TabsContent value="signup">
+              <h2 className="sr-only">Signup Form</h2>
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-first_name">First Name</Label>
@@ -205,7 +231,7 @@ export default function LoginPage() {
                 {signupData.role === `${GlobalVariables.non_admin.role1}` &&
                   (<div className="space-y-2 relative">
                     <Label htmlFor="signup-password">Password</Label>
-                    <p className="text-xs text-muted-foreground mb-1">
+                    <p id="password-hint" className="text-xs text-muted-foreground mb-1">
                       i) At least 8 characters<br />
                       ii) Include uppercase, lowercase, and a special character
                     </p>
@@ -215,6 +241,7 @@ export default function LoginPage() {
                       placeholder="Enter your password"
                       value={signupData.password}
                       onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                      aria-describedby="password-hint"
                       required
                     />
                     <button

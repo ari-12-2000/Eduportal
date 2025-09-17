@@ -1,11 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from '@/lib/prisma';
-import { Admin} from "@/lib/generated/prisma";
+import { Admin } from "@/lib/generated/prisma";
 import { GlobalVariables } from "@/globalVariables";
+import crypto from "crypto";
+import { render } from "@react-email/render";
+import ResetPasswordEmail from "@/app/emails/ResetPasswordEmail";
+import nodemailer from "nodemailer";
+import React from "react";
 
 export class AuthController {
-  static async getUserData(email:string) {
+  static async getUserData(email: string) {
     try {
       let learner = await prisma.learner.findUnique({
         where: { email },
@@ -96,7 +101,7 @@ export class AuthController {
             ? attempt.score.toNumber()
             : attempt.score ?? 0
 
-          console.log(attempt.status)  
+          console.log(attempt.status)
           if (attempt.status === 'Completed')
             completedQuizzes[attempt.assignmentId] = score
           else if (attempt.status === 'In progress') {
@@ -104,12 +109,12 @@ export class AuthController {
               start: attempt.startedAt,
               score,
             }
-            let rules:any=attempt.assignment.rules
-            if(rules.time_limit_seconds){
-               let timeLimit=rules.time_limit_seconds
-               if(attempt.startedAt<new Date(Date.now() - timeLimit * 1000))  
-                 completedQuizzes[attempt.assignmentId] = score
-              }
+            let rules: any = attempt.assignment.rules
+            if (rules.time_limit_seconds) {
+              let timeLimit = rules.time_limit_seconds
+              if (attempt.startedAt < new Date(Date.now() - timeLimit * 1000))
+                completedQuizzes[attempt.assignmentId] = score
+            }
           }
         })
 
@@ -166,7 +171,7 @@ export class AuthController {
 
       const isGuest = role === GlobalVariables.non_admin.role2
 
-      if (!isGuest && !password?.trim()) {
+      if (!isGuest && !password.trim()) {
         return NextResponse.json({ error: "Password is required" }, { status: 400 })
       }
 
@@ -210,141 +215,101 @@ export class AuthController {
     }
   }
 
-  // static async refreshUser(req: NextRequest) {
-  //   try {
-  //     const token = req.headers.get("Authorization")?.split(" ")[1]
-  //     if (!token) {
-  //       return NextResponse.json({ error: "No token provided" }, { status: 401 })
-  //     }
-  //     const decoded = jwt.verify(token, JWT_SECRET) as { id: number, email: string, role: string, adminType?: string }
-  //     const learner = await prisma.learner.findUnique({
-  //       where: { id: decoded.id },
-  //       include: {
-  //         enrollments: {
-  //           include: {
-  //             program: {
-  //               include: {
-  //                 programModules: {
-  //                   include: {
-  //                     module: {
-  //                       include: {
-  //                         moduleTopics: {
-  //                           select: { topicId: true },
-  //                         },
-  //                       },
-  //                     },
-  //                   },
-  //                 },
-  //                 enrollments: {
-  //                   select: { learnerId: true },
-  //                 },
-  //                 quizzes: {
-  //                   select: {
-  //                     id: true,
-  //                     title: true,
-  //                     uniqueLinkToken: true, // Include unique link token for quizzes
-  //                     rules: true // Include rules for quizzes
-  //                   }
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //         measureProgress: {
-  //           include: {
-  //             program: {
-  //               select: {
-  //                 id: true
-  //               }
-  //             },
-  //             module: {
-  //               select: {
-  //                 id: true
-  //               }
-  //             },
-  //             resource: {
-  //               select: {
-  //                 id: true
-  //               }
-  //             },
-  //             topic: {
-  //               select: {
-  //                 id: true
-  //               }
-  //             },
-  //           }
-  //         },
-  //         quizAttempts: {
-  //           select: {
-  //             assignmentId: true,
-  //             status: true,
-  //           }
-  //         }
-  //       },
-  //     })
+  static async createPasswordReset(req: NextRequest) {
+    try {
+      const { email } = await req.json();
+      const learner = await prisma.learner.findUnique({ where: { email } });
+      if (!learner) return NextResponse.json({ error: "Invalid Credentials" }, { status: 404 });
+      const rawToken = crypto.randomBytes(32).toString("hex");
+      const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+      const expires = new Date(Date.now() + 3600_000); // 1 hour
 
-  //     let userType = GlobalVariables.non_admin.role1
-  //     let enrolledCourses: Course[] = []
-  //     let enrolledCourseIDs: number[] = []
-  //     let completedPrograms: number[] = []
-  //     let completedModules: number[] = []
-  //     let completedResources: number[] = []
-  //     let completedTopics: number[] = []
-  //     let completedQuizzes: number[] = []
-  //     let attemptedQuizzes: number[] = []
+      await prisma.passwordReset.create({
+        data: {
+          learnerId: learner.id,
+          token: hashedToken,
+          expires,
+        },
+      });
+      const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${rawToken}`;
+      console.log("Reset Link:", resetLink);
+      await this.sendResetEmail(learner.email, learner.first_name, resetLink);
 
-  //     if (!learner) {
-  //       return NextResponse.json({ error: "User not found" }, { status: 404 })
-  //     }
+      return NextResponse.json(
+        { message: "Password reset email sent" },
+        { status: 200 }
+      );
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      return NextResponse.json(
+        { error: "Internal server error" },
+        { status: 500 }
+      );
+    }
+  }
 
-  //     enrolledCourses = learner.enrollments.map(e => ({
-  //       ...e.program,
-  //       price: e.program.price !== null ? e.program.price.toString() : null
-  //     }))
-  //     enrolledCourseIDs = learner.enrollments.map(e => e.program.id)
-  //     learner.measureProgress.forEach((progress: any) => {
-  //       if (progress.program?.id) {
-  //         completedPrograms.push(progress.program.id)
-  //       }
-  //       if (progress.module?.id) {
-  //         completedModules.push(progress.module.id)
-  //       }
-  //       if (progress.resource?.id) {
-  //         completedResources.push(progress.resource.id)
-  //       }
-  //       if (progress.topic?.id) {
-  //         completedTopics.push(progress.topic.id)
-  //       }
-  //     })
+  static async sendResetEmail(userEmail: string, userName: string, resetLink: string) {
+    try {
+      const emailHtml = await render(
+        React.createElement(ResetPasswordEmail, { userName, resetLink })
+      );
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
 
-  //     learner.quizAttempts.forEach((attempt: any) => {
-  //       if (attempt.status === 'Completed')
-  //         completedQuizzes.push(attempt.assignmentId)
-  //       else if (attempt.status === 'In progress')
-  //         attemptedQuizzes.push(attempt.assignmentId)
-  //     })
-  //     const userData = {
-  //       id: learner.id,
-  //       email: learner.email,
-  //       first_name: learner.first_name,
-  //       last_name: learner.last_name,
-  //       profile_image: learner.profile_image || "",
-  //       role: userType,
-  //       enrolledCourses,
-  //       enrolledCourseIDs,
-  //       completedPrograms,
-  //       completedModules,
-  //       completedResources,
-  //       completedTopics,
-  //       completedQuizzes,
-  //       attemptedQuizzes
-  //     }
+      await transporter.sendMail({
+        from: '"Edu-Portal" <no-reply@eduportal.com>',
+        to: userEmail,
+        subject: "Reset your password",
+        html: emailHtml,
+      });
 
-  //     return NextResponse.json({ user: userData }, { status: 200 })
+      return { success: true, message: "Reset email sent" };
+    } catch (error: any) {
+      throw new Error(error);
+    }
 
-  //   } catch (error) {
-  //     console.error("Refresh user error:", error)
-  //     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
-  //   }
-  // }
+  }
+
+  static async resetPassword(req: NextRequest) {
+    try {
+      const { token, newPassword } = await req.json()
+      if (!token || !newPassword) {
+        return NextResponse.json({ error: "All fields are required" }, { status: 400 })
+      }
+      const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+      const resetEntry = await prisma.passwordReset.findFirst({
+        where: {
+          token: hashedToken,
+          expires: { gt: new Date() },
+        },
+        include: { learner: true } // get learner info safely from DB
+      });
+
+      if (!resetEntry || !resetEntry.learner) { return NextResponse.json({ error: "Invalid or expired reset token" }, { status: 409 }) }
+
+      const hash = await bcrypt.hash(newPassword, 10);
+      await prisma.learner.update({
+        where: { id: resetEntry.learner.id },
+        data: { password: hash },
+      })
+
+      await prisma.passwordReset.deleteMany({ where: { learnerId: resetEntry.learner.id } });
+
+      return NextResponse.json({ sucess: true, message: "Password reset successful" }, { status: 200 })
+
+    } catch (error) {
+      console.error("Reset password error:", error)
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    }
+  }
+
+
+
+
 }

@@ -4,6 +4,7 @@ import { GlobalVariables } from "@/globalVariables"
 import { User } from "@/types/user"
 import { createContext, useContext, useState, useEffect, type ReactNode, SetStateAction, Dispatch } from "react"
 import { signIn, signOut, useSession } from "next-auth/react"
+import { toast } from "@/components/ui/use-toast"
 
 interface AuthContextType {
   user: User | null
@@ -30,14 +31,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!session?.user?.email) { setIsLoading(false); return }
     const fetchData = async () => {
       try {
-        const res = await fetch(`/auth/userData?email=${session?.user?.email}`)
+        const res = await fetch(`/api/auth/userData?email=${session?.user?.email}`)
         const data = await res.json()
         if (!res.ok)
           throw new Error(data.error)
         setUser(data.user)
 
-      } catch (error) {
+      } catch (error:any) {
         console.error("Failed to fetch user data:", error)
+        signOut({ redirect: false })
+        toast({
+        title: "Failed",
+        description: "Failed to fetch user data",
+        variant: "destructive",
+      });
+
       } finally {
         setIsLoading(false)   // ✅ Loading properly reset hobe
       }
@@ -61,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response?.error) {
         let message = ""
-        // NextAuth শুধু string দেবে, তাই নিজের map বানাতে হবে
+        
         switch (response.error) {
           case "CredentialsSignin":
             message = "Invalid credentials"
@@ -75,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           default:
             message = "Unexpected error. Please try again"
         }
+        setIsLoading(false);
         return { success: false, message };
       }
       // success
@@ -90,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
 
     try {
-      const response = await fetch("/auth/signup", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return response2
       } else {
         setIsLoading(false)
-        return { success: false, message: data.error }
+        return { success: false, message: data.error.message }
       }
     } catch (error) {
       setIsLoading(false)

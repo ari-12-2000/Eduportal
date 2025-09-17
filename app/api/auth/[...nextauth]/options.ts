@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
           if (!learner) {
             admin = await prisma.admin.findUnique({ where: { email: credentials.email } })
             if (!admin) {
-              throw new Error("Invalid credentials")
+              return null;
             }
             userType = GlobalVariables.admin
           }
@@ -34,12 +34,12 @@ export const authOptions: NextAuthOptions = {
           const user = admin || learner
           const isPasswordValid = await bcrypt.compare(credentials.password, user!.password!)
           if (!isPasswordValid) {
-            throw new Error("Invalid credentials")
+           return null;
           }
 
           if (userType === GlobalVariables.admin) {
             await prisma.admin.update({
-              where: { email: credentials.identifier.password },
+              where: { email: credentials.email },
               data: { lastLogin: new Date() },
             })
           }
@@ -53,8 +53,7 @@ export const authOptions: NextAuthOptions = {
           return userData
 
         } catch (err) {
-          console.log(err)
-          throw new Error()
+          return null;
         }
       }
     })

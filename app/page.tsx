@@ -7,9 +7,6 @@ import { CoursesList } from "@/components/courses-list"
 import { useCourses } from "@/contexts/course-context"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
-import Loading from "./loading"
-
-
  const categoryIcons = {
     "Web Development": { icon: Code, color: "bg-blue-500" },
     "UI/UX Design": { icon: Palette, color: "bg-purple-500" },
@@ -113,31 +110,31 @@ export default function HomePage() {
           </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {categories.map((cat:{ category: string }) => {
-                const Icon = categoryIcons[cat.category as keyof typeof categoryIcons].icon || Code;
-                console.log(Icon);
-                return (
-                  <Card
-                    key={cat.category}
-                    className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md group"
-                    onClick={() => handleCategoryClick(cat.category)}
-                  >
-                    <CardContent className="p-6 text-center">
-                      
-                      <div
-                        className={`w-16 h-16 ${categoryIcons[cat.category as keyof typeof categoryIcons].color ?? 'red'} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        <Icon className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-                        {cat.category}
-                      </h3>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-              
-            </div>
+            {categories.map((cat: { category: string }) => {
+              const Icon = categoryIcons[cat.category as keyof typeof categoryIcons].icon || Code;
+              console.log(Icon);
+              return (
+                <Card
+                  key={cat.category}
+                  className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md group"
+                  onClick={() => handleCategoryClick(cat.category)}
+                >
+                  <CardContent className="p-6 text-center">
+
+                    <div
+                      className={`w-16 h-16 ${categoryIcons[cat.category as keyof typeof categoryIcons].color ?? 'red'} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <Icon className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                      {cat.category}
+                    </h3>
+                  </CardContent>
+                </Card>
+              )
+            })}
+
+          </div>
           
         </section>
 

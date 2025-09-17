@@ -1,12 +1,13 @@
 "use client"
 import Loading from "@/app/courses/[programId]/[moduleId]/[topicId]/loading"
 import { useEffect, useRef, useState } from "react"
-import { useAuth, User } from "@/contexts/auth-context"
+import { useAuth} from "@/contexts/auth-context"
 import VideoPlayer from "./videoPlayer"
 import DocumentViewer from "./documentViewer"
 import { toast } from "./ui/use-toast"
 import { CheckCircle } from "lucide-react"
 import { Resource } from "@/lib/generated/prisma"
+import { User } from "@/types/user"
 
 
 export default function TopicResourceRenderer({ topicId, topics, moduleId, resource, resources }: { topicId: string, topics: number[], moduleId: string, resource: Resource, resources: any }) {
@@ -152,13 +153,12 @@ export default function TopicResourceRenderer({ topicId, topics, moduleId, resou
           updatedUser={...user!, completedResources: {...completedResources, [resource.id]:true}}
         }
         setUser(updatedUser!)
-        localStorage.setItem('eduportal-user',JSON.stringify(updatedUser!))
 
       } catch (error: any) {
         setMarkedCompleted(false);
         toast({
           title: "Failed", 
-          description: error.message || "Something went wrong.",
+          description: "Couldn't mark progress",
           variant: "destructive",
         });
         console.error("Error in handleMarkProgress:", error);

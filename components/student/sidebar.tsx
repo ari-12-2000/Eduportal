@@ -9,13 +9,12 @@ import { SidebarItem } from "@/components/sidebar-item"
 import { GlobalVariables } from "@/globalVariables"
 import { ProfilePhotoUpload } from "@/components/profile-photo-upload"
 import { toast } from "../ui/use-toast"
-import FallbackAvatar from "../FallbackAvatar"
+import FallbackAvatar from "@/components/FallbackAvatar"
 import { useSession } from "next-auth/react"
 
 interface SidebarProps {
   isOpen: boolean
   toggleSidebar?: () => void
-  setSidebarOpen: Dispatch<SetStateAction<boolean>>
 }
 
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
@@ -59,7 +58,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       console.error("Upload failed:", err);
       toast({
         title: "Failed",
-        description: "Couldn't update photo. Try again after sometime:",
+        description: "Couldn't update photo.",
         variant: "destructive",
       });
       return "";
@@ -76,7 +75,6 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       url = await uploadToDB(orgPhoto)
     const updatedUser = { ...user!, profile_image: url }
     setUser(updatedUser)
-    localStorage.setItem("eduportal-user", JSON.stringify(updatedUser))
   }
 
   const handleProfilePhotoClick = () => {
