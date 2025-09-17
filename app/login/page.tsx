@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { GlobalVariables } from "@/globalVariables"
 import { Eye, EyeOff } from "lucide-react"
 import { getSession } from "next-auth/react"
+import Link from "next/link";
 
 export default function LoginPage() {
   const [loginData, setLoginData] = useState({ email: "", password: "" })
@@ -179,6 +180,7 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-9 text-gray-500 hover:text-gray-800"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -186,7 +188,9 @@ export default function LoginPage() {
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Signing in..." : "Sign in"}
                 </Button>
+
               </form>
+              <Link href="/forget-password" className="text-sm text-blue-600 hover:underline mt-2 block text-right">Forgot password?</Link>
             </TabsContent>
 
             <TabsContent value="signup">
@@ -248,11 +252,12 @@ export default function LoginPage() {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-[4.7rem] text-gray-500 hover:text-gray-800"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>)}
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="signup-role">Account Type</Label>
                   <Select
                     value={signupData.role}
@@ -266,7 +271,7 @@ export default function LoginPage() {
                       <SelectItem value={GlobalVariables.non_admin.role2}>{GlobalVariables.non_admin.role2}</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Creating account..." : "Create account"}
                 </Button>
