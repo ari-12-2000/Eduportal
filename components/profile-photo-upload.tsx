@@ -220,7 +220,7 @@ export function ProfilePhotoUpload({ isOpen, onClose, onPhotoUpdate }: ProfilePh
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 md:p-6 border-b">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-900">Profile photoe</h2>
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900">Profile photo</h2>
           <button onClick={onClose} aria-label="Close" ref={closeBtnRef} className="p-2">
             <X className="h-5 w-5" />
           </button>
