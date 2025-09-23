@@ -10,16 +10,16 @@ import { toast } from "./ui/use-toast"
 interface ProfilePhotoUploadProps {
   isOpen: boolean
   onClose: () => void
-  currentPhoto?: string
   onPhotoUpdate: (photo: string, file: File | null) => void
 }
 
-export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdate }: ProfilePhotoUploadProps) {
+export function ProfilePhotoUpload({ isOpen, onClose, onPhotoUpdate }: ProfilePhotoUploadProps) {
+  const { user, setUser } = useAuth();
+  const currentPhoto= user?.profile_image ?? '';
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(currentPhoto || null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [orgPhoto, setOrgPhoto] = useState<File | null>(null)
-  const { user, setUser } = useAuth();
   const modalRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -174,6 +174,8 @@ export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdat
   }
 
   const handleDelete = async () => {
+    setSelectedPhoto("")
+    console.log('Deleted');
     if (!currentPhoto)
       return
     try {
@@ -184,13 +186,15 @@ export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdat
         }
       );
       const data = await response.json();
-      if (!response.ok)
+      if (!response.ok){
+        setSelectedPhoto(user!.profile_image ?? null);
         throw new Error(data.error)
+      }
       const updatedUser = { ...user!, profile_image: '' }
       setUser(updatedUser)
       setSelectedPhoto(null)
       setOrgPhoto(null)
-      onPhotoUpdate("", null)
+      onPhotoUpdate("", null)// user data update
     } catch (err: any) {
       toast({
         title: "Failed",
@@ -268,7 +272,7 @@ export function ProfilePhotoUpload({ isOpen, onClose, currentPhoto, onPhotoUpdat
               <button
                 type="button"
                 onClick={handleDelete}
-                className="flex-1 md:flex-none inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={"flex-1 md:flex-none inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete

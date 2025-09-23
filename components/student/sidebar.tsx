@@ -201,7 +201,6 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       <ProfilePhotoUpload
         isOpen={isPhotoUploadOpen}
         onClose={() => setIsPhotoUploadOpen(false)}
-        currentPhoto={user?.profile_image ?? ''}
         onPhotoUpdate={handlePhotoUpdate}
       />
     </>
