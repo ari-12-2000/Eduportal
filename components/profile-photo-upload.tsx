@@ -23,6 +23,7 @@ export function ProfilePhotoUpload({ isOpen, onClose, onPhotoUpdate }: ProfilePh
   const modalRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
+    console.log(currentPhoto);
     return () => {
       if (selectedPhoto?.startsWith("blob:")) {
         URL.revokeObjectURL(selectedPhoto)
