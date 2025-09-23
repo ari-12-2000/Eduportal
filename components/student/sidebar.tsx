@@ -61,7 +61,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
         description: "Couldn't update photo.",
         variant: "destructive",
       });
-      return "";
+      return user?.profile_image ?? "";
     }
   }
 
