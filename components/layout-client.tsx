@@ -15,10 +15,10 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
   return (
     <div className='bg-gray-50 flex'>
-      <Sidebar isOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
-      <div className={cn("flex-1 flex flex-col", (pathname === "/" || pathname.startsWith("/student")) ? "xl:ml-64" :"")}>
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <div className={cn("flex-1", (pathname === "/" || pathname.startsWith("/student")) ? "xl:ml-64" :"")}>
         <Header toggleSidebar={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main className="p-4 md:p-6">
           {children}
         </main>
         <Footer />

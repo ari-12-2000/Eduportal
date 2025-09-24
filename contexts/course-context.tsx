@@ -36,10 +36,9 @@ export function CourseProvider({
     if (previousPath?.startsWith("/courses/search") && filterCategory) {
       setFilterCategory("");
     }
-    // if (previousPath?.startsWith("/payment/") && loading) {
-    //   console.log(loading);
-    //   setLoading(false);
-    // }
+    if (previousPath?.startsWith("/payment/") && loading) {
+      setLoading(false);
+    }
   }, [pathname, previousPath, filterCategory, loading]);
 
   return (

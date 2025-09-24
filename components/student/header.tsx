@@ -27,7 +27,7 @@ export function Header({ toggleSidebar }: HeaderProps) {
   }
 
   return (
-    <header className={cn("bg-white border-b px-4 py-2 items-center justify-between z-30  sticky top-0 shadow-sm", (pathname === "/" || pathname.startsWith("/student")) ? "flex" : "hidden",)}>
+    <header className={cn("flex bg-white border-b px-4 py-2 items-center justify-between z-30  sticky top-0 shadow-sm", (pathname === "/" || pathname.startsWith("/student")) ? "flex" : "hidden")}>
       <div className="flex items-center">
         <Button
           variant="ghost"

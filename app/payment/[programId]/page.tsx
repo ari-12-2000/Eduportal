@@ -118,9 +118,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-
+    <>
       {/* Header */}
       <div className="bg-white shadow-sm border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -142,6 +140,8 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
           </div>
         </div>
       </div>
+
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
@@ -308,7 +308,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
