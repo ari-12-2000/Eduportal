@@ -122,7 +122,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
       {/* Header */}
-      <div className="bg-white shadow-sm border-b sticky top-0 z-10">
+      <div className="bg-white shadow-sm border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-start space-x-4">
