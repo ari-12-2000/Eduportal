@@ -99,7 +99,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto py-12">
         {/* Categories */}
         <section className="mb-16">
           <div className="text-center mb-12">

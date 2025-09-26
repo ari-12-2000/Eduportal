@@ -1,8 +1,7 @@
 "use client"
 
-import { use, useEffect } from "react"
+import { use, useEffect, useState } from "react"
 import Script from "next/script"
-import { useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
@@ -14,7 +13,6 @@ import { Button } from "@/components/ui/button"
 import { BookOpen, FileText, Star, Users, Shield, CreditCard, ArrowLeft, CheckCircle } from "lucide-react"
 import Image from "next/image"
 
-
 const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => {
   const { toast } = useToast()
   const { user, setUser } = useAuth()
@@ -22,16 +20,53 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
   const { programId } = use(params)
   const { courses, loading, setLoading } = useCourses()
   const [isProcessing, setIsProcessing] = useState(false)
-  const [isChecking, setIsChecking] = useState(true);
+  const [isChecking, setIsChecking] = useState(true)
+
+  // 🔹 Polling function
+  const pollEnrollment = (programId: string) => {
+    let attempts = 0
+    const maxAttempts = 10 // ~20s max wait (interval=2s)
+
+    const interval = setInterval(async () => {
+      attempts++
+      try {
+        const res = await fetch(`/courses/student?programId=${programId}`)
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error);
+        } else {
+          console.log(data)
+          if (data.enrolled) {
+            clearInterval(interval)
+            let updatedUser = { ...user!, enrolledCourseIDs: { ...user!.enrolledCourseIDs, [Number(programId)]: true } } 
+            setUser(updatedUser)
+            router.push(`/courses/${programId}?enrolled=true`)
+          }
+        }
+      } catch (err) {
+        console.error("Polling failed:", err)
+      }
+
+      if (attempts >= maxAttempts) {
+        clearInterval(interval)
+        toast({
+          variant: "destructive",
+          title: "Enrollment not confirmed",
+          description: "Payment succeeded but enrollment verification timed out. Please contact support.",
+        })
+        router.push("/courses/search")
+      }
+    }, 2000)
+  }
 
   const handlePayment = async (price: string) => {
     setIsProcessing(true)
-    setLoading(true);
+    setLoading(true)
     try {
       const res1 = await fetch("/purchase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ price }),
+        body: JSON.stringify({ price, programId }),
       })
       if (!res1.ok) {
         throw new Error("Failed to create purchase")
@@ -50,33 +85,13 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
         },
         handler: async (response: any) => {
           console.log("Payment successful", response)
-          try {
-            const res2 = await fetch("/courses/student", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                learnerId: user!.id,
-                programId: programId,
-              }),
-            })
-            if (!res2.ok) throw new Error("Enrollment failed")
-            const updatedUser = {
-              ...user!,
-              enrolledCourseIDs: { ...user!.enrolledCourseIDs, [programId]: true },
-            };
-            setUser(updatedUser);
+          toast({
+            title: "Payment Successful ✅",
+            description: "We’re verifying your enrollment...",
+          })
 
-            router.push(`/courses/${programId}?enrolled=true`)
-          } catch (err) {
-            toast({
-              variant: "destructive",
-              title: "Enrollment failed",
-              description: "Payment was successful, but enrollment failed. Please contact support.",
-            })
-            router.push("/courses/search")
-            setLoading(false)
-
-          }
+          // 🔹 Start polling enrollment after Razorpay success
+          pollEnrollment(programId)
         },
         theme: {
           color: "#3b82f6",
@@ -85,6 +100,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
       const razorpay = new window.Razorpay(options)
       razorpay.open()
     } catch (err) {
+      setLoading(false)
       console.error(err)
       toast({
         variant: "destructive",
@@ -100,13 +116,12 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
 
   useEffect(() => {
     if (!course) {
-      router.replace("/courses"); // or "/404"
-      return;
+      router.replace("/courses") // or "/404"
+      return
     }
-    setIsChecking(false);
-  }, [course, router]);
+    setIsChecking(false)
+  }, [course, router])
 
-  console.log(isChecking);
   if (isChecking || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">

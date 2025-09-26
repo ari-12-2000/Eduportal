@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { cloudinary } from '@/lib/config';
 import { CloudinaryUploadResult } from '@/types/cloudinary';
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 export class LearnerController {
   // 1. Get all enrolled courses for a learner
@@ -175,6 +177,24 @@ export class LearnerController {
     }
   }
 
+  static async checkEnrollment(programId: number) {
+    try {
+      const session = await getServerSession(authOptions);
+
+      if (!session || !session.user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const enrollment = await prisma.enrollment.findFirst({
+        where: { learnerId: Number(session.user.id), programId },
+      });
+
+      return NextResponse.json({ success:true, enrolled: !!enrollment },{ status: 200 });
+    } catch (error) {
+      console.error("Check enrollment failed", error);
+      return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    }
+  }
 
   // static async updateProgress(req: NextRequest) {
   //   const { learnerId, programId?, moduleId?, resourceId?, topicId?} = await req.json();
@@ -390,39 +410,40 @@ export class LearnerController {
         );
       }
 
-          const formData = await req.formData();
-    const file = formData.get("file") as File | null;
+      const formData = await req.formData();
+      const file = formData.get("file") as File | null;
 
-    if (!file) {
-      return NextResponse.json(
-        { error: "Missing file" },
-        { status: 400 }
-      );
-    }
+      if (!file) {
+        return NextResponse.json(
+          { error: "Missing file" },
+          { status: 400 }
+        );
+      }
 
-    // 📌 File কে buffer বানানো (Cloudinary তে পাঠানোর জন্য)
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+      // 📌 File কে buffer বানানো (Cloudinary তে পাঠানোর জন্য)
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
 
-    // 🔹 Photo upload to Cloudinary (upload_stream দিয়ে buffer পাঠাতে হবে)
-    const uploadResponse= await new Promise<CloudinaryUploadResult>((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        { folder: "learners" },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result as CloudinaryUploadResult);
-        }
-      ).end(buffer);
-    });
+      // 🔹 Photo upload to Cloudinary (upload_stream দিয়ে buffer পাঠাতে হবে)
+      const uploadResponse = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          { folder: "learners" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result as CloudinaryUploadResult);
+          }
+        ).end(buffer);
+      });
 
-    const updated = await prisma.learner.update({
-      where: { id },
-      data: { 
-        profile_image: uploadResponse.secure_url ,
-        image_id:uploadResponse.public_id},
-    });
+      const updated = await prisma.learner.update({
+        where: { id },
+        data: {
+          profile_image: uploadResponse.secure_url,
+          image_id: uploadResponse.public_id
+        },
+      });
 
-    return NextResponse.json({ data: updated }, { status: 200 });
+      return NextResponse.json({ data: updated }, { status: 200 });
 
     } catch (err) {
       console.error("Update error:", err);
@@ -449,7 +470,7 @@ export class LearnerController {
 
       const res = await cloudinary.uploader.destroy(learner.image_id!);
       if (res.result !== "ok" && res.result !== "not found") {
-         return NextResponse.json({ error: 'Cloudinary delete failed' }, { status: 500 })
+        return NextResponse.json({ error: 'Cloudinary delete failed' }, { status: 500 })
       }
 
       const deleted = await prisma.learner.update({
