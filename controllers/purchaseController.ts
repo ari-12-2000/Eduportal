@@ -37,6 +37,7 @@ export class PurchaseController {
   }
 
   static async handlingWebhook(req: NextRequest) {
+    console.log("Webhook received");
     try {
       const secret = process.env.RAZORPAY_WEBHOOK_SECRET!
       const signature = req.headers.get("x-razorpay-signature") || ""
@@ -55,6 +56,14 @@ export class PurchaseController {
         const payment = payload.payload.payment.entity
         const programId = payment.notes?.programId
         const learnerId = payment.notes?.learnerId
+
+        if (!programId || !learnerId) {
+        console.error("❌ Missing programId/learnerId in payment.notes");
+        return NextResponse.json(
+          { error: "Missing programId or learnerId" },
+          { status: 400 }
+        );
+      }
         const existingEnrollment = await prisma.enrollment.findFirst({
         where: { learnerId: learnerId, programId: programId }
       });
