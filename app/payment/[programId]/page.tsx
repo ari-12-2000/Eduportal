@@ -24,6 +24,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
 
   // 🔹 Polling function
   const pollEnrollment = (programId: string) => {
+    setLoading(true)
     let attempts = 0
     const maxAttempts = 10 // ~20s max wait (interval=2s)
 
@@ -84,6 +85,7 @@ const PaymentPage = ({ params }: { params: Promise<{ programId: string }> }) => 
           email: user!.email,
         },
         handler: async (response: any) => {
+          setLoading(true)
           console.log("Payment successful", response)
           toast({
             title: "Payment Successful ✅",

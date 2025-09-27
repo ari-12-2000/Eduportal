@@ -73,7 +73,6 @@ model Learner {
   createdLearners    Learner[]         @relation("LearnerCreator")
   measureProgress    MeasureProgress[]
   quizAttempts       QuizAttempt[]     @relation("LearnerAttempts")
-  resourceViews      ResourceView[]
   passwordResets     PasswordReset[]
 
   @@map("learners")
@@ -204,7 +203,6 @@ model Resource {
   deletedAt       DateTime?         @map("deleted_at") @db.Timestamptz(6)
   createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   measureProgress MeasureProgress[]
-  resourceViews   ResourceView[]
   topicResources  TopicResource[]
 
   @@map("resources")
@@ -331,16 +329,6 @@ model QuestionAttempt {
   @@map("question_attempts")
 }
 
-model ResourceView {
-  learnerId  Int      @map("learner_id")
-  resourceId Int      @map("resource_id")
-  viewedAt   DateTime @default(now()) @map("viewed_at") @db.Timestamptz(6)
-  learner    Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)
-  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-
-  @@id([learnerId, resourceId])
-  @@map("resource_views")
-}
 
 model MeasureProgress {
   id           Int       @id @default(autoincrement())

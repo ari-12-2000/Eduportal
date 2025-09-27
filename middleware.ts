@@ -12,14 +12,16 @@ console.log('middleware request',request.url)
   if (token) {
     // If already logged in → redirect away from /login
     if (url.pathname.startsWith("/login")) {
-      return NextResponse.redirect(new URL("/", request.url))
+      const referer = request.headers.get('referer');
+      const redirectUrl = referer ? new URL(referer) : new URL("/", request.url);
+      return NextResponse.redirect(redirectUrl);
     }
   } else {
     // Not logged in → block protected routes
     if (
       url.pathname.startsWith("/student") ||
       url.pathname.startsWith("/admin") ||
-      url.pathname.startsWith("/payment") ||
+      url.pathname.startsWith("/payment") || url.pathname.startsWith("/razorpay")|| url.pathname.startsWith("/purchase") ||
       (url.pathname.startsWith("/courses") && !url.pathname.startsWith("/courses/categories") && !url.pathname.startsWith("/courses/search"))
     ) {
       console.log('url pathname',url.pathname)
