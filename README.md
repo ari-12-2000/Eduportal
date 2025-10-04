@@ -1,3 +1,8 @@
+Steps to run:-
+i)npm install
+ii)npm run dev
+
+
 EduPortal 
 • Developed a full stack robust, scalable, maintainable responsive educational web application involving 
 quizzes, self-paced courses for students, professionals. A learner’s dashboard tracking achievements of 
