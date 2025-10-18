@@ -73,48 +73,48 @@ model Learner {
   createdLearners    Learner[]         @relation("LearnerCreator")
   measureProgress    MeasureProgress[]
   quizAttempts       QuizAttempt[]     @relation("LearnerAttempts")
-  resourceViews      ResourceView[]
   passwordResets     PasswordReset[]
 
   @@map("learners")
 }
 
 model Program {
-  id               Int               @id @default(autoincrement())
-  authorId         Int               @map("author_id")
-  title            String            @db.VarChar(255)
+  id               Int                          @id @default(autoincrement())
+  authorId         Int                          @map("author_id")
+  title            String                       @db.VarChar(255)
   description      String
-  category         String            @db.VarChar(100)
-  instructor       String            @db.VarChar(255)
-  instructorAvatar String?           @map("instructor_avatar")
+  category         String                       @db.VarChar(100)
+  instructor       String                       @db.VarChar(255)
+  instructorAvatar String?                      @map("instructor_avatar")
   image            String?
-  rating           Float?            @default(0) @map("rating")
-  level            String?           @db.VarChar(50)
-  price            Decimal           @db.Decimal(10, 2)
+  rating           Float?                       @default(0) @map("rating")
+  level            String?                      @db.VarChar(50)
+  price            Decimal                      @db.Decimal(10, 2)
   type             ProgramType?
-  totalTimeLimit   Int?              @map("total_time_limit")
-  status           Int?              @db.SmallInt
-  uniqueHash       String?           @map("unique_hash") @db.VarChar(255)
-  startDate        DateTime?         @map("start_date") @db.Date
-  endDate          DateTime?         @map("end_date") @db.Date
-  surveyStartDate  DateTime?         @map("survey_start_date") @db.Date
-  surveyEndDate    DateTime?         @map("survey_end_date") @db.Date
-  passingScore     Int?              @map("passing_score")
-  studySettings    Json?             @map("study_settings")
-  clientId         Int?              @map("client_id")
-  packageId        Int?              @map("package_id")
-  isActive         Boolean           @default(true) @map("is_active")
-  isDeleted        Boolean           @default(false) @map("is_deleted")
-  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz(6)
-  maxParticipants  Int?              @map("max_participants")
+  totalTimeLimit   Int?                         @map("total_time_limit")
+  status           Int?                         @db.SmallInt
+  uniqueHash       String?                      @map("unique_hash") @db.VarChar(255)
+  startDate        DateTime?                    @map("start_date") @db.Date
+  endDate          DateTime?                    @map("end_date") @db.Date
+  surveyStartDate  DateTime?                    @map("survey_start_date") @db.Date
+  surveyEndDate    DateTime?                    @map("survey_end_date") @db.Date
+  passingScore     Int?                         @map("passing_score")
+  studySettings    Json?                        @map("study_settings")
+  clientId         Int?                         @map("client_id")
+  packageId        Int?                         @map("package_id")
+  isActive         Boolean                      @default(true) @map("is_active")
+  isDeleted        Boolean                      @default(false) @map("is_deleted")
+  createdAt        DateTime                     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime                     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?                    @map("deleted_at") @db.Timestamptz(6)
+  maxParticipants  Int?                         @map("max_participants")
+  embedding        Unsupported("vector(1536)")? // dimension 1536 (যদি text-embedding-3-small use করো)
   quizzes          QuizAssignment[]
-  enrollments      Enrollment[]      @relation("ProgramEnrollments")
+  enrollments      Enrollment[]                 @relation("ProgramEnrollments")
   leaderboards     Leaderboard[]
   measureProgress  MeasureProgress[]
   programModules   ProgramModule[]
-  author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  author           Admin                        @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("programs")
 }
@@ -204,7 +204,6 @@ model Resource {
   deletedAt       DateTime?         @map("deleted_at") @db.Timestamptz(6)
   createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   measureProgress MeasureProgress[]
-  resourceViews   ResourceView[]
   topicResources  TopicResource[]
 
   @@map("resources")
@@ -329,17 +328,6 @@ model QuestionAttempt {
 
   @@id([attemptId, questionId])
   @@map("question_attempts")
-}
-
-model ResourceView {
-  learnerId  Int      @map("learner_id")
-  resourceId Int      @map("resource_id")
-  viewedAt   DateTime @default(now()) @map("viewed_at") @db.Timestamptz(6)
-  learner    Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)
-  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-
-  @@id([learnerId, resourceId])
-  @@map("resource_views")
 }
 
 model MeasureProgress {

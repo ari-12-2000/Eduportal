@@ -37,84 +37,89 @@ model Admin {
 }
 
 model Learner {
-  id                 Int               @id @default(autoincrement())
-  first_name         String            @db.VarChar(255)
-  last_name          String            @db.VarChar(255)
-  gender             String?           @db.VarChar(50)
-  dob                DateTime?         @map("date_of_birth") @db.Date
-  email              String            @unique @db.VarChar(255)
-  phone              Bytes?
-  communicationEmail Bytes?            @map("communication_email")
-  password           String?
-  profile_image      String?
-  image_id           String?
-  organisation       String?           @db.VarChar(255)
-  designation        String?           @db.VarChar(255)
-  department         String?           @db.VarChar(255)
-  location           String?           @db.VarChar(255)
-  hierarchy_level    String?           @map("hierarchy_level") @db.VarChar(255)
-  totalPoints        Int               @default(0) @map("total_points")
-  isActive           Boolean           @default(true) @map("is_active")
-  isDeleted          Boolean           @default(false) @map("is_deleted")
-  deletedAt          DateTime?         @map("deleted_at") @db.Timestamptz(6)
-  isVerified         Boolean           @default(false) @map("is_verified")
-  lastLogin          DateTime?         @map("last_login") @db.Timestamptz(6)
-  createdBy          Int?              @map("created_by")
-  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
-  uniqueHash         String?           @map("unique_hash")
-  status             Int?
-  extraConfig        String?           @map("extra_config")
-  metaData           String?           @map("meta_data")
-  role               String            @db.VarChar(20)
-  enrollments        Enrollment[]      @relation("LearnerEnrollments")
-  leaderboards       Leaderboard[]
-  creator            Learner?          @relation("LearnerCreator", fields: [createdBy], references: [id])
-  createdLearners    Learner[]         @relation("LearnerCreator")
-  measureProgress    MeasureProgress[]
-  quizAttempts       QuizAttempt[]     @relation("LearnerAttempts")
-  passwordResets     PasswordReset[]
+  id              Int               @id @default(autoincrement())
+  first_name      String            @db.VarChar(255)
+  last_name       String            @db.VarChar(255)
+  gender          String?           @db.VarChar(50)
+  dob             DateTime?         @map("date_of_birth") @db.Date
+  email           String            @unique @db.VarChar(255)
+  phone           Bytes?
+  password        String?
+  profile_image   String?
+  image_id        String?
+  organisation    String?           @db.VarChar(255)
+  designation     String?           @db.VarChar(255)
+  department      String?           @db.VarChar(255)
+  location        String?           @db.VarChar(255)
+  hierarchy_level String?           @map("hierarchy_level") @db.VarChar(255)
+  totalPoints     Int               @default(0) @map("total_points")
+  isActive        Boolean           @default(true) @map("is_active")
+  isDeleted       Boolean           @default(false) @map("is_deleted")
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  isVerified      Boolean           @default(false) @map("is_verified")
+  lastLogin       DateTime?         @map("last_login") @db.Timestamptz(6)
+  createdBy       Int?              @map("created_by")
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  uniqueHash      String?           @map("unique_hash")
+  status          Int?
+  extraConfig     String?           @map("extra_config")
+  metaData        String?           @map("meta_data")
+  role            String            @db.VarChar(20)
+  enrollments     Enrollment[]      @relation("LearnerEnrollments")
+  leaderboards    Leaderboard[]
+  creator         Learner?          @relation("LearnerCreator", fields: [createdBy], references: [id])
+  createdLearners Learner[]         @relation("LearnerCreator")
+  measureProgress MeasureProgress[]
+  quizAttempts    QuizAttempt[]     @relation("LearnerAttempts")
+  passwordResets  PasswordReset[]
 
+  @@index([role])
+  @@index([status])
   @@map("learners")
 }
 
 model Program {
-  id               Int               @id @default(autoincrement())
-  authorId         Int               @map("author_id")
-  title            String            @db.VarChar(255)
+  id               Int                          @id @default(autoincrement())
+  authorId         Int                          @map("author_id")
+  title            String                       @db.VarChar(255)
   description      String
-  category         String            @db.VarChar(100)
-  instructor       String            @db.VarChar(255)
-  instructorAvatar String?           @map("instructor_avatar")
+  category         String                       @db.VarChar(100)
+  instructor       String                       @db.VarChar(255)
+  instructorAvatar String?                      @map("instructor_avatar")
   image            String?
-  rating           Float?            @default(0) @map("rating")
-  level            String?           @db.VarChar(50)
-  price            Decimal           @db.Decimal(10, 2)
+  rating           Float?                       @default(0) @map("rating")
+  level            String?                      @db.VarChar(50)
+  price            Decimal                      @db.Decimal(10, 2)
   type             ProgramType?
-  totalTimeLimit   Int?              @map("total_time_limit")
-  status           Int?              @db.SmallInt
-  uniqueHash       String?           @map("unique_hash") @db.VarChar(255)
-  startDate        DateTime?         @map("start_date") @db.Date
-  endDate          DateTime?         @map("end_date") @db.Date
-  surveyStartDate  DateTime?         @map("survey_start_date") @db.Date
-  surveyEndDate    DateTime?         @map("survey_end_date") @db.Date
-  passingScore     Int?              @map("passing_score")
-  studySettings    Json?             @map("study_settings")
-  clientId         Int?              @map("client_id")
-  packageId        Int?              @map("package_id")
-  isActive         Boolean           @default(true) @map("is_active")
-  isDeleted        Boolean           @default(false) @map("is_deleted")
-  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt        DateTime?         @map("deleted_at") @db.Timestamptz(6)
-  maxParticipants  Int?              @map("max_participants")
+  totalTimeLimit   Int?                         @map("total_time_limit")
+  status           Int?                         @db.SmallInt
+  uniqueHash       String?                      @map("unique_hash") @db.VarChar(255)
+  startDate        DateTime?                    @map("start_date") @db.Date
+  endDate          DateTime?                    @map("end_date") @db.Date
+  surveyStartDate  DateTime?                    @map("survey_start_date") @db.Date
+  surveyEndDate    DateTime?                    @map("survey_end_date") @db.Date
+  passingScore     Int?                         @map("passing_score")
+  studySettings    Json?                        @map("study_settings")
+  clientId         Int?                         @map("client_id")
+  packageId        Int?                         @map("package_id")
+  isActive         Boolean                      @default(true) @map("is_active")
+  isDeleted        Boolean                      @default(false) @map("is_deleted")
+  createdAt        DateTime                     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime                     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?                    @map("deleted_at") @db.Timestamptz(6)
+  maxParticipants  Int?                         @map("max_participants")
+  embedding        Unsupported("vector(1536)")? // dimension 1536 (যদি text-embedding-3-small use করো)
   quizzes          QuizAssignment[]
-  enrollments      Enrollment[]      @relation("ProgramEnrollments")
+  enrollments      Enrollment[]                 @relation("ProgramEnrollments")
   leaderboards     Leaderboard[]
   measureProgress  MeasureProgress[]
   programModules   ProgramModule[]
-  author           Admin             @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  author           Admin                        @relation("ProgramAuthor", fields: [authorId], references: [id], onDelete: Cascade)
 
+  @@index([authorId])
+  @@index([category])
+  @@index([status])
   @@map("programs")
 }
 
@@ -146,6 +151,8 @@ model Enrollment {
   program    Program  @relation("ProgramEnrollments", fields: [programId], references: [id], onDelete: Cascade)
 
   @@unique([learnerId, programId])
+  @@index([learnerId])
+  @@index([programId])
   @@map("enrollments")
 }
 
@@ -313,7 +320,8 @@ model QuizAttempt {
   questionAttempts QuestionAttempt[]
   assignment       QuizAssignment    @relation("AssignmentAttempts", fields: [assignmentId], references: [id], onDelete: Cascade)
   learner          Learner           @relation("LearnerAttempts", fields: [learnerId], references: [id], onDelete: Cascade)
-
+  @@index([assignmentId])
+  @@index([learnerId])
   @@map("quiz_attempts")
 }
 
@@ -328,7 +336,6 @@ model QuestionAttempt {
   @@id([attemptId, questionId])
   @@map("question_attempts")
 }
-
 
 model MeasureProgress {
   id           Int       @id @default(autoincrement())
@@ -346,7 +353,9 @@ model MeasureProgress {
   program      Program?  @relation(fields: [programId], references: [id], onDelete: Cascade)
   resource     Resource? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   topic        Topic?    @relation(fields: [topicId], references: [id], onDelete: Cascade)
-
+  @@index([learnerId])
+  @@index([programId])
+  @@index([topicId])
   @@map("measure_progress")
 }
 

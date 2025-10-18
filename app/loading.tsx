@@ -1,14 +1,6 @@
 export default function Loading() {
   return (
     <div className="flex min-h-screen animate-pulse text-black flex-col sm:flex-row">
-      {/* Sidebar */}
-      <div className="hidden sm:flex w-64 bg-white border-r border-gray-200 p-4 space-y-4">
-        <div className="h-10 w-3/4 bg-black/10 rounded" />
-        {[...Array(6)].map((_, i) => (
-          <div key={i} className="h-4 w-1/2 bg-black/10 rounded" />
-        ))}
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 p-4 sm:p-8 space-y-12 bg-gray-50">
         {/* Search bar */}

@@ -94,11 +94,6 @@ export type QuizAttempt = $Result.DefaultSelection<Prisma.$QuizAttemptPayload>
  */
 export type QuestionAttempt = $Result.DefaultSelection<Prisma.$QuestionAttemptPayload>
 /**
- * Model ResourceView
- * 
- */
-export type ResourceView = $Result.DefaultSelection<Prisma.$ResourceViewPayload>
-/**
  * Model MeasureProgress
  * 
  */
@@ -491,16 +486,6 @@ export class PrismaClient<
     * ```
     */
   get questionAttempt(): Prisma.QuestionAttemptDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.resourceView`: Exposes CRUD operations for the **ResourceView** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ResourceViews
-    * const resourceViews = await prisma.resourceView.findMany()
-    * ```
-    */
-  get resourceView(): Prisma.ResourceViewDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.measureProgress`: Exposes CRUD operations for the **MeasureProgress** model.
@@ -987,7 +972,6 @@ export namespace Prisma {
     QuestionPaperQuestion: 'QuestionPaperQuestion',
     QuizAttempt: 'QuizAttempt',
     QuestionAttempt: 'QuestionAttempt',
-    ResourceView: 'ResourceView',
     MeasureProgress: 'MeasureProgress',
     Leaderboard: 'Leaderboard',
     PasswordReset: 'PasswordReset'
@@ -1009,7 +993,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "learner" | "program" | "module" | "enrollment" | "programModule" | "topic" | "moduleTopic" | "resource" | "topicResource" | "questionPool" | "quizAssignment" | "questionPaper" | "questionPaperQuestion" | "quizAttempt" | "questionAttempt" | "resourceView" | "measureProgress" | "leaderboard" | "passwordReset"
+      modelProps: "admin" | "learner" | "program" | "module" | "enrollment" | "programModule" | "topic" | "moduleTopic" | "resource" | "topicResource" | "questionPool" | "quizAssignment" | "questionPaper" | "questionPaperQuestion" | "quizAttempt" | "questionAttempt" | "measureProgress" | "leaderboard" | "passwordReset"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2197,80 +2181,6 @@ export namespace Prisma {
           }
         }
       }
-      ResourceView: {
-        payload: Prisma.$ResourceViewPayload<ExtArgs>
-        fields: Prisma.ResourceViewFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ResourceViewFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ResourceViewFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>
-          }
-          findFirst: {
-            args: Prisma.ResourceViewFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ResourceViewFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>
-          }
-          findMany: {
-            args: Prisma.ResourceViewFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>[]
-          }
-          create: {
-            args: Prisma.ResourceViewCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>
-          }
-          createMany: {
-            args: Prisma.ResourceViewCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ResourceViewCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>[]
-          }
-          delete: {
-            args: Prisma.ResourceViewDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>
-          }
-          update: {
-            args: Prisma.ResourceViewUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>
-          }
-          deleteMany: {
-            args: Prisma.ResourceViewDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ResourceViewUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ResourceViewUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>[]
-          }
-          upsert: {
-            args: Prisma.ResourceViewUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ResourceViewPayload>
-          }
-          aggregate: {
-            args: Prisma.ResourceViewAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateResourceView>
-          }
-          groupBy: {
-            args: Prisma.ResourceViewGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ResourceViewGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ResourceViewCountArgs<ExtArgs>
-            result: $Utils.Optional<ResourceViewCountAggregateOutputType> | number
-          }
-        }
-      }
       MeasureProgress: {
         payload: Prisma.$MeasureProgressPayload<ExtArgs>
         fields: Prisma.MeasureProgressFieldRefs
@@ -2601,7 +2511,6 @@ export namespace Prisma {
     questionPaperQuestion?: QuestionPaperQuestionOmit
     quizAttempt?: QuizAttemptOmit
     questionAttempt?: QuestionAttemptOmit
-    resourceView?: ResourceViewOmit
     measureProgress?: MeasureProgressOmit
     leaderboard?: LeaderboardOmit
     passwordReset?: PasswordResetOmit
@@ -2739,7 +2648,6 @@ export namespace Prisma {
     createdLearners: number
     measureProgress: number
     quizAttempts: number
-    resourceViews: number
     passwordResets: number
   }
 
@@ -2749,7 +2657,6 @@ export namespace Prisma {
     createdLearners?: boolean | LearnerCountOutputTypeCountCreatedLearnersArgs
     measureProgress?: boolean | LearnerCountOutputTypeCountMeasureProgressArgs
     quizAttempts?: boolean | LearnerCountOutputTypeCountQuizAttemptsArgs
-    resourceViews?: boolean | LearnerCountOutputTypeCountResourceViewsArgs
     passwordResets?: boolean | LearnerCountOutputTypeCountPasswordResetsArgs
   }
 
@@ -2797,13 +2704,6 @@ export namespace Prisma {
    */
   export type LearnerCountOutputTypeCountQuizAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuizAttemptWhereInput
-  }
-
-  /**
-   * LearnerCountOutputType without action
-   */
-  export type LearnerCountOutputTypeCountResourceViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ResourceViewWhereInput
   }
 
   /**
@@ -3003,13 +2903,11 @@ export namespace Prisma {
 
   export type ResourceCountOutputType = {
     measureProgress: number
-    resourceViews: number
     topicResources: number
   }
 
   export type ResourceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     measureProgress?: boolean | ResourceCountOutputTypeCountMeasureProgressArgs
-    resourceViews?: boolean | ResourceCountOutputTypeCountResourceViewsArgs
     topicResources?: boolean | ResourceCountOutputTypeCountTopicResourcesArgs
   }
 
@@ -3029,13 +2927,6 @@ export namespace Prisma {
    */
   export type ResourceCountOutputTypeCountMeasureProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MeasureProgressWhereInput
-  }
-
-  /**
-   * ResourceCountOutputType without action
-   */
-  export type ResourceCountOutputTypeCountResourceViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ResourceViewWhereInput
   }
 
   /**
@@ -4956,7 +4847,6 @@ export namespace Prisma {
     createdLearners?: boolean | Learner$createdLearnersArgs<ExtArgs>
     measureProgress?: boolean | Learner$measureProgressArgs<ExtArgs>
     quizAttempts?: boolean | Learner$quizAttemptsArgs<ExtArgs>
-    resourceViews?: boolean | Learner$resourceViewsArgs<ExtArgs>
     passwordResets?: boolean | Learner$passwordResetsArgs<ExtArgs>
     _count?: boolean | LearnerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["learner"]>
@@ -5070,7 +4960,6 @@ export namespace Prisma {
     createdLearners?: boolean | Learner$createdLearnersArgs<ExtArgs>
     measureProgress?: boolean | Learner$measureProgressArgs<ExtArgs>
     quizAttempts?: boolean | Learner$quizAttemptsArgs<ExtArgs>
-    resourceViews?: boolean | Learner$resourceViewsArgs<ExtArgs>
     passwordResets?: boolean | Learner$passwordResetsArgs<ExtArgs>
     _count?: boolean | LearnerCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -5090,7 +4979,6 @@ export namespace Prisma {
       createdLearners: Prisma.$LearnerPayload<ExtArgs>[]
       measureProgress: Prisma.$MeasureProgressPayload<ExtArgs>[]
       quizAttempts: Prisma.$QuizAttemptPayload<ExtArgs>[]
-      resourceViews: Prisma.$ResourceViewPayload<ExtArgs>[]
       passwordResets: Prisma.$PasswordResetPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -5524,7 +5412,6 @@ export namespace Prisma {
     createdLearners<T extends Learner$createdLearnersArgs<ExtArgs> = {}>(args?: Subset<T, Learner$createdLearnersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     measureProgress<T extends Learner$measureProgressArgs<ExtArgs> = {}>(args?: Subset<T, Learner$measureProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeasureProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quizAttempts<T extends Learner$quizAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, Learner$quizAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    resourceViews<T extends Learner$resourceViewsArgs<ExtArgs> = {}>(args?: Subset<T, Learner$resourceViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     passwordResets<T extends Learner$passwordResetsArgs<ExtArgs> = {}>(args?: Subset<T, Learner$passwordResetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PasswordResetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6117,30 +6004,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: QuizAttemptScalarFieldEnum | QuizAttemptScalarFieldEnum[]
-  }
-
-  /**
-   * Learner.resourceViews
-   */
-  export type Learner$resourceViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    where?: ResourceViewWhereInput
-    orderBy?: ResourceViewOrderByWithRelationInput | ResourceViewOrderByWithRelationInput[]
-    cursor?: ResourceViewWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ResourceViewScalarFieldEnum | ResourceViewScalarFieldEnum[]
   }
 
   /**
@@ -13828,7 +13691,6 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     measureProgress?: boolean | Resource$measureProgressArgs<ExtArgs>
-    resourceViews?: boolean | Resource$resourceViewsArgs<ExtArgs>
     topicResources?: boolean | Resource$topicResourcesArgs<ExtArgs>
     _count?: boolean | ResourceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["resource"]>
@@ -13872,7 +13734,6 @@ export namespace Prisma {
   export type ResourceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "resourceType" | "url" | "title" | "description" | "status" | "isDeleted" | "deletedAt" | "createdAt", ExtArgs["result"]["resource"]>
   export type ResourceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     measureProgress?: boolean | Resource$measureProgressArgs<ExtArgs>
-    resourceViews?: boolean | Resource$resourceViewsArgs<ExtArgs>
     topicResources?: boolean | Resource$topicResourcesArgs<ExtArgs>
     _count?: boolean | ResourceCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -13883,7 +13744,6 @@ export namespace Prisma {
     name: "Resource"
     objects: {
       measureProgress: Prisma.$MeasureProgressPayload<ExtArgs>[]
-      resourceViews: Prisma.$ResourceViewPayload<ExtArgs>[]
       topicResources: Prisma.$TopicResourcePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -14291,7 +14151,6 @@ export namespace Prisma {
   export interface Prisma__ResourceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     measureProgress<T extends Resource$measureProgressArgs<ExtArgs> = {}>(args?: Subset<T, Resource$measureProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeasureProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    resourceViews<T extends Resource$resourceViewsArgs<ExtArgs> = {}>(args?: Subset<T, Resource$resourceViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     topicResources<T extends Resource$topicResourcesArgs<ExtArgs> = {}>(args?: Subset<T, Resource$topicResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -14740,30 +14599,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MeasureProgressScalarFieldEnum | MeasureProgressScalarFieldEnum[]
-  }
-
-  /**
-   * Resource.resourceViews
-   */
-  export type Resource$resourceViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    where?: ResourceViewWhereInput
-    orderBy?: ResourceViewOrderByWithRelationInput | ResourceViewOrderByWithRelationInput[]
-    cursor?: ResourceViewWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ResourceViewScalarFieldEnum | ResourceViewScalarFieldEnum[]
   }
 
   /**
@@ -22874,1084 +22709,6 @@ export namespace Prisma {
 
 
   /**
-   * Model ResourceView
-   */
-
-  export type AggregateResourceView = {
-    _count: ResourceViewCountAggregateOutputType | null
-    _avg: ResourceViewAvgAggregateOutputType | null
-    _sum: ResourceViewSumAggregateOutputType | null
-    _min: ResourceViewMinAggregateOutputType | null
-    _max: ResourceViewMaxAggregateOutputType | null
-  }
-
-  export type ResourceViewAvgAggregateOutputType = {
-    learnerId: number | null
-    resourceId: number | null
-  }
-
-  export type ResourceViewSumAggregateOutputType = {
-    learnerId: number | null
-    resourceId: number | null
-  }
-
-  export type ResourceViewMinAggregateOutputType = {
-    learnerId: number | null
-    resourceId: number | null
-    viewedAt: Date | null
-  }
-
-  export type ResourceViewMaxAggregateOutputType = {
-    learnerId: number | null
-    resourceId: number | null
-    viewedAt: Date | null
-  }
-
-  export type ResourceViewCountAggregateOutputType = {
-    learnerId: number
-    resourceId: number
-    viewedAt: number
-    _all: number
-  }
-
-
-  export type ResourceViewAvgAggregateInputType = {
-    learnerId?: true
-    resourceId?: true
-  }
-
-  export type ResourceViewSumAggregateInputType = {
-    learnerId?: true
-    resourceId?: true
-  }
-
-  export type ResourceViewMinAggregateInputType = {
-    learnerId?: true
-    resourceId?: true
-    viewedAt?: true
-  }
-
-  export type ResourceViewMaxAggregateInputType = {
-    learnerId?: true
-    resourceId?: true
-    viewedAt?: true
-  }
-
-  export type ResourceViewCountAggregateInputType = {
-    learnerId?: true
-    resourceId?: true
-    viewedAt?: true
-    _all?: true
-  }
-
-  export type ResourceViewAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ResourceView to aggregate.
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ResourceViews to fetch.
-     */
-    orderBy?: ResourceViewOrderByWithRelationInput | ResourceViewOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ResourceViewWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ResourceViews from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ResourceViews.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ResourceViews
-    **/
-    _count?: true | ResourceViewCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ResourceViewAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ResourceViewSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ResourceViewMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ResourceViewMaxAggregateInputType
-  }
-
-  export type GetResourceViewAggregateType<T extends ResourceViewAggregateArgs> = {
-        [P in keyof T & keyof AggregateResourceView]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateResourceView[P]>
-      : GetScalarType<T[P], AggregateResourceView[P]>
-  }
-
-
-
-
-  export type ResourceViewGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ResourceViewWhereInput
-    orderBy?: ResourceViewOrderByWithAggregationInput | ResourceViewOrderByWithAggregationInput[]
-    by: ResourceViewScalarFieldEnum[] | ResourceViewScalarFieldEnum
-    having?: ResourceViewScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ResourceViewCountAggregateInputType | true
-    _avg?: ResourceViewAvgAggregateInputType
-    _sum?: ResourceViewSumAggregateInputType
-    _min?: ResourceViewMinAggregateInputType
-    _max?: ResourceViewMaxAggregateInputType
-  }
-
-  export type ResourceViewGroupByOutputType = {
-    learnerId: number
-    resourceId: number
-    viewedAt: Date
-    _count: ResourceViewCountAggregateOutputType | null
-    _avg: ResourceViewAvgAggregateOutputType | null
-    _sum: ResourceViewSumAggregateOutputType | null
-    _min: ResourceViewMinAggregateOutputType | null
-    _max: ResourceViewMaxAggregateOutputType | null
-  }
-
-  type GetResourceViewGroupByPayload<T extends ResourceViewGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ResourceViewGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ResourceViewGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ResourceViewGroupByOutputType[P]>
-            : GetScalarType<T[P], ResourceViewGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ResourceViewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    learnerId?: boolean
-    resourceId?: boolean
-    viewedAt?: boolean
-    learner?: boolean | LearnerDefaultArgs<ExtArgs>
-    resource?: boolean | ResourceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["resourceView"]>
-
-  export type ResourceViewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    learnerId?: boolean
-    resourceId?: boolean
-    viewedAt?: boolean
-    learner?: boolean | LearnerDefaultArgs<ExtArgs>
-    resource?: boolean | ResourceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["resourceView"]>
-
-  export type ResourceViewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    learnerId?: boolean
-    resourceId?: boolean
-    viewedAt?: boolean
-    learner?: boolean | LearnerDefaultArgs<ExtArgs>
-    resource?: boolean | ResourceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["resourceView"]>
-
-  export type ResourceViewSelectScalar = {
-    learnerId?: boolean
-    resourceId?: boolean
-    viewedAt?: boolean
-  }
-
-  export type ResourceViewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"learnerId" | "resourceId" | "viewedAt", ExtArgs["result"]["resourceView"]>
-  export type ResourceViewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    learner?: boolean | LearnerDefaultArgs<ExtArgs>
-    resource?: boolean | ResourceDefaultArgs<ExtArgs>
-  }
-  export type ResourceViewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    learner?: boolean | LearnerDefaultArgs<ExtArgs>
-    resource?: boolean | ResourceDefaultArgs<ExtArgs>
-  }
-  export type ResourceViewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    learner?: boolean | LearnerDefaultArgs<ExtArgs>
-    resource?: boolean | ResourceDefaultArgs<ExtArgs>
-  }
-
-  export type $ResourceViewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ResourceView"
-    objects: {
-      learner: Prisma.$LearnerPayload<ExtArgs>
-      resource: Prisma.$ResourcePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      learnerId: number
-      resourceId: number
-      viewedAt: Date
-    }, ExtArgs["result"]["resourceView"]>
-    composites: {}
-  }
-
-  type ResourceViewGetPayload<S extends boolean | null | undefined | ResourceViewDefaultArgs> = $Result.GetResult<Prisma.$ResourceViewPayload, S>
-
-  type ResourceViewCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ResourceViewFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ResourceViewCountAggregateInputType | true
-    }
-
-  export interface ResourceViewDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ResourceView'], meta: { name: 'ResourceView' } }
-    /**
-     * Find zero or one ResourceView that matches the filter.
-     * @param {ResourceViewFindUniqueArgs} args - Arguments to find a ResourceView
-     * @example
-     * // Get one ResourceView
-     * const resourceView = await prisma.resourceView.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ResourceViewFindUniqueArgs>(args: SelectSubset<T, ResourceViewFindUniqueArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ResourceView that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ResourceViewFindUniqueOrThrowArgs} args - Arguments to find a ResourceView
-     * @example
-     * // Get one ResourceView
-     * const resourceView = await prisma.resourceView.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ResourceViewFindUniqueOrThrowArgs>(args: SelectSubset<T, ResourceViewFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ResourceView that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewFindFirstArgs} args - Arguments to find a ResourceView
-     * @example
-     * // Get one ResourceView
-     * const resourceView = await prisma.resourceView.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ResourceViewFindFirstArgs>(args?: SelectSubset<T, ResourceViewFindFirstArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ResourceView that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewFindFirstOrThrowArgs} args - Arguments to find a ResourceView
-     * @example
-     * // Get one ResourceView
-     * const resourceView = await prisma.resourceView.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ResourceViewFindFirstOrThrowArgs>(args?: SelectSubset<T, ResourceViewFindFirstOrThrowArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ResourceViews that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ResourceViews
-     * const resourceViews = await prisma.resourceView.findMany()
-     * 
-     * // Get first 10 ResourceViews
-     * const resourceViews = await prisma.resourceView.findMany({ take: 10 })
-     * 
-     * // Only select the `learnerId`
-     * const resourceViewWithLearnerIdOnly = await prisma.resourceView.findMany({ select: { learnerId: true } })
-     * 
-     */
-    findMany<T extends ResourceViewFindManyArgs>(args?: SelectSubset<T, ResourceViewFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ResourceView.
-     * @param {ResourceViewCreateArgs} args - Arguments to create a ResourceView.
-     * @example
-     * // Create one ResourceView
-     * const ResourceView = await prisma.resourceView.create({
-     *   data: {
-     *     // ... data to create a ResourceView
-     *   }
-     * })
-     * 
-     */
-    create<T extends ResourceViewCreateArgs>(args: SelectSubset<T, ResourceViewCreateArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ResourceViews.
-     * @param {ResourceViewCreateManyArgs} args - Arguments to create many ResourceViews.
-     * @example
-     * // Create many ResourceViews
-     * const resourceView = await prisma.resourceView.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ResourceViewCreateManyArgs>(args?: SelectSubset<T, ResourceViewCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ResourceViews and returns the data saved in the database.
-     * @param {ResourceViewCreateManyAndReturnArgs} args - Arguments to create many ResourceViews.
-     * @example
-     * // Create many ResourceViews
-     * const resourceView = await prisma.resourceView.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ResourceViews and only return the `learnerId`
-     * const resourceViewWithLearnerIdOnly = await prisma.resourceView.createManyAndReturn({
-     *   select: { learnerId: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ResourceViewCreateManyAndReturnArgs>(args?: SelectSubset<T, ResourceViewCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ResourceView.
-     * @param {ResourceViewDeleteArgs} args - Arguments to delete one ResourceView.
-     * @example
-     * // Delete one ResourceView
-     * const ResourceView = await prisma.resourceView.delete({
-     *   where: {
-     *     // ... filter to delete one ResourceView
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ResourceViewDeleteArgs>(args: SelectSubset<T, ResourceViewDeleteArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ResourceView.
-     * @param {ResourceViewUpdateArgs} args - Arguments to update one ResourceView.
-     * @example
-     * // Update one ResourceView
-     * const resourceView = await prisma.resourceView.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ResourceViewUpdateArgs>(args: SelectSubset<T, ResourceViewUpdateArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ResourceViews.
-     * @param {ResourceViewDeleteManyArgs} args - Arguments to filter ResourceViews to delete.
-     * @example
-     * // Delete a few ResourceViews
-     * const { count } = await prisma.resourceView.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ResourceViewDeleteManyArgs>(args?: SelectSubset<T, ResourceViewDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ResourceViews.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ResourceViews
-     * const resourceView = await prisma.resourceView.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ResourceViewUpdateManyArgs>(args: SelectSubset<T, ResourceViewUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ResourceViews and returns the data updated in the database.
-     * @param {ResourceViewUpdateManyAndReturnArgs} args - Arguments to update many ResourceViews.
-     * @example
-     * // Update many ResourceViews
-     * const resourceView = await prisma.resourceView.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ResourceViews and only return the `learnerId`
-     * const resourceViewWithLearnerIdOnly = await prisma.resourceView.updateManyAndReturn({
-     *   select: { learnerId: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ResourceViewUpdateManyAndReturnArgs>(args: SelectSubset<T, ResourceViewUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ResourceView.
-     * @param {ResourceViewUpsertArgs} args - Arguments to update or create a ResourceView.
-     * @example
-     * // Update or create a ResourceView
-     * const resourceView = await prisma.resourceView.upsert({
-     *   create: {
-     *     // ... data to create a ResourceView
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ResourceView we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ResourceViewUpsertArgs>(args: SelectSubset<T, ResourceViewUpsertArgs<ExtArgs>>): Prisma__ResourceViewClient<$Result.GetResult<Prisma.$ResourceViewPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ResourceViews.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewCountArgs} args - Arguments to filter ResourceViews to count.
-     * @example
-     * // Count the number of ResourceViews
-     * const count = await prisma.resourceView.count({
-     *   where: {
-     *     // ... the filter for the ResourceViews we want to count
-     *   }
-     * })
-    **/
-    count<T extends ResourceViewCountArgs>(
-      args?: Subset<T, ResourceViewCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ResourceViewCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ResourceView.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ResourceViewAggregateArgs>(args: Subset<T, ResourceViewAggregateArgs>): Prisma.PrismaPromise<GetResourceViewAggregateType<T>>
-
-    /**
-     * Group by ResourceView.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ResourceViewGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ResourceViewGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ResourceViewGroupByArgs['orderBy'] }
-        : { orderBy?: ResourceViewGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ResourceViewGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetResourceViewGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ResourceView model
-   */
-  readonly fields: ResourceViewFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ResourceView.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ResourceViewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    learner<T extends LearnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LearnerDefaultArgs<ExtArgs>>): Prisma__LearnerClient<$Result.GetResult<Prisma.$LearnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    resource<T extends ResourceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ResourceDefaultArgs<ExtArgs>>): Prisma__ResourceClient<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ResourceView model
-   */
-  interface ResourceViewFieldRefs {
-    readonly learnerId: FieldRef<"ResourceView", 'Int'>
-    readonly resourceId: FieldRef<"ResourceView", 'Int'>
-    readonly viewedAt: FieldRef<"ResourceView", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ResourceView findUnique
-   */
-  export type ResourceViewFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * Filter, which ResourceView to fetch.
-     */
-    where: ResourceViewWhereUniqueInput
-  }
-
-  /**
-   * ResourceView findUniqueOrThrow
-   */
-  export type ResourceViewFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * Filter, which ResourceView to fetch.
-     */
-    where: ResourceViewWhereUniqueInput
-  }
-
-  /**
-   * ResourceView findFirst
-   */
-  export type ResourceViewFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * Filter, which ResourceView to fetch.
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ResourceViews to fetch.
-     */
-    orderBy?: ResourceViewOrderByWithRelationInput | ResourceViewOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ResourceViews.
-     */
-    cursor?: ResourceViewWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ResourceViews from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ResourceViews.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ResourceViews.
-     */
-    distinct?: ResourceViewScalarFieldEnum | ResourceViewScalarFieldEnum[]
-  }
-
-  /**
-   * ResourceView findFirstOrThrow
-   */
-  export type ResourceViewFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * Filter, which ResourceView to fetch.
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ResourceViews to fetch.
-     */
-    orderBy?: ResourceViewOrderByWithRelationInput | ResourceViewOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ResourceViews.
-     */
-    cursor?: ResourceViewWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ResourceViews from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ResourceViews.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ResourceViews.
-     */
-    distinct?: ResourceViewScalarFieldEnum | ResourceViewScalarFieldEnum[]
-  }
-
-  /**
-   * ResourceView findMany
-   */
-  export type ResourceViewFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * Filter, which ResourceViews to fetch.
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ResourceViews to fetch.
-     */
-    orderBy?: ResourceViewOrderByWithRelationInput | ResourceViewOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ResourceViews.
-     */
-    cursor?: ResourceViewWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ResourceViews from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ResourceViews.
-     */
-    skip?: number
-    distinct?: ResourceViewScalarFieldEnum | ResourceViewScalarFieldEnum[]
-  }
-
-  /**
-   * ResourceView create
-   */
-  export type ResourceViewCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ResourceView.
-     */
-    data: XOR<ResourceViewCreateInput, ResourceViewUncheckedCreateInput>
-  }
-
-  /**
-   * ResourceView createMany
-   */
-  export type ResourceViewCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ResourceViews.
-     */
-    data: ResourceViewCreateManyInput | ResourceViewCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ResourceView createManyAndReturn
-   */
-  export type ResourceViewCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * The data used to create many ResourceViews.
-     */
-    data: ResourceViewCreateManyInput | ResourceViewCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ResourceView update
-   */
-  export type ResourceViewUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ResourceView.
-     */
-    data: XOR<ResourceViewUpdateInput, ResourceViewUncheckedUpdateInput>
-    /**
-     * Choose, which ResourceView to update.
-     */
-    where: ResourceViewWhereUniqueInput
-  }
-
-  /**
-   * ResourceView updateMany
-   */
-  export type ResourceViewUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ResourceViews.
-     */
-    data: XOR<ResourceViewUpdateManyMutationInput, ResourceViewUncheckedUpdateManyInput>
-    /**
-     * Filter which ResourceViews to update
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * Limit how many ResourceViews to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ResourceView updateManyAndReturn
-   */
-  export type ResourceViewUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * The data used to update ResourceViews.
-     */
-    data: XOR<ResourceViewUpdateManyMutationInput, ResourceViewUncheckedUpdateManyInput>
-    /**
-     * Filter which ResourceViews to update
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * Limit how many ResourceViews to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ResourceView upsert
-   */
-  export type ResourceViewUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ResourceView to update in case it exists.
-     */
-    where: ResourceViewWhereUniqueInput
-    /**
-     * In case the ResourceView found by the `where` argument doesn't exist, create a new ResourceView with this data.
-     */
-    create: XOR<ResourceViewCreateInput, ResourceViewUncheckedCreateInput>
-    /**
-     * In case the ResourceView was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ResourceViewUpdateInput, ResourceViewUncheckedUpdateInput>
-  }
-
-  /**
-   * ResourceView delete
-   */
-  export type ResourceViewDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-    /**
-     * Filter which ResourceView to delete.
-     */
-    where: ResourceViewWhereUniqueInput
-  }
-
-  /**
-   * ResourceView deleteMany
-   */
-  export type ResourceViewDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ResourceViews to delete
-     */
-    where?: ResourceViewWhereInput
-    /**
-     * Limit how many ResourceViews to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ResourceView without action
-   */
-  export type ResourceViewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ResourceView
-     */
-    select?: ResourceViewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ResourceView
-     */
-    omit?: ResourceViewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ResourceViewInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model MeasureProgress
    */
 
@@ -27700,15 +26457,6 @@ export namespace Prisma {
   export type QuestionAttemptScalarFieldEnum = (typeof QuestionAttemptScalarFieldEnum)[keyof typeof QuestionAttemptScalarFieldEnum]
 
 
-  export const ResourceViewScalarFieldEnum: {
-    learnerId: 'learnerId',
-    resourceId: 'resourceId',
-    viewedAt: 'viewedAt'
-  };
-
-  export type ResourceViewScalarFieldEnum = (typeof ResourceViewScalarFieldEnum)[keyof typeof ResourceViewScalarFieldEnum]
-
-
   export const MeasureProgressScalarFieldEnum: {
     id: 'id',
     learnerId: 'learnerId',
@@ -28129,7 +26877,6 @@ export namespace Prisma {
     createdLearners?: LearnerListRelationFilter
     measureProgress?: MeasureProgressListRelationFilter
     quizAttempts?: QuizAttemptListRelationFilter
-    resourceViews?: ResourceViewListRelationFilter
     passwordResets?: PasswordResetListRelationFilter
   }
 
@@ -28170,7 +26917,6 @@ export namespace Prisma {
     createdLearners?: LearnerOrderByRelationAggregateInput
     measureProgress?: MeasureProgressOrderByRelationAggregateInput
     quizAttempts?: QuizAttemptOrderByRelationAggregateInput
-    resourceViews?: ResourceViewOrderByRelationAggregateInput
     passwordResets?: PasswordResetOrderByRelationAggregateInput
   }
 
@@ -28214,7 +26960,6 @@ export namespace Prisma {
     createdLearners?: LearnerListRelationFilter
     measureProgress?: MeasureProgressListRelationFilter
     quizAttempts?: QuizAttemptListRelationFilter
-    resourceViews?: ResourceViewListRelationFilter
     passwordResets?: PasswordResetListRelationFilter
   }, "id" | "email">
 
@@ -28836,7 +27581,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Resource"> | Date | string | null
     createdAt?: DateTimeFilter<"Resource"> | Date | string
     measureProgress?: MeasureProgressListRelationFilter
-    resourceViews?: ResourceViewListRelationFilter
     topicResources?: TopicResourceListRelationFilter
   }
 
@@ -28851,7 +27595,6 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     measureProgress?: MeasureProgressOrderByRelationAggregateInput
-    resourceViews?: ResourceViewOrderByRelationAggregateInput
     topicResources?: TopicResourceOrderByRelationAggregateInput
   }
 
@@ -28869,7 +27612,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Resource"> | Date | string | null
     createdAt?: DateTimeFilter<"Resource"> | Date | string
     measureProgress?: MeasureProgressListRelationFilter
-    resourceViews?: ResourceViewListRelationFilter
     topicResources?: TopicResourceListRelationFilter
   }, "id">
 
@@ -29407,57 +28149,6 @@ export namespace Prisma {
     timeTakenSec?: IntNullableWithAggregatesFilter<"QuestionAttempt"> | number | null
   }
 
-  export type ResourceViewWhereInput = {
-    AND?: ResourceViewWhereInput | ResourceViewWhereInput[]
-    OR?: ResourceViewWhereInput[]
-    NOT?: ResourceViewWhereInput | ResourceViewWhereInput[]
-    learnerId?: IntFilter<"ResourceView"> | number
-    resourceId?: IntFilter<"ResourceView"> | number
-    viewedAt?: DateTimeFilter<"ResourceView"> | Date | string
-    learner?: XOR<LearnerScalarRelationFilter, LearnerWhereInput>
-    resource?: XOR<ResourceScalarRelationFilter, ResourceWhereInput>
-  }
-
-  export type ResourceViewOrderByWithRelationInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-    viewedAt?: SortOrder
-    learner?: LearnerOrderByWithRelationInput
-    resource?: ResourceOrderByWithRelationInput
-  }
-
-  export type ResourceViewWhereUniqueInput = Prisma.AtLeast<{
-    learnerId_resourceId?: ResourceViewLearnerIdResourceIdCompoundUniqueInput
-    AND?: ResourceViewWhereInput | ResourceViewWhereInput[]
-    OR?: ResourceViewWhereInput[]
-    NOT?: ResourceViewWhereInput | ResourceViewWhereInput[]
-    learnerId?: IntFilter<"ResourceView"> | number
-    resourceId?: IntFilter<"ResourceView"> | number
-    viewedAt?: DateTimeFilter<"ResourceView"> | Date | string
-    learner?: XOR<LearnerScalarRelationFilter, LearnerWhereInput>
-    resource?: XOR<ResourceScalarRelationFilter, ResourceWhereInput>
-  }, "learnerId_resourceId">
-
-  export type ResourceViewOrderByWithAggregationInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-    viewedAt?: SortOrder
-    _count?: ResourceViewCountOrderByAggregateInput
-    _avg?: ResourceViewAvgOrderByAggregateInput
-    _max?: ResourceViewMaxOrderByAggregateInput
-    _min?: ResourceViewMinOrderByAggregateInput
-    _sum?: ResourceViewSumOrderByAggregateInput
-  }
-
-  export type ResourceViewScalarWhereWithAggregatesInput = {
-    AND?: ResourceViewScalarWhereWithAggregatesInput | ResourceViewScalarWhereWithAggregatesInput[]
-    OR?: ResourceViewScalarWhereWithAggregatesInput[]
-    NOT?: ResourceViewScalarWhereWithAggregatesInput | ResourceViewScalarWhereWithAggregatesInput[]
-    learnerId?: IntWithAggregatesFilter<"ResourceView"> | number
-    resourceId?: IntWithAggregatesFilter<"ResourceView"> | number
-    viewedAt?: DateTimeWithAggregatesFilter<"ResourceView"> | Date | string
-  }
-
   export type MeasureProgressWhereInput = {
     AND?: MeasureProgressWhereInput | MeasureProgressWhereInput[]
     OR?: MeasureProgressWhereInput[]
@@ -29848,7 +28539,6 @@ export namespace Prisma {
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -29888,7 +28578,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -29927,7 +28616,6 @@ export namespace Prisma {
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -29967,7 +28655,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -30634,7 +29321,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     measureProgress?: MeasureProgressCreateNestedManyWithoutResourceInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutResourceInput
     topicResources?: TopicResourceCreateNestedManyWithoutResourceInput
   }
 
@@ -30649,7 +29335,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutResourceInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutResourceInput
     topicResources?: TopicResourceUncheckedCreateNestedManyWithoutResourceInput
   }
 
@@ -30663,7 +29348,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     measureProgress?: MeasureProgressUpdateManyWithoutResourceNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutResourceNestedInput
     topicResources?: TopicResourceUpdateManyWithoutResourceNestedInput
   }
 
@@ -30678,7 +29362,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutResourceNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutResourceNestedInput
     topicResources?: TopicResourceUncheckedUpdateManyWithoutResourceNestedInput
   }
 
@@ -31210,46 +29893,6 @@ export namespace Prisma {
     answerText?: NullableStringFieldUpdateOperationsInput | string | null
     isCorrect?: BoolFieldUpdateOperationsInput | boolean
     timeTakenSec?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type ResourceViewCreateInput = {
-    viewedAt?: Date | string
-    learner: LearnerCreateNestedOneWithoutResourceViewsInput
-    resource: ResourceCreateNestedOneWithoutResourceViewsInput
-  }
-
-  export type ResourceViewUncheckedCreateInput = {
-    learnerId: number
-    resourceId: number
-    viewedAt?: Date | string
-  }
-
-  export type ResourceViewUpdateInput = {
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    learner?: LearnerUpdateOneRequiredWithoutResourceViewsNestedInput
-    resource?: ResourceUpdateOneRequiredWithoutResourceViewsNestedInput
-  }
-
-  export type ResourceViewUncheckedUpdateInput = {
-    learnerId?: IntFieldUpdateOperationsInput | number
-    resourceId?: IntFieldUpdateOperationsInput | number
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ResourceViewCreateManyInput = {
-    learnerId: number
-    resourceId: number
-    viewedAt?: Date | string
-  }
-
-  export type ResourceViewUpdateManyMutationInput = {
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ResourceViewUncheckedUpdateManyInput = {
-    learnerId?: IntFieldUpdateOperationsInput | number
-    resourceId?: IntFieldUpdateOperationsInput | number
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MeasureProgressCreateInput = {
@@ -31789,12 +30432,6 @@ export namespace Prisma {
     none?: QuizAttemptWhereInput
   }
 
-  export type ResourceViewListRelationFilter = {
-    every?: ResourceViewWhereInput
-    some?: ResourceViewWhereInput
-    none?: ResourceViewWhereInput
-  }
-
   export type PasswordResetListRelationFilter = {
     every?: PasswordResetWhereInput
     some?: PasswordResetWhereInput
@@ -31818,10 +30455,6 @@ export namespace Prisma {
   }
 
   export type QuizAttemptOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ResourceViewOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33058,39 +31691,6 @@ export namespace Prisma {
     timeTakenSec?: SortOrder
   }
 
-  export type ResourceViewLearnerIdResourceIdCompoundUniqueInput = {
-    learnerId: number
-    resourceId: number
-  }
-
-  export type ResourceViewCountOrderByAggregateInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-    viewedAt?: SortOrder
-  }
-
-  export type ResourceViewAvgOrderByAggregateInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-  }
-
-  export type ResourceViewMaxOrderByAggregateInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-    viewedAt?: SortOrder
-  }
-
-  export type ResourceViewMinOrderByAggregateInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-    viewedAt?: SortOrder
-  }
-
-  export type ResourceViewSumOrderByAggregateInput = {
-    learnerId?: SortOrder
-    resourceId?: SortOrder
-  }
-
   export type ResourceNullableScalarRelationFilter = {
     is?: ResourceWhereInput | null
     isNot?: ResourceWhereInput | null
@@ -33448,13 +32048,6 @@ export namespace Prisma {
     connect?: QuizAttemptWhereUniqueInput | QuizAttemptWhereUniqueInput[]
   }
 
-  export type ResourceViewCreateNestedManyWithoutLearnerInput = {
-    create?: XOR<ResourceViewCreateWithoutLearnerInput, ResourceViewUncheckedCreateWithoutLearnerInput> | ResourceViewCreateWithoutLearnerInput[] | ResourceViewUncheckedCreateWithoutLearnerInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutLearnerInput | ResourceViewCreateOrConnectWithoutLearnerInput[]
-    createMany?: ResourceViewCreateManyLearnerInputEnvelope
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-  }
-
   export type PasswordResetCreateNestedManyWithoutLearnerInput = {
     create?: XOR<PasswordResetCreateWithoutLearnerInput, PasswordResetUncheckedCreateWithoutLearnerInput> | PasswordResetCreateWithoutLearnerInput[] | PasswordResetUncheckedCreateWithoutLearnerInput[]
     connectOrCreate?: PasswordResetCreateOrConnectWithoutLearnerInput | PasswordResetCreateOrConnectWithoutLearnerInput[]
@@ -33495,13 +32088,6 @@ export namespace Prisma {
     connectOrCreate?: QuizAttemptCreateOrConnectWithoutLearnerInput | QuizAttemptCreateOrConnectWithoutLearnerInput[]
     createMany?: QuizAttemptCreateManyLearnerInputEnvelope
     connect?: QuizAttemptWhereUniqueInput | QuizAttemptWhereUniqueInput[]
-  }
-
-  export type ResourceViewUncheckedCreateNestedManyWithoutLearnerInput = {
-    create?: XOR<ResourceViewCreateWithoutLearnerInput, ResourceViewUncheckedCreateWithoutLearnerInput> | ResourceViewCreateWithoutLearnerInput[] | ResourceViewUncheckedCreateWithoutLearnerInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutLearnerInput | ResourceViewCreateOrConnectWithoutLearnerInput[]
-    createMany?: ResourceViewCreateManyLearnerInputEnvelope
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
   }
 
   export type PasswordResetUncheckedCreateNestedManyWithoutLearnerInput = {
@@ -33595,20 +32181,6 @@ export namespace Prisma {
     deleteMany?: QuizAttemptScalarWhereInput | QuizAttemptScalarWhereInput[]
   }
 
-  export type ResourceViewUpdateManyWithoutLearnerNestedInput = {
-    create?: XOR<ResourceViewCreateWithoutLearnerInput, ResourceViewUncheckedCreateWithoutLearnerInput> | ResourceViewCreateWithoutLearnerInput[] | ResourceViewUncheckedCreateWithoutLearnerInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutLearnerInput | ResourceViewCreateOrConnectWithoutLearnerInput[]
-    upsert?: ResourceViewUpsertWithWhereUniqueWithoutLearnerInput | ResourceViewUpsertWithWhereUniqueWithoutLearnerInput[]
-    createMany?: ResourceViewCreateManyLearnerInputEnvelope
-    set?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    disconnect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    delete?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    update?: ResourceViewUpdateWithWhereUniqueWithoutLearnerInput | ResourceViewUpdateWithWhereUniqueWithoutLearnerInput[]
-    updateMany?: ResourceViewUpdateManyWithWhereWithoutLearnerInput | ResourceViewUpdateManyWithWhereWithoutLearnerInput[]
-    deleteMany?: ResourceViewScalarWhereInput | ResourceViewScalarWhereInput[]
-  }
-
   export type PasswordResetUpdateManyWithoutLearnerNestedInput = {
     create?: XOR<PasswordResetCreateWithoutLearnerInput, PasswordResetUncheckedCreateWithoutLearnerInput> | PasswordResetCreateWithoutLearnerInput[] | PasswordResetUncheckedCreateWithoutLearnerInput[]
     connectOrCreate?: PasswordResetCreateOrConnectWithoutLearnerInput | PasswordResetCreateOrConnectWithoutLearnerInput[]
@@ -33691,20 +32263,6 @@ export namespace Prisma {
     update?: QuizAttemptUpdateWithWhereUniqueWithoutLearnerInput | QuizAttemptUpdateWithWhereUniqueWithoutLearnerInput[]
     updateMany?: QuizAttemptUpdateManyWithWhereWithoutLearnerInput | QuizAttemptUpdateManyWithWhereWithoutLearnerInput[]
     deleteMany?: QuizAttemptScalarWhereInput | QuizAttemptScalarWhereInput[]
-  }
-
-  export type ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput = {
-    create?: XOR<ResourceViewCreateWithoutLearnerInput, ResourceViewUncheckedCreateWithoutLearnerInput> | ResourceViewCreateWithoutLearnerInput[] | ResourceViewUncheckedCreateWithoutLearnerInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutLearnerInput | ResourceViewCreateOrConnectWithoutLearnerInput[]
-    upsert?: ResourceViewUpsertWithWhereUniqueWithoutLearnerInput | ResourceViewUpsertWithWhereUniqueWithoutLearnerInput[]
-    createMany?: ResourceViewCreateManyLearnerInputEnvelope
-    set?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    disconnect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    delete?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    update?: ResourceViewUpdateWithWhereUniqueWithoutLearnerInput | ResourceViewUpdateWithWhereUniqueWithoutLearnerInput[]
-    updateMany?: ResourceViewUpdateManyWithWhereWithoutLearnerInput | ResourceViewUpdateManyWithWhereWithoutLearnerInput[]
-    deleteMany?: ResourceViewScalarWhereInput | ResourceViewScalarWhereInput[]
   }
 
   export type PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput = {
@@ -34424,13 +32982,6 @@ export namespace Prisma {
     connect?: MeasureProgressWhereUniqueInput | MeasureProgressWhereUniqueInput[]
   }
 
-  export type ResourceViewCreateNestedManyWithoutResourceInput = {
-    create?: XOR<ResourceViewCreateWithoutResourceInput, ResourceViewUncheckedCreateWithoutResourceInput> | ResourceViewCreateWithoutResourceInput[] | ResourceViewUncheckedCreateWithoutResourceInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutResourceInput | ResourceViewCreateOrConnectWithoutResourceInput[]
-    createMany?: ResourceViewCreateManyResourceInputEnvelope
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-  }
-
   export type TopicResourceCreateNestedManyWithoutResourceInput = {
     create?: XOR<TopicResourceCreateWithoutResourceInput, TopicResourceUncheckedCreateWithoutResourceInput> | TopicResourceCreateWithoutResourceInput[] | TopicResourceUncheckedCreateWithoutResourceInput[]
     connectOrCreate?: TopicResourceCreateOrConnectWithoutResourceInput | TopicResourceCreateOrConnectWithoutResourceInput[]
@@ -34443,13 +32994,6 @@ export namespace Prisma {
     connectOrCreate?: MeasureProgressCreateOrConnectWithoutResourceInput | MeasureProgressCreateOrConnectWithoutResourceInput[]
     createMany?: MeasureProgressCreateManyResourceInputEnvelope
     connect?: MeasureProgressWhereUniqueInput | MeasureProgressWhereUniqueInput[]
-  }
-
-  export type ResourceViewUncheckedCreateNestedManyWithoutResourceInput = {
-    create?: XOR<ResourceViewCreateWithoutResourceInput, ResourceViewUncheckedCreateWithoutResourceInput> | ResourceViewCreateWithoutResourceInput[] | ResourceViewUncheckedCreateWithoutResourceInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutResourceInput | ResourceViewCreateOrConnectWithoutResourceInput[]
-    createMany?: ResourceViewCreateManyResourceInputEnvelope
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
   }
 
   export type TopicResourceUncheckedCreateNestedManyWithoutResourceInput = {
@@ -34475,20 +33019,6 @@ export namespace Prisma {
     update?: MeasureProgressUpdateWithWhereUniqueWithoutResourceInput | MeasureProgressUpdateWithWhereUniqueWithoutResourceInput[]
     updateMany?: MeasureProgressUpdateManyWithWhereWithoutResourceInput | MeasureProgressUpdateManyWithWhereWithoutResourceInput[]
     deleteMany?: MeasureProgressScalarWhereInput | MeasureProgressScalarWhereInput[]
-  }
-
-  export type ResourceViewUpdateManyWithoutResourceNestedInput = {
-    create?: XOR<ResourceViewCreateWithoutResourceInput, ResourceViewUncheckedCreateWithoutResourceInput> | ResourceViewCreateWithoutResourceInput[] | ResourceViewUncheckedCreateWithoutResourceInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutResourceInput | ResourceViewCreateOrConnectWithoutResourceInput[]
-    upsert?: ResourceViewUpsertWithWhereUniqueWithoutResourceInput | ResourceViewUpsertWithWhereUniqueWithoutResourceInput[]
-    createMany?: ResourceViewCreateManyResourceInputEnvelope
-    set?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    disconnect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    delete?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    update?: ResourceViewUpdateWithWhereUniqueWithoutResourceInput | ResourceViewUpdateWithWhereUniqueWithoutResourceInput[]
-    updateMany?: ResourceViewUpdateManyWithWhereWithoutResourceInput | ResourceViewUpdateManyWithWhereWithoutResourceInput[]
-    deleteMany?: ResourceViewScalarWhereInput | ResourceViewScalarWhereInput[]
   }
 
   export type TopicResourceUpdateManyWithoutResourceNestedInput = {
@@ -34517,20 +33047,6 @@ export namespace Prisma {
     update?: MeasureProgressUpdateWithWhereUniqueWithoutResourceInput | MeasureProgressUpdateWithWhereUniqueWithoutResourceInput[]
     updateMany?: MeasureProgressUpdateManyWithWhereWithoutResourceInput | MeasureProgressUpdateManyWithWhereWithoutResourceInput[]
     deleteMany?: MeasureProgressScalarWhereInput | MeasureProgressScalarWhereInput[]
-  }
-
-  export type ResourceViewUncheckedUpdateManyWithoutResourceNestedInput = {
-    create?: XOR<ResourceViewCreateWithoutResourceInput, ResourceViewUncheckedCreateWithoutResourceInput> | ResourceViewCreateWithoutResourceInput[] | ResourceViewUncheckedCreateWithoutResourceInput[]
-    connectOrCreate?: ResourceViewCreateOrConnectWithoutResourceInput | ResourceViewCreateOrConnectWithoutResourceInput[]
-    upsert?: ResourceViewUpsertWithWhereUniqueWithoutResourceInput | ResourceViewUpsertWithWhereUniqueWithoutResourceInput[]
-    createMany?: ResourceViewCreateManyResourceInputEnvelope
-    set?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    disconnect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    delete?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    connect?: ResourceViewWhereUniqueInput | ResourceViewWhereUniqueInput[]
-    update?: ResourceViewUpdateWithWhereUniqueWithoutResourceInput | ResourceViewUpdateWithWhereUniqueWithoutResourceInput[]
-    updateMany?: ResourceViewUpdateManyWithWhereWithoutResourceInput | ResourceViewUpdateManyWithWhereWithoutResourceInput[]
-    deleteMany?: ResourceViewScalarWhereInput | ResourceViewScalarWhereInput[]
   }
 
   export type TopicResourceUncheckedUpdateManyWithoutResourceNestedInput = {
@@ -34913,34 +33429,6 @@ export namespace Prisma {
     upsert?: QuizAttemptUpsertWithoutQuestionAttemptsInput
     connect?: QuizAttemptWhereUniqueInput
     update?: XOR<XOR<QuizAttemptUpdateToOneWithWhereWithoutQuestionAttemptsInput, QuizAttemptUpdateWithoutQuestionAttemptsInput>, QuizAttemptUncheckedUpdateWithoutQuestionAttemptsInput>
-  }
-
-  export type LearnerCreateNestedOneWithoutResourceViewsInput = {
-    create?: XOR<LearnerCreateWithoutResourceViewsInput, LearnerUncheckedCreateWithoutResourceViewsInput>
-    connectOrCreate?: LearnerCreateOrConnectWithoutResourceViewsInput
-    connect?: LearnerWhereUniqueInput
-  }
-
-  export type ResourceCreateNestedOneWithoutResourceViewsInput = {
-    create?: XOR<ResourceCreateWithoutResourceViewsInput, ResourceUncheckedCreateWithoutResourceViewsInput>
-    connectOrCreate?: ResourceCreateOrConnectWithoutResourceViewsInput
-    connect?: ResourceWhereUniqueInput
-  }
-
-  export type LearnerUpdateOneRequiredWithoutResourceViewsNestedInput = {
-    create?: XOR<LearnerCreateWithoutResourceViewsInput, LearnerUncheckedCreateWithoutResourceViewsInput>
-    connectOrCreate?: LearnerCreateOrConnectWithoutResourceViewsInput
-    upsert?: LearnerUpsertWithoutResourceViewsInput
-    connect?: LearnerWhereUniqueInput
-    update?: XOR<XOR<LearnerUpdateToOneWithWhereWithoutResourceViewsInput, LearnerUpdateWithoutResourceViewsInput>, LearnerUncheckedUpdateWithoutResourceViewsInput>
-  }
-
-  export type ResourceUpdateOneRequiredWithoutResourceViewsNestedInput = {
-    create?: XOR<ResourceCreateWithoutResourceViewsInput, ResourceUncheckedCreateWithoutResourceViewsInput>
-    connectOrCreate?: ResourceCreateOrConnectWithoutResourceViewsInput
-    upsert?: ResourceUpsertWithoutResourceViewsInput
-    connect?: ResourceWhereUniqueInput
-    update?: XOR<XOR<ResourceUpdateToOneWithWhereWithoutResourceViewsInput, ResourceUpdateWithoutResourceViewsInput>, ResourceUncheckedUpdateWithoutResourceViewsInput>
   }
 
   export type LearnerCreateNestedOneWithoutMeasureProgressInput = {
@@ -35985,7 +34473,6 @@ export namespace Prisma {
     creator?: LearnerCreateNestedOneWithoutCreatedLearnersInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -36024,7 +34511,6 @@ export namespace Prisma {
     leaderboards?: LeaderboardUncheckedCreateNestedManyWithoutLearnerInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -36067,7 +34553,6 @@ export namespace Prisma {
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -36106,7 +34591,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -36187,26 +34671,6 @@ export namespace Prisma {
 
   export type QuizAttemptCreateManyLearnerInputEnvelope = {
     data: QuizAttemptCreateManyLearnerInput | QuizAttemptCreateManyLearnerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ResourceViewCreateWithoutLearnerInput = {
-    viewedAt?: Date | string
-    resource: ResourceCreateNestedOneWithoutResourceViewsInput
-  }
-
-  export type ResourceViewUncheckedCreateWithoutLearnerInput = {
-    resourceId: number
-    viewedAt?: Date | string
-  }
-
-  export type ResourceViewCreateOrConnectWithoutLearnerInput = {
-    where: ResourceViewWhereUniqueInput
-    create: XOR<ResourceViewCreateWithoutLearnerInput, ResourceViewUncheckedCreateWithoutLearnerInput>
-  }
-
-  export type ResourceViewCreateManyLearnerInputEnvelope = {
-    data: ResourceViewCreateManyLearnerInput | ResourceViewCreateManyLearnerInput[]
     skipDuplicates?: boolean
   }
 
@@ -36331,7 +34795,6 @@ export namespace Prisma {
     creator?: LearnerUpdateOneWithoutCreatedLearnersNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -36370,7 +34833,6 @@ export namespace Prisma {
     leaderboards?: LeaderboardUncheckedUpdateManyWithoutLearnerNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -36489,31 +34951,6 @@ export namespace Prisma {
     passed?: BoolNullableFilter<"QuizAttempt"> | boolean | null
     status?: StringFilter<"QuizAttempt"> | string
     createdAt?: DateTimeFilter<"QuizAttempt"> | Date | string
-  }
-
-  export type ResourceViewUpsertWithWhereUniqueWithoutLearnerInput = {
-    where: ResourceViewWhereUniqueInput
-    update: XOR<ResourceViewUpdateWithoutLearnerInput, ResourceViewUncheckedUpdateWithoutLearnerInput>
-    create: XOR<ResourceViewCreateWithoutLearnerInput, ResourceViewUncheckedCreateWithoutLearnerInput>
-  }
-
-  export type ResourceViewUpdateWithWhereUniqueWithoutLearnerInput = {
-    where: ResourceViewWhereUniqueInput
-    data: XOR<ResourceViewUpdateWithoutLearnerInput, ResourceViewUncheckedUpdateWithoutLearnerInput>
-  }
-
-  export type ResourceViewUpdateManyWithWhereWithoutLearnerInput = {
-    where: ResourceViewScalarWhereInput
-    data: XOR<ResourceViewUpdateManyMutationInput, ResourceViewUncheckedUpdateManyWithoutLearnerInput>
-  }
-
-  export type ResourceViewScalarWhereInput = {
-    AND?: ResourceViewScalarWhereInput | ResourceViewScalarWhereInput[]
-    OR?: ResourceViewScalarWhereInput[]
-    NOT?: ResourceViewScalarWhereInput | ResourceViewScalarWhereInput[]
-    learnerId?: IntFilter<"ResourceView"> | number
-    resourceId?: IntFilter<"ResourceView"> | number
-    viewedAt?: DateTimeFilter<"ResourceView"> | Date | string
   }
 
   export type PasswordResetUpsertWithWhereUniqueWithoutLearnerInput = {
@@ -37192,7 +35629,6 @@ export namespace Prisma {
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -37231,7 +35667,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -37361,7 +35796,6 @@ export namespace Prisma {
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -37400,7 +35834,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -38173,26 +36606,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ResourceViewCreateWithoutResourceInput = {
-    viewedAt?: Date | string
-    learner: LearnerCreateNestedOneWithoutResourceViewsInput
-  }
-
-  export type ResourceViewUncheckedCreateWithoutResourceInput = {
-    learnerId: number
-    viewedAt?: Date | string
-  }
-
-  export type ResourceViewCreateOrConnectWithoutResourceInput = {
-    where: ResourceViewWhereUniqueInput
-    create: XOR<ResourceViewCreateWithoutResourceInput, ResourceViewUncheckedCreateWithoutResourceInput>
-  }
-
-  export type ResourceViewCreateManyResourceInputEnvelope = {
-    data: ResourceViewCreateManyResourceInput | ResourceViewCreateManyResourceInput[]
-    skipDuplicates?: boolean
-  }
-
   export type TopicResourceCreateWithoutResourceInput = {
     position: number
     topic: TopicCreateNestedOneWithoutTopicResourcesInput
@@ -38229,22 +36642,6 @@ export namespace Prisma {
     data: XOR<MeasureProgressUpdateManyMutationInput, MeasureProgressUncheckedUpdateManyWithoutResourceInput>
   }
 
-  export type ResourceViewUpsertWithWhereUniqueWithoutResourceInput = {
-    where: ResourceViewWhereUniqueInput
-    update: XOR<ResourceViewUpdateWithoutResourceInput, ResourceViewUncheckedUpdateWithoutResourceInput>
-    create: XOR<ResourceViewCreateWithoutResourceInput, ResourceViewUncheckedCreateWithoutResourceInput>
-  }
-
-  export type ResourceViewUpdateWithWhereUniqueWithoutResourceInput = {
-    where: ResourceViewWhereUniqueInput
-    data: XOR<ResourceViewUpdateWithoutResourceInput, ResourceViewUncheckedUpdateWithoutResourceInput>
-  }
-
-  export type ResourceViewUpdateManyWithWhereWithoutResourceInput = {
-    where: ResourceViewScalarWhereInput
-    data: XOR<ResourceViewUpdateManyMutationInput, ResourceViewUncheckedUpdateManyWithoutResourceInput>
-  }
-
   export type TopicResourceUpsertWithWhereUniqueWithoutResourceInput = {
     where: TopicResourceWhereUniqueInput
     update: XOR<TopicResourceUpdateWithoutResourceInput, TopicResourceUncheckedUpdateWithoutResourceInput>
@@ -38271,7 +36668,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     measureProgress?: MeasureProgressCreateNestedManyWithoutResourceInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutResourceInput
   }
 
   export type ResourceUncheckedCreateWithoutTopicResourcesInput = {
@@ -38285,7 +36681,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutResourceInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutResourceInput
   }
 
   export type ResourceCreateOrConnectWithoutTopicResourcesInput = {
@@ -38348,7 +36743,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     measureProgress?: MeasureProgressUpdateManyWithoutResourceNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutResourceNestedInput
   }
 
   export type ResourceUncheckedUpdateWithoutTopicResourcesInput = {
@@ -38362,7 +36756,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutResourceNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutResourceNestedInput
   }
 
   export type TopicUpsertWithoutTopicResourcesInput = {
@@ -39108,7 +37501,6 @@ export namespace Prisma {
     creator?: LearnerCreateNestedOneWithoutCreatedLearnersInput
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -39147,7 +37539,6 @@ export namespace Prisma {
     leaderboards?: LeaderboardUncheckedCreateNestedManyWithoutLearnerInput
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -39266,7 +37657,6 @@ export namespace Prisma {
     creator?: LearnerUpdateOneWithoutCreatedLearnersNestedInput
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -39305,7 +37695,6 @@ export namespace Prisma {
     leaderboards?: LeaderboardUncheckedUpdateManyWithoutLearnerNestedInput
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -39379,246 +37768,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LearnerCreateWithoutResourceViewsInput = {
-    first_name: string
-    last_name: string
-    gender?: string | null
-    dob?: Date | string | null
-    email: string
-    phone?: Uint8Array | null
-    communicationEmail?: Uint8Array | null
-    password?: string | null
-    profile_image?: string | null
-    image_id?: string | null
-    organisation?: string | null
-    designation?: string | null
-    department?: string | null
-    location?: string | null
-    hierarchy_level?: string | null
-    totalPoints?: number
-    isActive?: boolean
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    isVerified?: boolean
-    lastLogin?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    uniqueHash?: string | null
-    status?: number | null
-    extraConfig?: string | null
-    metaData?: string | null
-    role: string
-    enrollments?: EnrollmentCreateNestedManyWithoutLearnerInput
-    leaderboards?: LeaderboardCreateNestedManyWithoutLearnerInput
-    creator?: LearnerCreateNestedOneWithoutCreatedLearnersInput
-    createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
-    measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
-    quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
-  }
-
-  export type LearnerUncheckedCreateWithoutResourceViewsInput = {
-    id?: number
-    first_name: string
-    last_name: string
-    gender?: string | null
-    dob?: Date | string | null
-    email: string
-    phone?: Uint8Array | null
-    communicationEmail?: Uint8Array | null
-    password?: string | null
-    profile_image?: string | null
-    image_id?: string | null
-    organisation?: string | null
-    designation?: string | null
-    department?: string | null
-    location?: string | null
-    hierarchy_level?: string | null
-    totalPoints?: number
-    isActive?: boolean
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    isVerified?: boolean
-    lastLogin?: Date | string | null
-    createdBy?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    uniqueHash?: string | null
-    status?: number | null
-    extraConfig?: string | null
-    metaData?: string | null
-    role: string
-    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutLearnerInput
-    leaderboards?: LeaderboardUncheckedCreateNestedManyWithoutLearnerInput
-    createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
-    measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
-    quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
-  }
-
-  export type LearnerCreateOrConnectWithoutResourceViewsInput = {
-    where: LearnerWhereUniqueInput
-    create: XOR<LearnerCreateWithoutResourceViewsInput, LearnerUncheckedCreateWithoutResourceViewsInput>
-  }
-
-  export type ResourceCreateWithoutResourceViewsInput = {
-    resourceType: $Enums.ResourceType
-    url: string
-    title?: string | null
-    description?: string | null
-    status?: number | null
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    measureProgress?: MeasureProgressCreateNestedManyWithoutResourceInput
-    topicResources?: TopicResourceCreateNestedManyWithoutResourceInput
-  }
-
-  export type ResourceUncheckedCreateWithoutResourceViewsInput = {
-    id?: number
-    resourceType: $Enums.ResourceType
-    url: string
-    title?: string | null
-    description?: string | null
-    status?: number | null
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutResourceInput
-    topicResources?: TopicResourceUncheckedCreateNestedManyWithoutResourceInput
-  }
-
-  export type ResourceCreateOrConnectWithoutResourceViewsInput = {
-    where: ResourceWhereUniqueInput
-    create: XOR<ResourceCreateWithoutResourceViewsInput, ResourceUncheckedCreateWithoutResourceViewsInput>
-  }
-
-  export type LearnerUpsertWithoutResourceViewsInput = {
-    update: XOR<LearnerUpdateWithoutResourceViewsInput, LearnerUncheckedUpdateWithoutResourceViewsInput>
-    create: XOR<LearnerCreateWithoutResourceViewsInput, LearnerUncheckedCreateWithoutResourceViewsInput>
-    where?: LearnerWhereInput
-  }
-
-  export type LearnerUpdateToOneWithWhereWithoutResourceViewsInput = {
-    where?: LearnerWhereInput
-    data: XOR<LearnerUpdateWithoutResourceViewsInput, LearnerUncheckedUpdateWithoutResourceViewsInput>
-  }
-
-  export type LearnerUpdateWithoutResourceViewsInput = {
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image?: NullableStringFieldUpdateOperationsInput | string | null
-    image_id?: NullableStringFieldUpdateOperationsInput | string | null
-    organisation?: NullableStringFieldUpdateOperationsInput | string | null
-    designation?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    hierarchy_level?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPoints?: IntFieldUpdateOperationsInput | number
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isVerified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    uniqueHash?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableIntFieldUpdateOperationsInput | number | null
-    extraConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    metaData?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
-    enrollments?: EnrollmentUpdateManyWithoutLearnerNestedInput
-    leaderboards?: LeaderboardUpdateManyWithoutLearnerNestedInput
-    creator?: LearnerUpdateOneWithoutCreatedLearnersNestedInput
-    createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
-    measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
-    quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
-  }
-
-  export type LearnerUncheckedUpdateWithoutResourceViewsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    first_name?: StringFieldUpdateOperationsInput | string
-    last_name?: StringFieldUpdateOperationsInput | string
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    communicationEmail?: NullableBytesFieldUpdateOperationsInput | Uint8Array | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image?: NullableStringFieldUpdateOperationsInput | string | null
-    image_id?: NullableStringFieldUpdateOperationsInput | string | null
-    organisation?: NullableStringFieldUpdateOperationsInput | string | null
-    designation?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    hierarchy_level?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPoints?: IntFieldUpdateOperationsInput | number
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isVerified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    uniqueHash?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableIntFieldUpdateOperationsInput | number | null
-    extraConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    metaData?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
-    enrollments?: EnrollmentUncheckedUpdateManyWithoutLearnerNestedInput
-    leaderboards?: LeaderboardUncheckedUpdateManyWithoutLearnerNestedInput
-    createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
-    measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
-    quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
-  }
-
-  export type ResourceUpsertWithoutResourceViewsInput = {
-    update: XOR<ResourceUpdateWithoutResourceViewsInput, ResourceUncheckedUpdateWithoutResourceViewsInput>
-    create: XOR<ResourceCreateWithoutResourceViewsInput, ResourceUncheckedCreateWithoutResourceViewsInput>
-    where?: ResourceWhereInput
-  }
-
-  export type ResourceUpdateToOneWithWhereWithoutResourceViewsInput = {
-    where?: ResourceWhereInput
-    data: XOR<ResourceUpdateWithoutResourceViewsInput, ResourceUncheckedUpdateWithoutResourceViewsInput>
-  }
-
-  export type ResourceUpdateWithoutResourceViewsInput = {
-    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
-    url?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableIntFieldUpdateOperationsInput | number | null
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    measureProgress?: MeasureProgressUpdateManyWithoutResourceNestedInput
-    topicResources?: TopicResourceUpdateManyWithoutResourceNestedInput
-  }
-
-  export type ResourceUncheckedUpdateWithoutResourceViewsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
-    url?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableIntFieldUpdateOperationsInput | number | null
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    measureProgress?: MeasureProgressUncheckedUpdateManyWithoutResourceNestedInput
-    topicResources?: TopicResourceUncheckedUpdateManyWithoutResourceNestedInput
-  }
-
   export type LearnerCreateWithoutMeasureProgressInput = {
     first_name: string
     last_name: string
@@ -39653,7 +37802,6 @@ export namespace Prisma {
     creator?: LearnerCreateNestedOneWithoutCreatedLearnersInput
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -39692,7 +37840,6 @@ export namespace Prisma {
     leaderboards?: LeaderboardUncheckedCreateNestedManyWithoutLearnerInput
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -39820,7 +37967,6 @@ export namespace Prisma {
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
-    resourceViews?: ResourceViewCreateNestedManyWithoutResourceInput
     topicResources?: TopicResourceCreateNestedManyWithoutResourceInput
   }
 
@@ -39834,7 +37980,6 @@ export namespace Prisma {
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutResourceInput
     topicResources?: TopicResourceUncheckedCreateNestedManyWithoutResourceInput
   }
 
@@ -39922,7 +38067,6 @@ export namespace Prisma {
     creator?: LearnerUpdateOneWithoutCreatedLearnersNestedInput
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -39961,7 +38105,6 @@ export namespace Prisma {
     leaderboards?: LeaderboardUncheckedUpdateManyWithoutLearnerNestedInput
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -40107,7 +38250,6 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    resourceViews?: ResourceViewUpdateManyWithoutResourceNestedInput
     topicResources?: TopicResourceUpdateManyWithoutResourceNestedInput
   }
 
@@ -40121,7 +38263,6 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutResourceNestedInput
     topicResources?: TopicResourceUncheckedUpdateManyWithoutResourceNestedInput
   }
 
@@ -40199,7 +38340,6 @@ export namespace Prisma {
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetCreateNestedManyWithoutLearnerInput
   }
 
@@ -40238,7 +38378,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutLearnerInput
   }
 
@@ -40368,7 +38507,6 @@ export namespace Prisma {
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -40407,7 +38545,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -40528,7 +38665,6 @@ export namespace Prisma {
     createdLearners?: LearnerCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewCreateNestedManyWithoutLearnerInput
   }
 
   export type LearnerUncheckedCreateWithoutPasswordResetsInput = {
@@ -40567,7 +38703,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedCreateNestedManyWithoutCreatorInput
     measureProgress?: MeasureProgressUncheckedCreateNestedManyWithoutLearnerInput
     quizAttempts?: QuizAttemptUncheckedCreateNestedManyWithoutLearnerInput
-    resourceViews?: ResourceViewUncheckedCreateNestedManyWithoutLearnerInput
   }
 
   export type LearnerCreateOrConnectWithoutPasswordResetsInput = {
@@ -40621,7 +38756,6 @@ export namespace Prisma {
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
   }
 
   export type LearnerUncheckedUpdateWithoutPasswordResetsInput = {
@@ -40660,7 +38794,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
   export type AdminCreateManyCreatorInput = {
@@ -41011,11 +39144,6 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ResourceViewCreateManyLearnerInput = {
-    resourceId: number
-    viewedAt?: Date | string
-  }
-
   export type PasswordResetCreateManyLearnerInput = {
     id?: string
     token: string
@@ -41092,7 +39220,6 @@ export namespace Prisma {
     createdLearners?: LearnerUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutLearnerNestedInput
   }
 
@@ -41131,7 +39258,6 @@ export namespace Prisma {
     createdLearners?: LearnerUncheckedUpdateManyWithoutCreatorNestedInput
     measureProgress?: MeasureProgressUncheckedUpdateManyWithoutLearnerNestedInput
     quizAttempts?: QuizAttemptUncheckedUpdateManyWithoutLearnerNestedInput
-    resourceViews?: ResourceViewUncheckedUpdateManyWithoutLearnerNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutLearnerNestedInput
   }
 
@@ -41240,21 +39366,6 @@ export namespace Prisma {
     passed?: NullableBoolFieldUpdateOperationsInput | boolean | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ResourceViewUpdateWithoutLearnerInput = {
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    resource?: ResourceUpdateOneRequiredWithoutResourceViewsNestedInput
-  }
-
-  export type ResourceViewUncheckedUpdateWithoutLearnerInput = {
-    resourceId?: IntFieldUpdateOperationsInput | number
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ResourceViewUncheckedUpdateManyWithoutLearnerInput = {
-    resourceId?: IntFieldUpdateOperationsInput | number
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PasswordResetUpdateWithoutLearnerInput = {
@@ -41733,11 +39844,6 @@ export namespace Prisma {
     quizId?: number | null
   }
 
-  export type ResourceViewCreateManyResourceInput = {
-    learnerId: number
-    viewedAt?: Date | string
-  }
-
   export type TopicResourceCreateManyResourceInput = {
     topicId: number
     position: number
@@ -41776,21 +39882,6 @@ export namespace Prisma {
     programId?: NullableIntFieldUpdateOperationsInput | number | null
     moduleId?: NullableIntFieldUpdateOperationsInput | number | null
     quizId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type ResourceViewUpdateWithoutResourceInput = {
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    learner?: LearnerUpdateOneRequiredWithoutResourceViewsNestedInput
-  }
-
-  export type ResourceViewUncheckedUpdateWithoutResourceInput = {
-    learnerId?: IntFieldUpdateOperationsInput | number
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ResourceViewUncheckedUpdateManyWithoutResourceInput = {
-    learnerId?: IntFieldUpdateOperationsInput | number
-    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TopicResourceUpdateWithoutResourceInput = {
