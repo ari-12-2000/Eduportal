@@ -16,18 +16,19 @@ export default async function CourseDetail({
   params: Promise<{ programId: string }>
   searchParams: Promise<{ [enrolled: string]: string | undefined }>
 }) {
-    const { programId } = await params;
-    const {enrolled} = await searchParams;
-    let courseData:Course|null = null;
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${programId}`,{ next: { revalidate: 3600 } })
-        const data = await res.json()
-        if(!res.ok)
-          throw new Error(data.error)
-        courseData = data.data
-      } catch (err: any) {
-        console.error("Error fetching course:", err)
-      }  
+  const { programId } = await params;
+  const { enrolled } = await searchParams;
+  let courseData: Course | null = null;
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${programId}`,
+      { cache: "no-store" }) // optional, avoids caching in Next.js
+    const data = await res.json()
+    if (!res.ok)
+      throw new Error(data.error)
+    courseData = data.data
+  } catch (err: any) {
+    console.error("Error fetching course:", err)
+  }
 
-     return  <CourseClientWrapper  courseData={courseData} enrolled={enrolled}/>
+  return <CourseClientWrapper courseData={courseData} enrolled={enrolled} />
 }
