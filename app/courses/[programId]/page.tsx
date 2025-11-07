@@ -1,14 +1,6 @@
 import CourseClientWrapper from "@/components/course/course-client-wrapper";
 import { Course } from "@/types/course";
 
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses`);
-  const data = await res.json();
-  return data?.data?.map((course: any) => ({ programId: course.id.toString() })) || [];
-}
-
 export default async function CourseDetail({
   params,
   searchParams,
