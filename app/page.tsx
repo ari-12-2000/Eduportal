@@ -7,21 +7,24 @@ import { CoursesList } from "@/components/courses-list"
 import { useCourses } from "@/contexts/course-context"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
- const categoryIcons = {
-    "Web Development": { icon: Code, color: "bg-blue-500" },
-    "UI/UX Design": { icon: Palette, color: "bg-purple-500" },
-    "Database": { icon: Database, color: "bg-green-500" },
-    "Data Science": { icon: BarChartBig, color: "bg-green-500" },
-    "Machine Learning": { icon: Brain, color: "bg-red-500" },
-    "Digital Marketing": { icon: Megaphone, color: "bg-orange-500" },
-    "Mobile Development": { icon: Smartphone, color: "bg-orange-500" },
-  } as const;
+import { useSession } from "next-auth/react"
+const categoryIcons = {
+  "Web Development": { icon: Code, color: "bg-blue-500" },
+  "UI/UX Design": { icon: Palette, color: "bg-purple-500" },
+  "Database": { icon: Database, color: "bg-green-500" },
+  "Data Science": { icon: BarChartBig, color: "bg-green-500" },
+  "Machine Learning": { icon: Brain, color: "bg-red-500" },
+  "Digital Marketing": { icon: Megaphone, color: "bg-orange-500" },
+  "Mobile Development": { icon: Smartphone, color: "bg-orange-500" },
+} as const;
 
 
 export default function HomePage() {
   const router = useRouter()
   const { courses, categories, filterCategory, setFilterCategory } = useCourses();
- const {isLoading} = useAuth();
+  const { isLoading } = useAuth();
+  const { status } = useSession();
+
 
   const handleCategoryClick = (categoryName: string) => {
     console.log(categoryName);
@@ -34,7 +37,7 @@ export default function HomePage() {
       setFilterCategory("");
     router.push("/courses/search/")
   }
-   return (
+  return (
     <div className=" bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden">
@@ -109,7 +112,7 @@ export default function HomePage() {
             </p>
           </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {categories.map((cat: { category: string }) => {
               const Icon = categoryIcons[cat.category as keyof typeof categoryIcons].icon || Code;
               console.log(Icon);
@@ -135,7 +138,7 @@ export default function HomePage() {
             })}
 
           </div>
-          
+
         </section>
 
         {/* Featured Courses */}
@@ -153,7 +156,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {isLoading ? (
+          {status=='loading' || isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
                 <div
@@ -185,11 +188,11 @@ export default function HomePage() {
               ))}
             </div>
           ) : (<>
-            <CoursesList courses={courses!.slice(0,3)} />
+            <CoursesList courses={courses!.slice(0, 3)} />
             <Link href="/courses/search" className="text-lg text-blue-600 hover:underline flex items-center justify-center md:hidden mt-4">
               View all courses →
             </Link>
-            </>
+          </>
           )}
         </section>
       </div>
