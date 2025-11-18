@@ -145,14 +145,22 @@ export default function ChatbotSidebar({ open, onClose }: { open: boolean; onClo
                 {messages.map((msg, i) => (
                   <div
                     key={i}
-                    className={`p-2 rounded-lg whitespace-pre-line ${msg.sender === "user"
-                      ? "bg-blue-100 text-blue-900 self-end"
-                      : "bg-gray-200 text-gray-800"
-                      }`}
+                    className={`flex w-full ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    {msg.text}
+                    <div
+                      className={`
+                      p-2 rounded-lg whitespace-pre-line max-w-[75%]
+                      ${msg.sender === "user"
+                          ? "bg-blue-100 text-blue-900"
+                          : "bg-gray-200 text-gray-800"
+                        }
+                  `}
+                    >
+                      {msg.text}
+                    </div>
                   </div>
                 ))}
+
 
                 {/* 👇 NEW: Typing Indicator */}
                 {typing && (
