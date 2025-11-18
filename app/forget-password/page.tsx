@@ -7,19 +7,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { AlertCircle, CheckCircle2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useRouter } from 'next/navigation';
+
 
 const forgetPassword = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState("")
+    const [message, setMessage] = useState("")
     const [email, setEmail] = useState("")
-    const router=useRouter();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
-        setSuccess("")
+        setMessage("")
 
         if (!email.trim()) {
             setError("Email is required.")
@@ -38,12 +37,12 @@ const forgetPassword = () => {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Request failed");
-            setSuccess(data.message);
-            router.push('/login');
+            console.log("Password reset requested:", data);
         } catch (error) {
-            setError((error as Error).message);
+            console.log("Error requesting password reset:", error);
         } finally {
             setLoading(false);
+            setMessage("If your email is registered, you’ll receive a password reset link soon.");
         }
 
     }
@@ -58,7 +57,7 @@ const forgetPassword = () => {
                         <span className="ml-2 text-2xl font-semibold text-gray-900">EduPortal</span>
                     </div>
                     <CardTitle className="text-2xl text-center">Forgot your password</CardTitle>
-                    <CardDescription className='text-center'>Please enter the email address you'd like your password reset information sent to</CardDescription>
+                    <CardDescription className='text-center'>Enter your email address below, and we’ll send you a link to reset your password.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {error && (
@@ -67,14 +66,15 @@ const forgetPassword = () => {
                             <AlertDescription>{error}</AlertDescription>
                         </Alert>
                     )}
-                    {success && (
+                    {message && (
                         <Alert className="mb-4 border-green-100 bg-green-50 text-green-800">
                             <CheckCircle2 className="h-5 w-5 text-green-600" />
-                            <AlertDescription className="font-medium">{success}</AlertDescription>
+                            <AlertDescription className="font-medium">{message}</AlertDescription>
                         </Alert>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    {!message && (<form onSubmit={handleSubmit} className="space-y-4">
+
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -89,7 +89,7 @@ const forgetPassword = () => {
                         <Button type="submit" className="w-full" disabled={loading}>
                             {loading ? "Requesting..." : "Request reset link"}
                         </Button>
-                    </form>
+                    </form>)}
 
                 </CardContent>
             </Card>

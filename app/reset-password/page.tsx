@@ -8,18 +8,40 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useRouter, useSearchParams } from 'next/navigation'
-
+import Link from 'next/link'
 
 const ResetPassword = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const rawToken = searchParams.get("token") ?? "";
-
-    const [showPassword, setShowPassword] = useState(false)
-    const [password, setPassword] = useState("")
+    const [showPassword, setShowPassword] = useState(false);
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState("")
+    const [success, setSuccess] = useState("");
+    const [countdown, setCountdown] = useState(5); // ⏱️ seconds before redirect
+
+
+    useEffect(() => {
+        if (success) {
+            const timer = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+            return () => clearInterval(timer);
+        }
+    }, [success]);
+
+    useEffect(() => {
+        if (countdown === 0 && success) {
+            router.push("/login");
+        }
+    }, [countdown, success, router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,14 +50,16 @@ const ResetPassword = () => {
         setError(null);
 
         if (!password.trim()) {
-            setError("Password is required.")
-            return
+            setError("Password is required.");
+            setLoading(false);
+            return;
         }
 
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
         if (!passwordRegex.test(password)) {
-            setError("Password must be at least 8 characters long and include uppercase, lowercase, and a special character.")
-            return
+            setError("Password must be at least 8 characters long and should include uppercase, lowercase, and a special character.");
+            setLoading(false);
+            return;
         }
 
         try {
@@ -49,14 +73,13 @@ const ResetPassword = () => {
             if (!res.ok) throw new Error(data.error || "Reset failed");
 
             setSuccess(data.message);
-            router.push("/login");
         } catch (err: any) {
-            setError(err);
-            console.log(err);
+            setError(err.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
     };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
             <Card className="w-full max-w-md">
@@ -76,46 +99,57 @@ const ResetPassword = () => {
                             <AlertDescription>{error}</AlertDescription>
                         </Alert>
                     )}
+
                     {success && (
                         <Alert className="mb-4 border-green-100 bg-green-50 text-green-800">
                             <CheckCircle2 className="h-5 w-5 text-green-600" />
-                            <AlertDescription className="font-medium">{success}</AlertDescription>
+                            <AlertDescription className="font-medium space-y-1">
+                                <p>{success}</p>
+                                <p>Redirecting to login in {countdown} seconds...</p>
+                                <p>
+                                    Or <Link href="/login" className="underline text-green-700 hover:text-green-900">go to login now</Link>.
+                                </p>
+                            </AlertDescription>
                         </Alert>
                     )}
 
-                    <form className='space-y-4' onSubmit={handleSubmit}>
-                        <div className="space-y-2 relative">
-                            <Label htmlFor="password">Password</Label>
-                            <p className="text-xs text-muted-foreground mb-1">
-                                i) At least 8 characters<br />
-                                ii) Include uppercase, lowercase, and a special character
-                            </p>
-                            <Input
-                                id="password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Enter your password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className='relative'
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-[4.7rem] text-gray-500 hover:text-gray-800"
-                            >
-                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                            </button>
-                        </div>
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Resetting..." : "Reset password"}
-                        </Button>
-                    </form>
+                    {!success && (
+                        <form className="space-y-4" onSubmit={handleSubmit}>
+
+                            <div className="space-y-2 relative">
+                                <Label htmlFor="password">Password</Label>
+                                <p className="text-xs text-muted-foreground mb-1">
+                                    i) At least 8 characters<br />
+                                    ii) Include uppercase, lowercase, and a special character
+                                </p>
+                                <Input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder={"Enter your password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className="relative"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-[4.7rem] text-gray-500 hover:text-gray-800"
+                                >
+                                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                </button>
+                            </div>
+
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading
+                                    ? "Resetting..." : "Reset Password"}
+                            </Button>
+                        </form>
+                    )}
                 </CardContent>
             </Card>
         </div>
+    );
+};
 
-    )
-}
-
-export default ResetPassword
+export default ResetPassword;

@@ -291,7 +291,7 @@ export class AuthController {
         include: { learner: true } // get learner info safely from DB
       });
 
-      if (!resetEntry || !resetEntry.learner) { return NextResponse.json({ error: "Invalid or expired reset token" }, { status: 409 }) }
+      if (!resetEntry || !resetEntry.learner) { return NextResponse.json({ error: "Invalid or expired reset link" }, { status: 409 }) }
 
       const hash = await bcrypt.hash(newPassword, 10);
       await prisma.learner.update({

@@ -6,3 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 
+export function cleanJSON(raw: string) {
+  return raw
+    .replace(/```json/i, "") // remove ```json
+    .replace(/```/g, "")     // remove ```
+    .trim();
+}

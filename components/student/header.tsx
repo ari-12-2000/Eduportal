@@ -3,17 +3,19 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Search, Bell, MessageSquare, Menu, ArrowLeft } from "lucide-react"
+import { Search, Bell, MessageCircle, Menu, ArrowLeft } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 interface HeaderProps {
   toggleSidebar: () => void
+  toggleChatBot: () => void
 }
 
-export function Header({ toggleSidebar }: HeaderProps) {
+export function Header({ toggleSidebar, toggleChatBot }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchValue, setSearchValue] = useState("")
   const pathname = usePathname()
@@ -46,10 +48,10 @@ export function Header({ toggleSidebar }: HeaderProps) {
         </div>
 
         <div className="hidden ml-2 lg:flex items-center xl:hidden">
-            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold">E</span>
-            </div>
-            <span className="ml-2 text-xl font-semibold text-gray-800">Eduportal</span>
+          <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
+            <span className="text-white font-bold">E</span>
+          </div>
+          <span className="ml-2 text-xl font-semibold text-gray-800">Eduportal</span>
         </div>
       </div>
 
@@ -105,8 +107,22 @@ export function Header({ toggleSidebar }: HeaderProps) {
         <Button variant="ghost" size="icon" className="text-gray-500">
           <Bell className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" className="text-gray-500">
-          <MessageSquare className="h-5 w-5" />
+        <Button
+          onClick={toggleChatBot}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-600 to bg-purple-600 text-white hover:text-white rounded-full
+           hover:bg-blue-500 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/40
+           transition-all duration-300"
+        >
+          <MessageCircle className="h-5 w-5" />
+          <div className="relative w-10 h-10">
+            <Image
+              src="/images/chatbot.png"
+              alt="AI Robot image"
+              fill
+              className="object-contain"
+            />
+          </div>
+
         </Button>
       </div>
     </header>

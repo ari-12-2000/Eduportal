@@ -43,12 +43,12 @@ export default function SearchPage() {
   const [mounted, setMounted] = useState(false)
 
   const categories = [
-    "Web Development",
-    "UI/UX Design",
-    "Data Science",
-    "Database",
-    "Machine Learning",
-    "Digital Marketing",
+    "web development",
+    "ui/ux design",
+    "data science",
+    "database",
+    "machine learning",
+    "digital marketing",
   ]
 
   const levels = ["Beginner", "Intermediate", "Advanced"]
@@ -208,7 +208,8 @@ export default function SearchPage() {
                   checked={filters.categories.includes(cat)}
                   onCheckedChange={(checked) => handleCheckboxChange("categories", cat, checked as boolean)}
                 />
-                <Label htmlFor={cat}>{cat}</Label>
+                
+                <Label className="capitalize" htmlFor={cat}>{cat}</Label>
               </div>
             ))}
           </div>

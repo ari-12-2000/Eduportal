@@ -9,13 +9,13 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { useSession } from "next-auth/react"
 const categoryIcons = {
-  "Web Development": { icon: Code, color: "bg-blue-500" },
-  "UI/UX Design": { icon: Palette, color: "bg-purple-500" },
-  "Database": { icon: Database, color: "bg-green-500" },
-  "Data Science": { icon: BarChartBig, color: "bg-green-500" },
-  "Machine Learning": { icon: Brain, color: "bg-red-500" },
-  "Digital Marketing": { icon: Megaphone, color: "bg-orange-500" },
-  "Mobile Development": { icon: Smartphone, color: "bg-orange-500" },
+  "web development": { icon: Code, color: "bg-blue-500" },
+  "ui/ux design": { icon: Palette, color: "bg-purple-500" },
+  "database": { icon: Database, color: "bg-green-500" },
+  "data science": { icon: BarChartBig, color: "bg-green-500" },
+  "machine learning": { icon: Brain, color: "bg-red-500" },
+  "digital marketing": { icon: Megaphone, color: "bg-orange-500" },
+  "mobile development": { icon: Smartphone, color: "bg-orange-500" },
 } as const;
 
 
@@ -115,7 +115,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {categories.map((cat: { category: string }) => {
               const Icon = categoryIcons[cat.category as keyof typeof categoryIcons].icon || Code;
-              console.log(Icon);
+              
               return (
                 <Card
                   key={cat.category}
@@ -129,7 +129,7 @@ export default function HomePage() {
                     >
                       <Icon className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors capitalize">
                       {cat.category}
                     </h3>
                   </CardContent>
