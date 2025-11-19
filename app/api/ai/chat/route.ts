@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import type { Program } from "@/lib/generated/prisma";
 import { cleanJSON } from "@/lib/utils";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
@@ -17,7 +16,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Select the free / fast Gemini model
+    
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
     });
@@ -57,7 +56,7 @@ ${message}
 
     if (!raw) {
       return NextResponse.json(
-        { success: false, error: "AI returned empty response" },
+        { success: false, error: "AI returned an empty response" },
         { status: 500 }
       );
     }
@@ -86,7 +85,7 @@ ${message}
     // Validate shape minimally
     if (
       typeof extracted !== "object" ||
-      (!("category" in extracted) && !("courseName" in extracted))
+      (!("category" in extracted) && !("courseName" in extracted) && !("select" in extracted))
     ) {
       return NextResponse.json(
         { success: false, error: "AI returned unexpected JSON shape", aiRaw: raw },
@@ -95,7 +94,7 @@ ${message}
     }
 
     // Query the DB using Prisma based on extracted data
-    let programs: any[] = [];
+    let programs: unknown[] = [];
 
 
     if (extracted.category == 'all') {
