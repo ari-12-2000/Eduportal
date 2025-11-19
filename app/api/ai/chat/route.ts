@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    
+
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
     });
@@ -35,7 +35,8 @@ Your job is ONLY to extract exactly this JSON:
 Rules:
 - If user asks general topic like "I want React courses", category = "React"
 - If user asks a specific course like "Full-Stack React Bootcamp", courseName = "Full-Stack React Bootcamp"
-- If user asks for all the categories or all the courses assign 'all' string to the category or courseName property.
+- If user asks for all the categories or all the courses assign 'all' string to the category or courseName property respectively. 
+- But don't assign 'all' to the coursename or category property if the user asks for a specific thing. Eg:if the user asks for all the react courses, the category is react, not all.
 - Never return the category and course name at the same time. Give priority to the course name if user specifies both category and course name. 
 - If user asks to view some properties for a particular course or the courses of a particular category like title, send the properties inside a select object like select:{ title:true, instructor:true}, otherwise select:null.
 - Only return a single JSON object (no additional text or explanation).
@@ -115,33 +116,45 @@ ${message}
         results: courses
       })
     }
-    
+
     if (extracted.category) {
       if (extracted.select)
         programs = await prisma.program.findMany({
           where: {
-            category: extracted.category.toLowerCase(),
+            category: {
+              contains: extracted.category,
+              mode: "insensitive"
+            },
           },
           select: extracted.select
         });
       else
         programs = await prisma.program.findMany({
           where: {
-            category: extracted.category,
+            category: {
+              contains: extracted.category,
+              mode: "insensitive"
+            },
           },
         });
     } else if (extracted.courseName) {
       if (extracted.select)
         programs = await prisma.program.findMany({
           where: {
-            title: extracted.courseName
+            title: {
+              contains: extracted.courseName,
+              mode: "insensitive"
+            },
           },
           select: extracted.select
         });
       else
         programs = await prisma.program.findMany({
           where: {
-            title: extracted.courseName
+            title: {
+              contains: extracted.courseName,
+              mode: "insensitive"
+            },
           },
 
         });
