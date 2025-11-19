@@ -113,7 +113,7 @@ export function Header({ toggleSidebar, toggleChatBot }: HeaderProps) {
            hover:bg-blue-500 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/40
            transition-all duration-300"
         >
-          <MessageCircle className="h-5 w-5" />
+          
           <div className="relative w-10 h-10">
             <Image
               src="/images/chatbot.png"
@@ -122,6 +122,7 @@ export function Header({ toggleSidebar, toggleChatBot }: HeaderProps) {
               className="object-contain"
             />
           </div>
+          <p className="font-bold text-lg">Ask</p>
 
         </Button>
       </div>
