@@ -4,11 +4,4 @@ ii) npm run dev
 
 
 EduPortal 
-• Developed a full stack robust, scalable, maintainable responsive educational web application involving 
-quizzes, self-paced courses for students, professionals. A learner’s dashboard tracking achievements of 
-professional learners. It has content with insightful animations, icons, accordions, loading skeletons, 
-seamless payment system, etc. User can upload details including profile image, password will be 
-encrypted with hashing before storing in database and authorization is there for admin and non-admin 
-users.  
-• Technology – Next.js, Tailwind CSS, lucide-react, shadcdn, Bcrypt.js, JWT, Node.js, Prisma , 
-PostgreSQL as dbms, Razorpay payment gateway and cloudinary for images and videos uploading.  
+Developed a complete learning platform featuring self-paced courses, quizzes, learner dashboards, and Razorpay payments. Implemented secure JWT authentication, role-based access, and Cloudinary media uploads. Built an AI-powered course discovery assistant using Google Gemini 2.0 Flash with natural-language search and Prisma integration. The UI is crafted with Next.js 15, Tailwind CSS, shadcn/ui, lucide-react, and includes animations, accordions, skeletons, and an AI chat interface. 
