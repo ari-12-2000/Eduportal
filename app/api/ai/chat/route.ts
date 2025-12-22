@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { cleanJSON } from "@/lib/utils";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY!,
+});
+
+type AIExtraction = {
+  category: string | null;
+  courseName: string | null;
+  select: Record<string, boolean> | null;
+};
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,11 +23,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
-    });
 
     // Ask Gemini to extract the category or course name in strict JSON
     const prompt = `
@@ -45,15 +48,13 @@ ${message}
 `;
 
     // Note: the SDK returns an object with a .response that has a .text() async method
-    const aiResponse = await model.generateContent(prompt);
+    const aiResponse = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
 
     // read the AI text output (safe access)
-    const raw =
-      aiResponse &&
-        (aiResponse as any).response &&
-        typeof (aiResponse as any).response.text === "function"
-        ? (await (aiResponse as any).response.text()).trim()
-        : String((aiResponse as any)?.response || "").trim();
+    const raw =aiResponse.text;
 
     if (!raw) {
       return NextResponse.json(
@@ -64,8 +65,7 @@ ${message}
 
     // Try parsing JSON returned by the model
 
-    let extracted: { category: string | null; courseName: string | null; select: object | null } | null =
-      null;
+    let extracted: AIExtraction;
     try {
       const cleaned = cleanJSON(raw);
       extracted = JSON.parse(cleaned);
