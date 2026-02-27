@@ -14,3 +14,8 @@ EduPortal | Link- https://learning-app-ww1w.vercel.app
  interactive UI elements including animations, accordions, loading skeletons, and an AI-enhanced chat interface.
  - Implemented scalable state management using Redux Toolkit and RTK Query for efficient API caching, data
 synchronization, and reduced redundant network requests.
+
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/4542bbee-1761-468f-aae5-ce8d049e8cca" />
+
+<img width="1902" height="1049" alt="image" src="https://github.com/user-attachments/assets/ed4879f0-e63e-4ae0-bb55-06c0f17923e6" />
+
