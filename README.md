@@ -3,7 +3,7 @@ i) npm install
 ii) npm run dev
 
 
-EduPortal 
+EduPortal | Link- https://learning-app-ww1w.vercel.app
  - Developed a scalable and responsive learning platform with self-paced courses, quizzes, learner dashboards
  and a seamless Razorpay payment flow.
  - Implemented secure authentication & authorization using JWT + Bcrypt.js, role-based access (admin &
