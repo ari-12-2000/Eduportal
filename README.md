@@ -4,4 +4,13 @@ ii) npm run dev
 
 
 EduPortal 
-- Developed a complete learning platform featuring self-paced courses, quizzes, learner dashboards, and Razorpay payments. Implemented secure JWT authentication, role-based access, and Cloudinary media uploads. Built an AI-powered course discovery assistant using Google Gemini 2.0 Flash with natural-language search and Prisma integration. The UI is crafted with Next.js 15, Tailwind CSS, shadcn/ui, lucide-react, and includes animations, accordions, skeletons, and an AI chat interface. 
+ - Developed a scalable and responsive learning platform with self-paced courses, quizzes, learner dashboards
+ and a seamless Razorpay payment flow.
+ - Implemented secure authentication & authorization using JWT + Bcrypt.js, role-based access (admin &
+ learner), profile management, and media uploads via Cloudinary.
+- Built an advanced AI-powered course discovery chatbot using Google Gemini 2.0 Flash, enabling
+ natural-language search through category extraction, fuzzy matching, Prisma queries, and personalized responses.
+ - Delivered a polished user experience with Next.js , React.js, Tailwind CSS, shadcn/ui, lucide-react, and
+ interactive UI elements including animations, accordions, loading skeletons, and an AI-enhanced chat interface.
+ - Implemented scalable state management using Redux Toolkit and RTK Query for efficient API caching, data
+synchronization, and reduced redundant network requests.
