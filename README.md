@@ -23,8 +23,8 @@ AI: Google Gemini 2.0 Flash
 
 ### How to run locally
 
-npm install
-npm run dev
+- npm install
+- npm run dev
 
 
 <img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/4542bbee-1761-468f-aae5-ce8d049e8cca" />
